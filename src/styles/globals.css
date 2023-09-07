@@ -5,3 +5,29 @@
 .mall-button {
     @apply  cursor-pointer inline-flex items-center h-10 px-5 m-2 ease-linear transition-colors duration-150 rounded-lg;
   }
+
+.background-yellow {
+  @apply bg-[#f9b343]
+}
+.background-sky {
+  @apply bg-[#41b2b8]
+}
+.background-orange {
+  @apply bg-[#f17b49]
+}
+.background-blue {
+  @apply bg-[#207ff3]
+}
+.background-darkBlue {
+  @apply bg-[#262e3b]
+}
+.background-purple {
+  @apply bg-[#7a7bcb]
+}
+.background-white {
+  @apply bg-[#f8faf9]
+}
+
+.input-proyect{
+  @apply w-full rounded text-black
+}

@@ -1,3 +1,49 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": 
+  // ["next", "next/core-web-vitals"], 
+  [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@next/next/recommended"
+    // "plugin:prettier/recommended",
+    // "plugin:@typescript-eslint/eslint-recommended",
+    // "plugin:@typescript-eslint/recommended",
+    // "next/core-web-vitals"
+  ],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "plugins": ["react"],
+  "rules": {
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "camelcase": "off",
+    "object-curly-spacing": [2, "always"],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1,
+        "flatTernaryExpressions": true
+      }
+    ]
+  }
 }
