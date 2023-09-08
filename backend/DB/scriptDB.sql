@@ -1,5 +1,5 @@
 CREATE DATABASE mallCompass;
-USE db_tienda_ct;
+USE mallCompass;
 
 --CREACION DE TABLAS DE ENTIDAD
 
@@ -67,8 +67,8 @@ CREATE TABLE Publicaciones(
 		descripcion char(255),
     actividad char(25),
 		id_post integer NOT NULL AUTO_INCREMENT,
-    vigencia_inicio smalldatetime,
-    vigencia_final smalldatetime,
+    vigencia_inicio datetime,
+    vigencia_final datetime,
 		imagen char(255),
     likes integer,
 		PRIMARY KEY (id_post)
@@ -78,8 +78,8 @@ CREATE TABLE promociones(
 		descripcion char(255),
     categoria char(25),
 		id_promocion integer NOT NULL AUTO_INCREMENT,
-    vigencia_inicio smalldatetime,
-    vigencia_final smalldatetime,
+    vigencia_inicio datetime,
+    vigencia_final datetime,
     timer time,
     cantidad integer,
 		imagen char(255),
@@ -95,7 +95,7 @@ CREATE TABLE productos(
     estado_producto boolean,
     categoria char(25),
     nombre char(50),
-    precio float
+    precio float,
 		imagen char(255),
 		qr char(255),
 		PRIMARY KEY (id_producto)
@@ -159,16 +159,16 @@ CREATE TABLE rel_cc_tiendas(
     id_centroComercial integer,
     id_tienda integer,
     PRIMARY KEY (id_centroComercial,id_tienda),
-    FOREIGN KEY (id_centroComercial) REFERENCES centro_comercial(id_centroComercial)
+    FOREIGN KEY (id_centroComercial) REFERENCES centro_comercial(id_centroComercial),
     FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda),
 );
 
 CREATE TABLE rel_cc_publicaciones(
     id_post integer,
     id_centroComercial integer,
-    categoria char(25).
+    categoria char(25),
     PRIMARY KEY (id_post,id_centroComercial),
-    FOREIGN KEY (id_post) REFERENCES Publicaciones(id_post)
+    FOREIGN KEY (id_post) REFERENCES Publicaciones(id_post),
     FOREIGN KEY (id_centroComercial) REFERENCES centro_comercial(id_centroComercial),
 );
 
@@ -184,9 +184,9 @@ CREATE TABLE rel_cc_tiendas(
 CREATE TABLE rel_tiendas_promociones(
     id_tienda integer,
     id_promocion integer,
-    categoria char(25).
+    categoria char(25),
     PRIMARY KEY (id_tienda,id_promocion),
-    FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda)
+    FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda),
     FOREIGN KEY (id_promocion) REFERENCES promociones(id_promocion),
 );
 
@@ -194,6 +194,6 @@ CREATE TABLE rel_tiendas_productos(
     id_tienda integer,
     id_producto integer,
     PRIMARY KEY (id_tienda,id_producto),
-    FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda)
+    FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda),
     FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
 );
