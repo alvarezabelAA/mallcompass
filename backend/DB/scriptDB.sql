@@ -3,7 +3,7 @@ USE mallCompass;
 
 CREATE TABLE usuario_admin_cc(
 		fecha_nacimiento date,
-		id_usuarioCC integer NOT NULL,
+		id_usuarioCC integer NOT NULL AUTO_INCREMENT,
 		nombre char(50),
 		apellido char(50),
 		contrasena char(50),
@@ -14,7 +14,7 @@ CREATE TABLE usuario_admin_cc(
 );
 
 CREATE TABLE usuario_admin_tienda(
-		id_usuarioTienda integer NOT NULL,
+		id_usuarioTienda integer NOT NULL AUTO_INCREMENT,
 		nombre char(50),
 		apellido char(50),
 		contrasena char(50),
@@ -29,7 +29,7 @@ CREATE TABLE usuario_final(
 		contrasena char(50),
 		apellido char(50),
 		nombre char(50),
-		id_usuarioFinal integer NOT NULL,
+		id_usuarioFinal integer NOT NULL AUTO_INCREMENT,
 		correo char(50),
 		telefono char(50),
 		imagen char(225),
@@ -44,13 +44,13 @@ CREATE TABLE centro_comercial(
 		imagen char(255),
 		telefonoCC char(50),
 		correo char(50),
-		id_centroComercial integer NOT NULL,
+		id_centroComercial integer NOT NULL AUTO_INCREMENT,
 		direccion char(225),
 		PRIMARY KEY (id_centroComercial)
 );
 
 CREATE TABLE tiendas(
-		id_tienda integer NOT NULL,
+		id_tienda integer NOT NULL AUTO_INCREMENT,
 		nombreTienda char(50),
 		imagen char(255),
 		telefono char(50),
@@ -64,7 +64,7 @@ CREATE TABLE tiendas(
 CREATE TABLE Publicaciones(
 		descripcion char(255),
     actividad char(25),
-		id_post integer NOT NULL,
+		id_post integer NOT NULL AUTO_INCREMENT,
     vigencia_inicio datetime,
     vigencia_final datetime,
 		imagen char(255),
@@ -74,8 +74,7 @@ CREATE TABLE Publicaciones(
 
 CREATE TABLE promociones(
 		descripcion char(255),
-    categoria char(25),
-		id_promocion integer NOT NULL,
+		id_promocion integer NOT NULL AUTO_INCREMENT,
     vigencia_inicio datetime,
     vigencia_final datetime,
     timer time,
@@ -88,7 +87,7 @@ CREATE TABLE promociones(
 
 CREATE TABLE productos(
     existencia integer,
-		id_producto integer,
+		id_producto integer NOT NULL AUTO_INCREMENT,
 		descripcion char(255),
     estado_producto char(25),
     categoria char(25),
@@ -100,10 +99,9 @@ CREATE TABLE productos(
 );
 
 CREATE TABLE preferencias(
-		id_gusto integer NOT NULL,
-    categoria_actividades char(25),
-    categoria_tiendas char(25),
-    categoria_productos char(25),
+		id_gusto integer NOT NULL AUTO_INCREMENT,
+    categoria char(25),
+    descripcion char(25),
 		PRIMARY KEY (id_gusto)
 );
 /*------------------------------------------------------

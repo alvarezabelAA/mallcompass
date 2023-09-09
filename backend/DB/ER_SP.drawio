@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-09-08T23:17:00.894Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 OPR/100.0.0.0" etag="l98f8b319BnNDzEKhaM6" version="21.7.2" type="device">
+<mxfile host="app.diagrams.net" modified="2023-09-09T00:20:41.040Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 OPR/100.0.0.0" etag="CHEISbeFhW7540_un2CO" version="21.7.2" type="device">
   <diagram name="Página-1" id="ntaU-x05ywN7HmNlWzIk">
-    <mxGraphModel dx="1835" dy="985" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1121" dy="602" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -533,14 +533,6 @@
         <UserObject label="Likes" lucidchartObjectId="gwRmv_3BVJWS" id="7kZYflLGiu1vBRq_scR5-164">
           <mxCell style="html=1;overflow=block;blockSpacing=1;whiteSpace=wrap;fontSize=13;fontColor=#393C56;spacing=3.8;strokeOpacity=100;strokeWidth=1.5;rounded=1;arcSize=73;labelBackgroundColor=none;fillColor=#F2CC8F;strokeColor=#E07A5F;" parent="1" vertex="1">
             <mxGeometry x="1542" y="1181" width="120" height="60" as="geometry" />
-          </mxCell>
-        </UserObject>
-        <mxCell id="7kZYflLGiu1vBRq_scR5-167" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="7kZYflLGiu1vBRq_scR5-166" target="7kZYflLGiu1vBRq_scR5-13" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <UserObject label="Categoria" lucidchartObjectId="gwRmv_3BVJWS" id="7kZYflLGiu1vBRq_scR5-166">
-          <mxCell style="html=1;overflow=block;blockSpacing=1;whiteSpace=wrap;fontSize=13;fontColor=#393C56;spacing=3.8;strokeOpacity=100;strokeWidth=1.5;rounded=1;arcSize=73;labelBackgroundColor=none;fillColor=#F2CC8F;strokeColor=#E07A5F;" parent="1" vertex="1">
-            <mxGeometry x="1950" y="1447" width="120" height="60" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="D8XHNu2apg_CcIPbkV9C-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="7kZYflLGiu1vBRq_scR5-168" target="7kZYflLGiu1vBRq_scR5-175" edge="1">
