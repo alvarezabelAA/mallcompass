@@ -1,7 +1,7 @@
 const db = require('mysql');
 const conn = db.createConnection({
-    host: '',
-    user: '',
+    host: 'localhost',
+    user: 'root',
     password: '',
     database: 'mallCompass'
 });
