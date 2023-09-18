@@ -4,10 +4,11 @@ import { useContext } from 'react'
 import FormLogin from '../components/login/FormLogin'
 
 const Home = () => {
-  const {hello} = useContext(TaskContext)
+  const { hello } = useContext(TaskContext)
   console.log(hello)
   return (
     <FormLogin />
+    
   )
 }
 
