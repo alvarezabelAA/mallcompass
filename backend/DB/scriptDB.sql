@@ -6,7 +6,7 @@ CREATE TABLE usuario_admin_cc(
 		id_usuarioCC integer NOT NULL AUTO_INCREMENT,
 		nombre char(50),
 		apellido char(50),
-		contrasena char(50),
+		contrasena char(225),
 		imagen char(225),
 		telefono char(50),
 		correo char(50),
@@ -17,7 +17,7 @@ CREATE TABLE usuario_admin_tienda(
 		id_usuarioTienda integer NOT NULL AUTO_INCREMENT,
 		nombre char(50),
 		apellido char(50),
-		contrasena char(50),
+		contrasena char(225),
 		fecha_nacimiento date,
 		correo char(50),
 		telefono char(50),
@@ -26,7 +26,7 @@ CREATE TABLE usuario_admin_tienda(
 );
 
 CREATE TABLE usuario_final(
-		contrasena char(50),
+		contrasena char(225),
 		apellido char(50),
 		nombre char(50),
 		id_usuarioFinal integer NOT NULL AUTO_INCREMENT,
