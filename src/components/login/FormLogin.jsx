@@ -7,7 +7,7 @@ const FormLogin = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const { login } = useAuth();
+  // const { login } = useAuth();
 
   const router = useRouter(); // Obtenemos el objeto router
 
@@ -34,8 +34,8 @@ const FormLogin = () => {
     // Redirigir a la carpeta PantallaInicio después del inicio de sesión exitoso
     if (!emailError && !passwordError) {
       localStorage.setItem('token', 'Hola');
-      login('Hola');
-      router.push('/PantallaInicio/1213213');
+      // login('Hola');
+      router.push('/Feed/1213213');
     }
   };
 
