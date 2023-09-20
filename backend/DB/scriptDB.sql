@@ -40,7 +40,8 @@ CREATE TABLE usuario_final(
 CREATE TABLE centro_comercial(
 		estado_cuenta char(25),
 		nombreCC char(50),
-		longitud_latitud char(255),
+		longitud char(255),
+		latitud char(255),
 		imagen char(255),
 		telefonoCC char(50),
 		correo char(50),
