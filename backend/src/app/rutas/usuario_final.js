@@ -28,10 +28,10 @@ module.exports = (app) => {
 
 
     /*CONSULTA DATOS USUARIO */
-    app.options('/usuario/final/consulta/:id_usuario', cors());
+    app.options('/usuario/final/consulta', cors());
     app.get('/usuario/final/consulta/:id_usuario', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
-        let query = `SELECT * FROM usuarios WHERE id_usuario = ${req.params.id_usuario}`;
+        let query = `SELECT * FROM usuarios INNER JOIN logintokens ON usuarios.correo=logintokens.correo WHERE id_usuario = ${req.query.tokenSesion}`;
         conn.query(query, (error, filas) => {
             if(error){
                 res.json({status: 0, mensaje: "error en DB", datos:error});
@@ -99,8 +99,9 @@ module.exports = (app) => {
         }
             console.log('Contraseña hasheada:', hash);
         
-            let query = `INSERT INTO usuarios(contrasena, apellido, nombre, correo, telefono, imagen, fecha_nacimiento) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-            const values = [hash, req.body.apellido, req.body.nombre, req.body.correo, req.body.telefono, req.body.imagen, req.body.fecha_nacimiento];
+            const rol = "U";
+            let query = `INSERT INTO usuarios(contrasena, apellido, nombre, rol, correo, telefono, imagen, fecha_nacimiento) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+            const values = [hash, req.body.apellido, req.body.nombre, rol, req.body.correo, req.body.telefono, req.body.imagen, req.body.fecha_nacimiento];
         
             conn.query(query, values, (error, filas) => {
                 if (error) {
