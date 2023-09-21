@@ -7,6 +7,7 @@ CREATE TABLE usuarios(
 		apellido char(50),
 		nombre char(50),
 		id_usuario integer NOT NULL AUTO_INCREMENT,
+    rol char(25),
 		correo char(50),
 		telefono char(50),
 		imagen char(225),
