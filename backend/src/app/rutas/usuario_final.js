@@ -16,7 +16,7 @@ module.exports = (app) => {
     app.options('/usuario/final/consulta', cors());
     app.get('/usuario/final/consulta', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
-        let query = "SELECT * FROM usuario_final";
+        let query = "SELECT * FROM usuarios";
         conn.query(query, (error, filas) => {
             if(error){
                 res.json({status: 0, mensaje: "error en DB", datos:error});
@@ -28,10 +28,10 @@ module.exports = (app) => {
 
 
     /*CONSULTA DATOS USUARIO */
-    app.options('/usuario/final/consulta/:id_usuarioFinal', cors());
-    app.get('/usuario/final/consulta/:id_usuarioFinal', cors(),(req, res)=>{
+    app.options('/usuario/final/consulta/:id_usuario', cors());
+    app.get('/usuario/final/consulta/:id_usuario', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
-        let query = `SELECT * FROM usuario_final WHERE id_usuarioFinal = ${req.params.id_usuarioFinal}`;
+        let query = `SELECT * FROM usuarios WHERE id_usuario = ${req.params.id_usuario}`;
         conn.query(query, (error, filas) => {
             if(error){
                 res.json({status: 0, mensaje: "error en DB", datos:error});
@@ -47,7 +47,7 @@ module.exports = (app) => {
     app.get('/usuario/final/login', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
 
-        let query = `SELECT contrasena FROM usuario_final WHERE correo='${req.query.correo}'`;
+        let query = `SELECT contrasena FROM usuarios WHERE correo='${req.query.correo}'`;
         conn.query(query, (error, filas) => {
             if(error){
                 res.json({status: 0, mensaje: "error en DB", datos:error});
@@ -99,7 +99,7 @@ module.exports = (app) => {
         }
             console.log('Contraseña hasheada:', hash);
         
-            let query = `INSERT INTO usuario_final(contrasena, apellido, nombre, correo, telefono, imagen, fecha_nacimiento) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+            let query = `INSERT INTO usuarios(contrasena, apellido, nombre, correo, telefono, imagen, fecha_nacimiento) VALUES (?, ?, ?, ?, ?, ?, ?)`;
             const values = [hash, req.body.apellido, req.body.nombre, req.body.correo, req.body.telefono, req.body.imagen, req.body.fecha_nacimiento];
         
             conn.query(query, values, (error, filas) => {
