@@ -29,7 +29,7 @@ module.exports = (app) => {
 
     /*CONSULTA DATOS USUARIO */
     app.options('/usuario/final/consulta', cors());
-    app.get('/usuario/final/consulta/:id_usuario', cors(),(req, res)=>{
+    app.get('/usuario/final/consulta', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
         let query = `SELECT * FROM usuarios INNER JOIN logintokens ON usuarios.correo=logintokens.correo WHERE id_usuario = ${req.query.tokenSesion}`;
         conn.query(query, (error, filas) => {
@@ -142,10 +142,37 @@ module.exports = (app) => {
 
     });
 
+    /*UPDATE DE USUARIO NORMAL*/
+    app.put('/usuario/final/update',(req,res)=>{
+        let query1 = `SELECT * FROM logintokens WHERE token ='${req.query.tokenSesion}'`;
+        var correo;
+        var token;
+        conn.query(query1, (error, filas) => {
+            if(error){
+                res.json({status: 0, mensaje: "error en consulta de correo", datos:error});
+            }else{
+                if(filas.length == 0){
+                    res.json({status: 0, mensaje: "error token no valido", datos:error});
+                }else{
+                    correo = filas[0].correo;
+                    token = filas[0].token;
+                    console.log(`correo encontrado -> ${correo}  || token encontrado -> ${token}`);
+                    let query = `UPDATE usuarios SET contrasena=?, apellido=?, nombre=?, rol=?, correo=?, telefono=?, imagen=?, fecha_nacimiento=? WHERE correo ='${correo}'`;
+                    const values = [req.body.contrasena, req.body.apellido, req.body.nombre, req.body.rol, req.body.correo, req.body.telefono, req.body.imagen, req.body.fecha_nacimiento];
+                    conn.query(query, values, (error, filas) => {
+                        if(error){
+                            res.json({status: 0, mensaje: "error en DB", datos:error});
+                        }else{
+                            
+                            res.json({status: 1, mensaje: "Update de usuario realizado", datos: filas});
+                            
+                        }
+                    });
+                }
+            }
+        });
 
-    app.put('/usuario/final',(req,res)=>{
-        console.log("ejecucion metodo PUT");
-        res.json({mensaje:"respuesta desde PUT"});
+
     });
 
 }
