@@ -105,6 +105,13 @@ CREATE TABLE preferencias(
     descripcion char(25),
 		PRIMARY KEY (id_gusto)
 );
+
+CREATE TABLE loginTokens(
+		id integer NOT NULL AUTO_INCREMENT,
+    token char(225),
+    correo char(50),
+		PRIMARY KEY (id)
+);
 /*------------------------------------------------------
 --CREACION DE TABLAS DE RELACION
 -- ------>relaciones de usuarios*/
