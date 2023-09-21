@@ -5,7 +5,6 @@ const { tokenSesion } = require('./functions')
 
 module.exports = (app) => {
 
-    
 
     /*const corsOptions = {
         origin: '*', // Reemplaza con el dominio del frontend
