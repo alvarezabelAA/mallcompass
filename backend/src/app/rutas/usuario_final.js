@@ -66,8 +66,8 @@ module.exports = (app) => {
                       
                         if (result) {
                           console.log('Contraseña válida');
-                          /*const generador = tokenSesion(req.params.correo, conn);*/
-                          res.json({status: 1, mensaje: "login exitoso", datos: []});
+                          const generador = tokenSesion(req.query.correo, req.query.contrasena);
+                          res.json({status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`});
                         } else {
                           console.log('Contraseña inválida');
                           console.log(`Contraseña obtenida: ${filas[0].contrasena}`);
