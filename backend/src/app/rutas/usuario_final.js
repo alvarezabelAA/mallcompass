@@ -78,8 +78,36 @@ module.exports = (app) => {
 
             }
         });
-        
+    });
 
+    /* LOGOUT DE USUARIO*/
+    app.options('/usuario/final/logout', cors());
+    app.delete('/usuario/final/logout', cors(),(req, res)=>{
+        let query1 = `SELECT token FROM logintokens WHERE '${req.query.tokenSesion}'`;
+        var token;
+        conn.query(query1, (error, filas) => {
+            if(error){
+                res.json({status: 0, mensaje: "error en consulta de token", datos:error});
+            }else{
+                token = filas[0].token;
+                console.log(`token encontrado -> ${token}`);
+            }
+        });
+
+        let query2 = `DELETE FROM logintokens WHERE token='${req.query.tokenSesion}'`;
+        conn.query(query2, (error, filas) => {
+            if(error){
+                res.json({status: 0, mensaje: "error en DELETE sobre DB", datos:error});
+            }else{
+                if(token == req.query.tokenSesion){
+                    console.log("DELETE ejecutado");
+                    res.json({status: 1, mensaje: "Logout exitoso", datos:[]});
+                }else{
+                    console.log("DELETE no completado");
+                    res.json({status: 1, mensaje: "logout fallido", datos:'token ingresado es incorrecto'});
+                }
+            }
+        });
     });
 
 
@@ -120,8 +148,4 @@ module.exports = (app) => {
         res.json({mensaje:"respuesta desde PUT"});
     });
 
-    app.delete('/usuario/final',(req,res)=>{
-        console.log("ejecucion metodo DELETE");
-        res.json({mensaje:"respuesta desde DELETE"});
-    });
 }
