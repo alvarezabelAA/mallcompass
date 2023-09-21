@@ -16,13 +16,13 @@ function MyApp({ Component, pageProps }) {
   //   }
   // }, [login]); // Añade login como dependencia
   return (
-    // <AuthProvider>
-    //   {/* <TaskProvider> */}
-    //   <Layout>
-    <Component {...pageProps} />
-    //   </Layout>
-    //   {/* </TaskProvider> */}
-    // </AuthProvider>
+    <AuthProvider>
+      {/* <TaskProvider> */}
+      {/* <Layout> */}
+      <Component {...pageProps} />
+      {/* </Layout> */}
+      {/* </TaskProvider> */}
+    </AuthProvider>
   )
 }
 

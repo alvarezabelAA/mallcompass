@@ -36,3 +36,57 @@ export async function postToAPI(endpoint, dataToSend) {
     throw error;
   }
 }
+
+// Función para realizar una solicitud GET con parámetros
+export async function getFromAPIWithParams(endpoint, queryParams) {
+  try {
+    // Construir la URL completa con el host y el endpoint
+    const url = new URL(endpoint);
+
+    // Agregar los parámetros a la URL
+    Object.keys(queryParams).forEach((key) => {
+      url.searchParams.append(key, queryParams[key]);
+    });
+
+    console.log(url.href)
+
+    const response = await fetch(url.href);
+
+    if (!response.ok) {
+      throw new Error('La solicitud GET no fue exitosa');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+// // Función para realizar una solicitud GET con parámetros
+// export async function getFromAPIWithParams(endpoint, queryParams) {
+//   try {
+//     // Construir la URL completa con los parámetros
+//     const url = new URL(endpoint);
+
+//     // Agregar los parámetros a la URL
+//     Object.keys(queryParams).forEach((key) => {
+//       url.searchParams.append(key, queryParams[key]);
+//     });
+
+//     console.log(url.href)
+
+//     const response = await fetch(url.href);
+
+//     if (!response.ok) {
+//       throw new Error('La solicitud GET no fue exitosa');
+//     }
+
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+

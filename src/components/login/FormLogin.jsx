@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../context/AuthContext';
+import { getFromAPIWithParams } from '../../funciones/api';
 
 const FormLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  // const { login } = useAuth();
+  const { login } = useAuth();
 
   const router = useRouter(); // Obtenemos el objeto router
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Validación de campos
     if (!email) {
       setEmailError('El campo de correo electrónico es obligatorio.');
@@ -33,11 +34,25 @@ const FormLogin = () => {
 
     // Redirigir a la carpeta PantallaInicio después del inicio de sesión exitoso
     if (!emailError && !passwordError) {
-      localStorage.setItem('token', 'Hola');
+      const endpoint = 'http://localhost:4044/usuario/final/login/';
+      const queryParams = {
+        correo: 'correo@example.com',
+        contrasena: 'clave-secreta',
+      };
+
+      try {
+        const data = await getFromAPIWithParams(endpoint, queryParams);
+        console.log('Datos obtenidos:', data);
+      } catch (error) {
+        console.error('Error al obtener datos:', error);
+      }
+      // localStorage.setItem('token', 'Hola');
       // login('Hola');
-      router.push('/Feed/1213213');
+      // router.push('/Feed/1213213');
     }
   };
+
+  
 
   return (
     <>
