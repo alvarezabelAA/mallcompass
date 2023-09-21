@@ -7,6 +7,7 @@ function tokenSesion(correo){
     var token;
     while(verificador){
         
+        
         token = crypto.randomBytes(64).toString('hex');
         console.log(`generando token -> ${token}`);
         let query1 = `SELECT token FROM logintokens WHERE token=?`;

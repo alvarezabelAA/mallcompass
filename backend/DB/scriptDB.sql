@@ -99,6 +99,7 @@ CREATE TABLE productos(
 		PRIMARY KEY (id_producto)
 );
 
+
 CREATE TABLE preferencias(
 		id_gusto integer NOT NULL AUTO_INCREMENT,
     categoria char(25),
