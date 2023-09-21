@@ -55,22 +55,28 @@ module.exports = (app) => {
             }else{
                 console.log("datos obtenidos de DB");
 
-                bcrypt.compare(req.params.contrasena, filas[0].contrasena, (err, result) => {
-                    if (err) {
-                      console.error('Error al comparar contraseñas:', err);
-                      return;
-                    }
-                  
-                    if (result) {
-                      console.log('Contraseña válida');
-                      /*const generador = tokenSesion(req.params.correo, conn);*/
-                      res.json({status: 1, mensaje: "login exitoso", datos: []});
-                    } else {
-                      console.log('Contraseña inválida');
-                      console.log(`Contraseña obtenida: ${filas[0].contrasena}`);
-                      res.json({status: 1, mensaje: "contraseña incorrecta", datos: []});
-                    }
-                  });
+                if(filas.length == 0){
+                    res.json({status: 0, mensaje: "login fallido", datos: []});
+                }else{
+
+                    bcrypt.compare(req.params.contrasena, filas[0].contrasena, (err, result) => {
+                        if (err) {
+                          console.error('Error al comparar contraseñas:', err);
+                          return;
+                        }
+                      
+                        if (result) {
+                          console.log('Contraseña válida');
+                          /*const generador = tokenSesion(req.params.correo, conn);*/
+                          res.json({status: 1, mensaje: "login exitoso", datos: []});
+                        } else {
+                          console.log('Contraseña inválida');
+                          console.log(`Contraseña obtenida: ${filas[0].contrasena}`);
+                          res.json({status: 1, mensaje: "contraseña incorrecta", datos: []});
+                        }
+                      });
+                }
+
             }
         });
         
