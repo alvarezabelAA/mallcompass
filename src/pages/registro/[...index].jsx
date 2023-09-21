@@ -90,6 +90,11 @@ const registro = () => {
     }
   };
 
+  const handleLogin = () =>{
+    router.push(`/login/${pathGen()}`);
+
+  }
+
   return (
     <div className="md:p-32 py-60">
       <div className="max-w-md md:max-w-3xl mx-auto bg-white p-5 rounded-md shadow-md">
@@ -187,6 +192,13 @@ const registro = () => {
             onClick={handleregistro}
           >
             Registrarse
+          </button>
+          <button
+            onClick={handleLogin}
+            type="button"
+            className="w-full mt-2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Regresar Login
           </button>
         </div>
       </div>
