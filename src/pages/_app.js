@@ -18,9 +18,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
       {/* <TaskProvider> */}
-      {/* <Layout> */}
-      <Component {...pageProps} />
-      {/* </Layout> */}
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
       {/* </TaskProvider> */}
     </AuthProvider>
   )

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../context/AuthContext';
-import { getFromAPIWithParams } from '../../funciones/api';
+import { getFromAPIWithParams,encryptAndSetLocalStorage,decryptAndGetLocalStorage,pathGen } from '../../funciones/api';
 
 const FormLogin = () => {
   const [email, setEmail] = useState('');
@@ -36,21 +36,29 @@ const FormLogin = () => {
     if (!emailError && !passwordError) {
       const endpoint = 'http://localhost:4044/usuario/final/login/';
       const queryParams = {
-        correo: 'correo@example.com',
-        contrasena: 'clave-secreta',
+        correo: email,
+        contrasena: password,
       };
 
       try {
         const data = await getFromAPIWithParams(endpoint, queryParams);
         console.log('Datos obtenidos:', data);
+        console.log('Datos obtenidos:', data.mensaje);
+        if(data.mensaje === 'login exitoso'){
+          router.push(`/Feed/${pathGen()}`);
+          login(data.mensaje);
+          encryptAndSetLocalStorage('token', data.mensaje);
+        }
       } catch (error) {
         console.error('Error al obtener datos:', error);
       }
       // localStorage.setItem('token', 'Hola');
-      // login('Hola');
-      // router.push('/Feed/1213213');
     }
   };
+
+  const handleRegister = () =>{
+    router.push(`/registro/${pathGen()}`);
+  }
 
   
 
@@ -98,7 +106,7 @@ const FormLogin = () => {
                     </button>
                   </div>
                   <div>
-                    <button type="button" className="text-[#7a7bcb]">
+                    <button onClick={()=>handleRegister()} type="button" className="text-[#7a7bcb]">
                       Dont have an account?
                     </button>
                   </div>

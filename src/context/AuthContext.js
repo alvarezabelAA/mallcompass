@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { decryptAndGetLocalStorage } from '../funciones/api';
 
 const AuthContext = createContext();
 
@@ -11,9 +12,15 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Recuperar el token del almacenamiento local al cargar la aplicación
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
+    const decryptedData = decryptAndGetLocalStorage('token');
+    console.log(decryptedData)
+    if (decryptedData) {
+      console.log('Datos desencriptados:', decryptedData);
+    } else {
+      console.log('No se pudo desencriptar los datos.');
+    }
+    if (decryptedData) {
+      setToken(decryptedData);
     }
   }, []);
 
