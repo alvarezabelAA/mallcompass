@@ -43,11 +43,11 @@ module.exports = (app) => {
 
 
     /*LOGIN USUARIOS FINALES */
-    app.options('/usuario/final/login/:correo/:contrasena', cors());
-    app.get('/usuario/final/login/:correo/:contrasena', cors(),(req, res)=>{
+    app.options('/usuario/final/login', cors());
+    app.get('/usuario/final/login', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
 
-        let query = `SELECT contrasena FROM usuario_final WHERE correo='${req.params.correo}'`;
+        let query = `SELECT contrasena FROM usuario_final WHERE correo='${req.query.correo}'`;
         conn.query(query, (error, filas) => {
             if(error){
                 res.json({status: 0, mensaje: "error en DB", datos:error});
@@ -58,7 +58,7 @@ module.exports = (app) => {
                     res.json({status: 0, mensaje: "login fallido", datos: []});
                 }else{
 
-                    bcrypt.compare(req.params.contrasena, filas[0].contrasena, (err, result) => {
+                    bcrypt.compare(req.query.contrasena, filas[0].contrasena, (err, result) => {
                         if (err) {
                           console.error('Error al comparar contraseñas:', err);
                           return;
