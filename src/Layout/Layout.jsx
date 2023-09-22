@@ -9,8 +9,7 @@ const Layout = ({ children }) => {
   return (
     <LayoutContext.Provider value={{}} >
       <div>
-        <NavBar />
-        <div className=' sm:px-6 lg:px-8 py-2 w-full max-w-9xl mx-auto  mb-10'>
+        <div className=' w-full h-screen bg-gray-400 max-w-9xl mx-auto'>
           {children}
         </div>
       </div>

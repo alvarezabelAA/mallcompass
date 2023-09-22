@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
 import  { Bars4Icon }  from '@heroicons/react/24/solid'
+import { useAuth } from '../../context/AuthContext';
+import { useRouter } from 'next/router';
+import { pathGen } from '../../funciones/api';
 
 
 const NavBar = () => {
 
   const [showOptions, setShowOptions] = useState(false);
+  const { token,logout } = useAuth(); // Obtén el token del contexto de autenticación
+  const router = useRouter();
 
   const toggleOptions = () => {
     console.log(showOptions)
     setShowOptions(!showOptions)
   }
+
+  const handleLogout = () => {
+    // Llama a la función de cierre de sesión del contexto de autenticación
+    logout();
+    localStorage.clear();
+    // Redirige al usuario a la página de inicio de sesión o a donde desees
+    router.push(`/login/${pathGen()}`);
+  };
+
   return (
     <>
       <div className='grid gap-1 grid-cols-2 p-3 h-16 items-center bg-slate-900 text-white'>
@@ -26,6 +40,7 @@ const NavBar = () => {
                 <a className="block py-1" href="#">bueno</a>
                 <a className="block py-1" href="#">Mi perfil</a>
                 <a className="block py-1" href="#">Theme</a>
+                <a className="block py-1" href="#" onClick={handleLogout}>Cerrar Sesion</a>
               </div>
             )}
           </div>

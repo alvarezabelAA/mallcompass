@@ -1,40 +1,18 @@
 CREATE DATABASE mallCompass;
 USE mallCompass;
 
-CREATE TABLE usuario_admin_cc(
-		fecha_nacimiento date,
-		id_usuarioCC integer NOT NULL AUTO_INCREMENT,
-		nombre char(50),
-		apellido char(50),
-		contrasena char(225),
-		imagen char(225),
-		telefono char(50),
-		correo char(50),
-		PRIMARY KEY (id_usuarioCC)
-);
 
-CREATE TABLE usuario_admin_tienda(
-		id_usuarioTienda integer NOT NULL AUTO_INCREMENT,
-		nombre char(50),
-		apellido char(50),
-		contrasena char(225),
-		fecha_nacimiento date,
-		correo char(50),
-		telefono char(50),
-		imagen char(225),
-		PRIMARY KEY (id_usuarioTienda)
-);
-
-CREATE TABLE usuario_final(
+CREATE TABLE usuarios(
 		contrasena char(225),
 		apellido char(50),
 		nombre char(50),
-		id_usuarioFinal integer NOT NULL AUTO_INCREMENT,
+		id_usuario integer NOT NULL AUTO_INCREMENT,
+    rol char(25),
 		correo char(50),
 		telefono char(50),
 		imagen char(225),
 		fecha_nacimiento date,
-		PRIMARY KEY (id_usuarioFinal)
+		PRIMARY KEY (id_usuario)
 );
 
 CREATE TABLE centro_comercial(
@@ -99,54 +77,60 @@ CREATE TABLE productos(
 		PRIMARY KEY (id_producto)
 );
 
+
 CREATE TABLE preferencias(
 		id_gusto integer NOT NULL AUTO_INCREMENT,
     categoria char(25),
     descripcion char(25),
 		PRIMARY KEY (id_gusto)
 );
+
+CREATE TABLE loginTokens(
+		id integer NOT NULL AUTO_INCREMENT,
+    token char(225),
+    correo char(50),
+		PRIMARY KEY (id)
+);
 /*------------------------------------------------------
 --CREACION DE TABLAS DE RELACION
 -- ------>relaciones de usuarios*/
 CREATE TABLE rel_user_cc(
-    id_usuarioCC integer,
+    id_usuario integer,
     id_centroComercial integer,
-    rol char(25),
-    PRIMARY KEY (id_usuarioCC,id_centroComercial),
-    FOREIGN KEY (id_usuarioCC) REFERENCES usuario_admin_cc(id_usuarioCC),
+    PRIMARY KEY (id_usuario,id_centroComercial),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_centroComercial) REFERENCES centro_comercial(id_centroComercial)
 );
 
 CREATE TABLE rel_user_tienda(
     id_tienda integer,
-    id_usuarioTienda integer,
-    rol char(25),
-    PRIMARY KEY (id_tienda,id_usuarioTienda),
+    id_usuario integer,
+    PRIMARY KEY (id_tienda,id_usuario),
     FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda),
-    FOREIGN KEY (id_usuarioTienda) REFERENCES usuario_admin_tienda(id_usuarioTienda)
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
 CREATE TABLE rel_user_preferencias(
-    id_usuarioFinal integer,
+    id_usuario integer,
     id_gusto integer,
-    PRIMARY KEY (id_usuarioFinal,id_gusto),
-    FOREIGN KEY (id_usuarioFinal) REFERENCES usuario_final(id_usuarioFinal),
+    PRIMARY KEY (id_usuario,id_gusto),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_gusto) REFERENCES preferencias(id_gusto)
 );
 
 CREATE TABLE rel_user_productos(
-    id_usuarioFinal integer,
+    id_usuario integer,
     id_producto integer,
-    PRIMARY KEY (id_usuarioFinal,id_producto),
-    FOREIGN KEY (id_usuarioFinal) REFERENCES usuario_final(id_usuarioFinal),
+    PRIMARY KEY (id_usuario,id_producto),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
 );
 
 CREATE TABLE rel_user_promociones(
-    id_usuarioFinal integer,
+    id_usuario integer,
     id_promocion integer,
-    PRIMARY KEY (id_usuarioFinal,id_promocion),
-    FOREIGN KEY (id_usuarioFinal) REFERENCES usuario_final(id_usuarioFinal),
+    PRIMARY KEY (id_usuario,id_promocion),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_promocion) REFERENCES promociones(id_promocion)
 );
 

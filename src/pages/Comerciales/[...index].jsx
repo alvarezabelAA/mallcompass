@@ -1,8 +1,27 @@
-import React from 'react'
-import Table from '../../components/globals/Table';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';import Table from '../../components/globals/Table';
+import { useAuth } from '../../context/AuthContext';
+import useHasMounted from '../../hooks/useHasMounted';
 
 const Comerciales = () => {
+  const { token } = useAuth(); // Obtén el token del contexto de autenticación
+  const hasMounted = useHasMounted();
+  const router = useRouter();
 
+      
+  const getEnv = () => {
+    console.log(token);
+    if (!token) {
+      router.push('/login/23232');
+    }
+  }
+
+  useEffect(() => {
+    // Verifica si el componente se ha montado antes de validar el token
+    if (hasMounted) {
+      getEnv()
+    }
+  }, [hasMounted]);
   const companias = [
     {
       id_centro_comercial: 1,
@@ -61,6 +80,9 @@ const Comerciales = () => {
     { titulo: "Latitud", fila: "latitud", class: "text-right" },
     // Agrega más títulos y filas según sea necesario
   ];
+
+
+
   
 
   const deleteItem = (item) => {

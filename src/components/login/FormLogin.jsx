@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../context/AuthContext';
+import { getFromAPIWithParams,encryptAndSetLocalStorage,decryptAndGetLocalStorage,pathGen } from '../../funciones/api';
+import { useAlert } from '../../context/AlertContext'; // Ajusta la ruta según tu estructura de directorios
 
 const FormLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  // const { login } = useAuth();
+  const { login } = useAuth();
+  const { showAlertWithMessage } = useAlert();
 
   const router = useRouter(); // Obtenemos el objeto router
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Validación de campos
     if (!email) {
       setEmailError('El campo de correo electrónico es obligatorio.');
@@ -33,11 +36,34 @@ const FormLogin = () => {
 
     // Redirigir a la carpeta PantallaInicio después del inicio de sesión exitoso
     if (!emailError && !passwordError) {
-      localStorage.setItem('token', 'Hola');
-      // login('Hola');
-      router.push('/Feed/1213213');
+      const endpoint = 'http://localhost:4044/usuario/final/login/';
+      const queryParams = {
+        correo: email,
+        contrasena: password,
+      };
+
+      try {
+        const data = await getFromAPIWithParams(endpoint, queryParams);
+        if(data.status === 1){
+          showAlertWithMessage('OK', 'Bienvenido')
+          router.push(`/Feed/${pathGen()}`);
+          login(data.tokenSesionID);
+          encryptAndSetLocalStorage('token', data.tokenSesionID);
+        }else{
+          showAlertWithMessage('ERROR', 'Verifique sus datos ')
+        }
+      } catch (error) {
+        console.error('Error al obtener datos:', error);
+      }
+      // localStorage.setItem('token', 'Hola');
     }
   };
+
+  const handleRegister = () =>{
+    router.push(`/registro/${pathGen()}`);
+  }
+
+  
 
   return (
     <>
@@ -71,7 +97,7 @@ const FormLogin = () => {
                 </div>
               </div>
               <div>
-                <div className="grid grid-cols-1 gap-1 text-center mt-10">
+                <div className="grid grid-cols-1 gap-1 text-center mt-6">
                   <div>
                     <button className="py-1 px-6 rounded background-purple w-full" onClick={handleLogin}>
                       LOGIN
@@ -83,7 +109,7 @@ const FormLogin = () => {
                     </button>
                   </div>
                   <div>
-                    <button type="button" className="text-[#7a7bcb]">
+                    <button onClick={()=>handleRegister()} type="button" className="text-[#7a7bcb]">
                       Dont have an account?
                     </button>
                   </div>

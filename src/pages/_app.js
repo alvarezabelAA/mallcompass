@@ -1,4 +1,4 @@
-import { TaskProvider } from '../context/taskContext'
+import { AlertProvider } from '../context/AlertContext'
 import '../styles/globals.css'
 import Layout from '../Layout/Layout'
 import { AuthProvider, useAuth } from '../context/AuthContext'
@@ -16,13 +16,13 @@ function MyApp({ Component, pageProps }) {
   //   }
   // }, [login]); // Añade login como dependencia
   return (
-    // <AuthProvider>
-    //   {/* <TaskProvider> */}
-    //   <Layout>
-    <Component {...pageProps} />
-    //   </Layout>
-    //   {/* </TaskProvider> */}
-    // </AuthProvider>
+    <AlertProvider>
+      <AuthProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </AuthProvider>
+    </AlertProvider>
   )
 }
 
