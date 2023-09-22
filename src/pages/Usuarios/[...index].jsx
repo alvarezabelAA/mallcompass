@@ -1,20 +1,40 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';import Table from '../../components/globals/Table';
 import { useAuth } from '../../context/AuthContext';
 import useHasMounted from '../../hooks/useHasMounted';
 import SideBar from '../../components/globals/SideBar';
+import { deleteWithParams, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
+import { useAlert } from '../../context/AlertContext';
 
-const Comerciales = () => {
+const Usuarios = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
   const hasMounted = useHasMounted();
   const router = useRouter();
+  const [items,setItems]=useState([])
+  const { showAlertWithMessage } = useAlert();
 
+  const listar =async()=>{
+    try {
+      const endpoint = 'http://localhost:4044/usuario/final/consulta';
+      
+      const data = await getFromAPI(endpoint);
+      console.log(data)
+      setItems(data.datos)
+      if(data.status ==='1'){
+      }
+    } catch (error) {
+      console.error('Error al obtener datos:', error);
+
+    }
+
+  }
       
   const getEnv = () => {
     console.log(token);
     if (!token) {
       router.push('/login/23232');
     }
+    listar()
   }
 
   useEffect(() => {
@@ -23,6 +43,11 @@ const Comerciales = () => {
       getEnv()
     }
   }, [hasMounted]);
+
+  useEffect(() => {
+    console.log(items)
+  }, [items]);
+   
   const companias = [
     {
       id_centro_comercial: 1,
@@ -70,40 +95,70 @@ const Comerciales = () => {
   
   
   const Headers = [
-    { titulo: "ID Centro Comercial", fila: "id_centro_comercial", class: "text-center" },
-    { titulo: "Dirección", fila: "direccion", class: "text-left" },
-    { titulo: "Nombre CC", fila: "nombre_cc", class: "text-center" },
-    { titulo: "Estado de Cuenta", fila: "estado_cuenta", class: "text-center" },
+    { titulo: "Contraseña", fila: "contrasena", class: "text-center" },
+    { titulo: "Apellido", fila: "apellido", class: "text-center" },
+    { titulo: "Nombre", fila: "nombre", class: "text-center" },
+    { titulo: "Id Usuario", fila: "id_usuario", class: "text-center" },
+    { titulo: "Rol", fila: "rol", class: "text-center" },
+    { titulo: "Número de Teléfono", fila: "telefono", class: "text-center" },
     { titulo: "Correo", fila: "correo", class: "text-center" },
-    { titulo: "Número de Teléfono", fila: "numero_telefono", class: "text-center" },
     { titulo: "Imagen", fila: "imagen", class: "text-center" },
-    { titulo: "Longitud", fila: "longitud", class: "text-right" },
-    { titulo: "Latitud", fila: "latitud", class: "text-right" },
+    { titulo: "Fecha", fila: "fecha_nacimiento", class: "text-center" },
     // Agrega más títulos y filas según sea necesario
   ];
+
+  
 
 
 
   
 
-  const deleteItem = (item) => {
-    console.log(item)
+  const deleteItem = async (item) => {
+    console.log(item);
+    const endpoint = 'http://localhost:4044/usuario/final/delete'; // URL del servidor de eliminación
+    const requestBody = {
+      id_usuario: item.id_usuario, // Agrega otros campos si es necesario
+    };
+  
+    try {
+      const response = await deleteWithParams(endpoint, requestBody);
+  
+      console.log(response);
+  
+      if (response.status === 1) {
+        listar();
+        showAlertWithMessage('OK', 'El elemento se eliminó correctamente');
+      } else {
+        showAlertWithMessage('ERROR', 'No se pudo eliminar el elemento');
+      }
+    } catch (error) {
+      showAlertWithMessage('ERROR', 'Error al hacer la solicitud DELETE: ' + error);
+      // Maneja el error aquí
+    }
+  };
+  
+
+  const editItem = (items) => {
+    router.push(`/Usuarios/EditarUsuarios/${pathGen()}`)
+    console.log(items)
+    encryptAndSetLocalStorage('usuarioData', JSON.stringify(items));
+
   }
 
   return (
     <>
       <SideBar />
-      
       <div className="p-4 sm:ml-64">
         <Table 
           headers={Headers} 
-          content={companias} 
+          content={items} 
           showActions={true} 
           onDelete={(newValue)=> deleteItem(newValue)}
+          onEdit={(newValue)=> editItem(newValue)}
         />
       </div>
     </>
   )
 }
 
-export default Comerciales
+export default Usuarios

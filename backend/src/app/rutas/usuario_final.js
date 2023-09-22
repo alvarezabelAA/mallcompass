@@ -28,10 +28,10 @@ module.exports = (app) => {
 
 
   /*CONSULTA DATOS USUARIO */
-  app.options('/usuario/final/consulta', cors());
-  app.get('/usuario/final/consulta', cors(),(req, res)=>{
+  app.options('/usuario/final/consultaGeneral', cors());
+  app.get('/usuario/final/consultaGeneral', cors(),(req, res)=>{
     console.log("ejecucion metodo GET");
-    let query = `SELECT * FROM usuarios INNER JOIN logintokens ON usuarios.correo=logintokens.correo WHERE id_usuario = ${req.query.tokenSesion}`;
+    let query = `SELECT * FROM usuarios INNER JOIN logintokens ON usuarios.correo=logintokens.correo WHERE token = '${req.query.tokenSesion}'`;
     conn.query(query, (error, filas) => {
       if(error){
         res.json({ status: 0, mensaje: "error en DB", datos:error });
@@ -41,6 +41,8 @@ module.exports = (app) => {
     });
   });
 
+  
+
 
 
   /*LOGIN USUARIOS FINALES */
@@ -48,7 +50,7 @@ module.exports = (app) => {
   app.get('/usuario/final/login', cors(),(req, res)=>{
     console.log("ejecucion metodo GET");
 
-    let query = `SELECT contrasena FROM usuarios WHERE correo='${req.query.correo}'`;
+    let query = `SELECT contrasena,rol FROM usuarios WHERE correo='${req.query.correo}'`;
     conn.query(query, (error, filas) => {
       if(error){
         res.json({ status: 0, mensaje: "error en DB", datos:error });
@@ -68,7 +70,7 @@ module.exports = (app) => {
             if (result) {
               console.log('Contraseña válida');
               const generador = tokenSesion(req.query.correo, req.query.contrasena);
-              res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}` });
+              res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}` });
             } else {
               console.log('Contraseña inválida');
               console.log(`Contraseña obtenida: ${filas[0].contrasena}`);
@@ -111,16 +113,6 @@ module.exports = (app) => {
   });
 
 
-  /* REGISTRO DATOS USUARIO*/
-  app.options('/usuario/final/registro', cors());
-  app.post('/usuario/final/registro', cors(),(req, res) => {
-    console.log("ejecucion metodo POST");
-    if (!req.body.contrasena || !req.body.apellido || !req.body.nombre || !req.body.correo || !req.body.telefono || !req.body.imagen || !req.body.fecha_nacimiento) {
-      res.json({ status: 0, mensaje: "error datos enviados", descripcion: "algun campo enviado se encuentra vacío" });
-      return;
-    }
-  });
-
 
   /* REGISTRO DATOS USUARIO*/
   app.options('/usuario/final/registro', cors());
@@ -153,7 +145,33 @@ module.exports = (app) => {
   });
 
   /*UPDATE DE USUARIO NORMAL*/
-  app.put('/usuario/final/update',(req,res)=>{
+  app.options('/usuario/final/update', cors());
+  app.put('/usuario/final/update', cors(), (req, res) => {
+    const { contrasena, apellido, nombre, rol, correo, telefono, imagen, fecha_nacimiento } = req.body;
+  
+    if (!correo) {
+      res.json({ status: 0, mensaje: 'Correo no proporcionado en el cuerpo de la solicitud' });
+      return;
+    }
+  
+    // Construye la consulta de actualización
+    const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
+    const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
+  
+    // Ejecuta la consulta de actualización
+    conn.query(query, values, (error, filas) => {
+      if (error) {
+        res.json({ status: 0, mensaje: 'Error al actualizar el usuario', datos: error });
+      } else {
+        res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
+      }
+    });
+  });
+  
+
+  /*UPDATE DE USUARIOS*/
+  app.options('/usuario/final/updateGeneral', cors());
+  app.put('/usuario/final/updateGeneral',(req,res)=>{
     let query1 = `SELECT * FROM logintokens WHERE token ='${req.query.tokenSesion}'`;
     var correo;
     var token;
@@ -184,5 +202,32 @@ module.exports = (app) => {
 
 
   });
+
+  /* DELETE DE USUARIO POR ID_USUARIO */
+  app.options('/usuario/final/delete', cors());
+  app.delete('/usuario/final/delete', cors(), (req, res) => {
+    const { id_usuario } = req.body; // Obtiene el id_usuario del cuerpo de la solicitud
+
+    if (!id_usuario) {
+      res.json({ status: 0, mensaje: 'Falta el parámetro id_usuario en el cuerpo de la solicitud' });
+      return;
+    }
+
+    const query = `DELETE FROM usuarios WHERE id_usuario = ?`;
+
+    conn.query(query, [id_usuario], (error, result) => {
+      if (error) {
+        res.json({ status: 0, mensaje: 'Error al eliminar el usuario', datos: error });
+      } else {
+        if (result.affectedRows > 0) {
+          res.json({ status: 1, mensaje: 'Usuario eliminado correctamente', datos: result });
+        } else {
+          res.json({ status: 0, mensaje: 'No se encontró ningún usuario con ese id_usuario' });
+        }
+      }
+    });
+  });
+
+
 
 }

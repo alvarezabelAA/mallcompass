@@ -28,13 +28,6 @@ const FormLogin = () => {
       setPasswordError('');
     }
 
-    // Otras validaciones, como verificar el formato del correo electrónico, longitud de contraseña, etc.
-    // ...
-
-    // Si todas las validaciones pasan, puedes enviar los datos al servidor aquí
-    // ...
-
-    // Redirigir a la carpeta PantallaInicio después del inicio de sesión exitoso
     if (!emailError && !passwordError) {
       const endpoint = 'http://localhost:4044/usuario/final/login/';
       const queryParams = {
@@ -44,6 +37,7 @@ const FormLogin = () => {
 
       try {
         const data = await getFromAPIWithParams(endpoint, queryParams);
+        console.log(data)
         if(data.status === 1){
           showAlertWithMessage('OK', 'Bienvenido')
           router.push(`/Feed/${pathGen()}`);

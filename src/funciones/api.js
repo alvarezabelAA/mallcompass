@@ -37,6 +37,27 @@ export async function postToAPI(endpoint, dataToSend) {
   }
 }
 
+export async function deleteWithParams(endpoint, body) {
+  try {
+    const response = await fetch(endpoint, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error(`La solicitud DELETE no fue exitosa. Estado: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // Función para realizar una solicitud GET con parámetros
 export async function getFromAPIWithParams(endpoint, queryParams) {
   try {
@@ -47,7 +68,7 @@ export async function getFromAPIWithParams(endpoint, queryParams) {
     Object.keys(queryParams).forEach((key) => {
       url.searchParams.append(key, queryParams[key]);
     });
-
+    console.log(url.href)
     const response = await fetch(url.href);
 
     if (!response.ok) {
@@ -61,6 +82,36 @@ export async function getFromAPIWithParams(endpoint, queryParams) {
   // }
   }
 }
+
+// Función para realizar una solicitud PUT con queryParams y body
+export async function putToAPIWithParamsAndBody(endpoint, queryParams, bodyData) {
+  try {
+    // Construir la URL completa con el host y el endpoint y agregar los queryParams
+    const url = new URL(endpoint);
+    Object.keys(queryParams).forEach((key) => {
+      url.searchParams.append(key, queryParams[key]);
+    });
+
+    // Realizar la solicitud PUT con los datos del body
+    const response = await fetch(url.href, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json', // Ajusta el tipo de contenido según lo que esperas en el servidor
+      },
+      body: JSON.stringify(bodyData), // Convierte el objeto bodyData a JSON
+    });
+
+    if (!response.ok) {
+      throw new Error('La solicitud PUT no fue exitosa');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 // Función para encriptar y guardar en localStorage
 export function encryptAndSetLocalStorage(key, data) {

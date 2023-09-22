@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as iconsMd from 'react-icons/md';
 
-const Table = ({ headers, content, showActions = false, onDelete }) => {
+const Table = ({ headers, content, showActions = false, onDelete, onEdit }) => {
   const [searchTerm, setSearchTerm] = useState(""); // Estado para el filtro de búsqueda
   const [currentPage, setCurrentPage] = useState(1); // Estado para el número de página actual
   const [itemsPerPage, setItemsPerPage] = useState(4); // Estado para la cantidad de elementos por página
@@ -11,6 +11,13 @@ const Table = ({ headers, content, showActions = false, onDelete }) => {
     console.log(item);
     if (onDelete) {
       onDelete(item); // Llama a la función onDelete y pasa el elemento para eliminar
+    }
+  };
+
+  const handleEdit = (item) => {
+    console.log(item);
+    if (onEdit) {
+      onEdit(item); // Llama a la función onDelete y pasa el elemento para eliminar
     }
   };
 
@@ -101,7 +108,7 @@ const Table = ({ headers, content, showActions = false, onDelete }) => {
                 {showActions && (
                   <td className="text-center">
                     <button className="px-2 py-1">
-                      <iconsMd.MdEditDocument className='h-7 w-7 shrink-0 text-blue-500 dark:text-blue-300' />
+                      <iconsMd.MdEditDocument onClick={() => handleEdit(row)} className='h-7 w-7 shrink-0 text-blue-500 dark:text-blue-300' />
                     </button>
                     <button type="button" onClick={() => handleDelete(row)} className="px-2 py-1">
                       <iconsMd.MdDeleteOutline className='h-7 w-7 shrink-0 text-red-500 dark:text-red-300' />
