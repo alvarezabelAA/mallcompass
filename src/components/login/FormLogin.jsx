@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../context/AuthContext';
 import { getFromAPIWithParams,encryptAndSetLocalStorage,decryptAndGetLocalStorage,pathGen } from '../../funciones/api';
+import { useAlert } from '../../context/AlertContext'; // Ajusta la ruta según tu estructura de directorios
 
 const FormLogin = () => {
   const [email, setEmail] = useState('');
@@ -9,6 +10,7 @@ const FormLogin = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const { login } = useAuth();
+  const { showAlertWithMessage } = useAlert();
 
   const router = useRouter(); // Obtenemos el objeto router
 
@@ -42,12 +44,13 @@ const FormLogin = () => {
 
       try {
         const data = await getFromAPIWithParams(endpoint, queryParams);
-        console.log('Datos obtenidos:', data);
-        console.log('Datos obtenidos:', data.mensaje);
-        if(data.mensaje === 'login exitoso'){
+        if(data.status === 1){
+          showAlertWithMessage('OK', 'Bienvenido')
           router.push(`/Feed/${pathGen()}`);
-          login(data.mensaje);
-          encryptAndSetLocalStorage('token', data.mensaje);
+          login(data.tokenSesionID);
+          encryptAndSetLocalStorage('token', data.tokenSesionID);
+        }else{
+          showAlertWithMessage('ERROR', 'Verifique sus datos ')
         }
       } catch (error) {
         console.error('Error al obtener datos:', error);
@@ -94,7 +97,7 @@ const FormLogin = () => {
                 </div>
               </div>
               <div>
-                <div className="grid grid-cols-1 gap-1 text-center mt-10">
+                <div className="grid grid-cols-1 gap-1 text-center mt-6">
                   <div>
                     <button className="py-1 px-6 rounded background-purple w-full" onClick={handleLogin}>
                       LOGIN
