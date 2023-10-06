@@ -117,7 +117,7 @@ const EditarComecial = () => {
     console.log(registroData)
     const queryParams = {
       token: token.toString(),
-      id_centroComercial:id_comercial
+      id_Comercial:id_comercial
     };
     console.log()
     console.log(queryParams)
@@ -129,7 +129,7 @@ const EditarComecial = () => {
         console.log(response)
         if(response.status === 1){
           router.push(`/Comerciales/${pathGen()}`);
-          showAlertWithMessage('OK', 'Se ingresaron los datos')
+          showAlertWithMessage('OK', 'Se modificaron los datos')
         }else{
           showAlertWithMessage('ERROR', 'No se ingreso la data')
 
