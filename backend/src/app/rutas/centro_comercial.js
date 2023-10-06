@@ -99,7 +99,7 @@ module.exports = (app) => {
 
 
     /*MODIFICACION DATOS DE UN SOLO CC */
-    app.options('/centroComercial/consulta', cors());
+    app.options('/centroComercial/modificacion', cors());
     app.put('/centroComercial/consulta', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
         let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
