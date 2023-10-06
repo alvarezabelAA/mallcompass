@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';import Table from '../../components/globals/Table';
 import { useAuth } from '../../context/AuthContext';
 import useHasMounted from '../../hooks/useHasMounted';
@@ -90,11 +90,23 @@ const Comerciales = () => {
     console.log(item)
   }
 
+  const [validateSlide, setValidateSlide] = useState(true)
+
+  useEffect(()=>{
+  },[validateSlide])
+
+  const handleSidebarVisibility = (sidebarVisible) => {
+    setValidateSlide(sidebarVisible)
+    // Realiza acciones basadas en el valor de sidebarVisible aquí
+  };
+
+
+
   return (
     <>
-      <SideBar />
+      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
       
-      <div className="p-4 ml-24 sm:ml-64">
+      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
         <Table 
           headers={Headers} 
           content={companias} 

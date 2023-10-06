@@ -125,11 +125,24 @@ const EditarUsuario = () => {
     encryptAndSetLocalStorage('usuarioData', '');
     router.push(`/Configuracion/${pathGen()}`);
   };
+  const handleSidebarVisibility = (sidebarVisible) => {
+    console.log('Sidebar visibility:', sidebarVisible);
+    // Realiza acciones basadas en el valor de sidebarVisible aquí
+    setValidateSlide(sidebarVisible)
+
+  };
+
+  const [validateSlide, setValidateSlide] = useState(true)
+
+  useEffect(()=>{
+    console.log(validateSlide)
+  },[validateSlide])
+
 
   return (
     <>
-      <SideBar />
-      <div className='p-4 sm:ml-64'>
+      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
+      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
         <div className="md:p-32 py-60 ">
           <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
             <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Editar Perfil</h2>

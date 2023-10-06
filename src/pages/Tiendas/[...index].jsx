@@ -94,10 +94,24 @@ const Tiendas = () => {
 
   }
 
+  const handleSidebarVisibility = (sidebarVisible) => {
+    console.log('Sidebar visibility:', sidebarVisible);
+    setValidateSlide(sidebarVisible)
+
+    // Realiza acciones basadas en el valor de sidebarVisible aquí
+  };
+
+  const [validateSlide, setValidateSlide] = useState(true)
+
+  useEffect(()=>{
+    console.log(validateSlide)
+  },[validateSlide])
+
+
   return (
     <>
-      <SideBar />
-      <div className='p-4 sm:ml-64'>
+      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
+      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
         <Table
           headers={Headers} 
           content={items} 

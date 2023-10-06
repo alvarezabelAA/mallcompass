@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../context/AuthContext';
 import useHasMounted from '../../hooks/useHasMounted'
@@ -40,10 +40,24 @@ const Feed = () => {
     localStorage.clear();
     router.push(`/login/${pathGen()}`);
   };
+  const handleSidebarVisibility = (sidebarVisible) => {
+    console.log('Sidebar visibility:', sidebarVisible);
+    setValidateSlide(sidebarVisible)
+
+    // Realiza acciones basadas en el valor de sidebarVisible aquí
+  };
+
+  const [validateSlide, setValidateSlide] = useState(true)
+
+  useEffect(()=>{
+    console.log(validateSlide)
+  },[validateSlide])
+
+
   return (
     <>
-      <SideBar />
-      <div className="p-4 ml-24 sm:ml-64">
+      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
+      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
           <div className="grid grid-cols-3 gap-4 mb-4">
             <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">

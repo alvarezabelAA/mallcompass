@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { decryptAndGetLocalStorage, pathGen } from '../../funciones/api';
 import { useAuth } from '../../context/AuthContext';
 
-const SideBar = () => {
+const SideBar = ({ onVisible }) => {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [catalogosMenuOpen, setCatalogosMenuOpen] = useState(false); // Estado para el menú desplegable de Catalogos
   const router = useRouter();
@@ -14,6 +14,8 @@ const SideBar = () => {
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
+    onVisible(!sidebarVisible)
+
   };
 
   const toggleCatalogosMenu = () => {
@@ -25,8 +27,7 @@ const SideBar = () => {
   }`;
 
   useEffect(()=>{
-    console.log(sidebarClassName)
-    console.log(sidebarVisible)
+ 
   },[sidebarVisible])
 
 
@@ -54,13 +55,10 @@ const SideBar = () => {
   useEffect(()=>{
     const decryptedData = decryptAndGetLocalStorage('rol');
     setValidar(decryptedData)
-    console.log(decryptedData)
   },[validar])
 
   return (
     <>
-
-
       <aside
         id="default-sidebar"
         className={ `fixed top-0 left-0 z-40  h-screen transition-transform ${
