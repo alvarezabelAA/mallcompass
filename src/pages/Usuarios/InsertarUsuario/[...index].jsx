@@ -126,7 +126,7 @@ const InsertarUsuario = () => {
   return (
     <>
       <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
+      <div className='p-4 sm:ml-64'>
         <div className="md:p-32 py-60 ">
           <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
             <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Registro</h2>

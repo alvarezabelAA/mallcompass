@@ -3,11 +3,31 @@ import { useRouter } from 'next/router';import Table from '../../components/glob
 import { useAuth } from '../../context/AuthContext';
 import useHasMounted from '../../hooks/useHasMounted';
 import SideBar from '../../components/globals/SideBar';
+import { encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
 
 const Comerciales = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
   const hasMounted = useHasMounted();
   const router = useRouter();
+  const [items,setItems]=useState([])
+
+
+  const listar =async()=>{
+    try {
+      const endpoint = 'http://localhost:4044/centroComercial/consultaGeneral';
+      const queryParams = {
+        token: token      };
+      const data = await getFromAPIWithParams(endpoint,queryParams);
+      console.log(data)
+      setItems(data.datos)
+      if(data.status ==='1'){
+      }
+    } catch (error) {
+      console.error('Error al obtener datos:', error);
+
+    }
+
+  }
 
       
   const getEnv = () => {
@@ -15,6 +35,8 @@ const Comerciales = () => {
     if (!token) {
       router.push('/login/23232');
     }
+    listar()
+
   }
 
   useEffect(() => {
@@ -23,59 +45,14 @@ const Comerciales = () => {
       getEnv()
     }
   }, [hasMounted]);
-  const companias = [
-    {
-      id_centro_comercial: 1,
-      direccion: "Dirección 1",
-      nombre_cc: "Centro Comercial A",
-      estado_cuenta: "Activo",
-      correo: "correo1@example.com",
-      numero_telefono: "123-456-7890",
-      imagen: "imagen1.jpg",
-      longitud: -75.12345,
-      latitud: 40.67890,
-    },
-    {
-      id_centro_comercial: 2,
-      direccion: "Dirección 2",
-      nombre_cc: "Centro Comercial B",
-      estado_cuenta: "Inactivo",
-      correo: "correo2@example.com",
-      numero_telefono: "987-654-3210",
-      imagen: "imagen2.jpg",
-      longitud: -75.54321,
-      latitud: 40.12345,
-    },
-    // Agrega más compañías según sea necesario
-  ];
-  
-  // Generar 10 compañías adicionales
-  for (let i = 3; i <= 12; i++) {
-    const nuevaCompania = {
-      id_centro_comercial: i,
-      direccion: `Dirección ${i}`,
-      nombre_cc: `Centro Comercial ${String.fromCharCode(65 + i)}`,
-      estado_cuenta: i % 2 === 0 ? "Activo" : "Inactivo",
-      correo: `correo${i}@example.com`,
-      numero_telefono: `555-555-555${i}`,
-      imagen: `imagen${i}.jpg`,
-      longitud: -75.54321 + (i * 0.1),
-      latitud: 40.12345 + (i * 0.1),
-    };
-    companias.push(nuevaCompania);
-  }
-  
-  // Ahora `companias` contiene las 12 compañías
-  
   
   
   const Headers = [
-    { titulo: "ID Centro Comercial", fila: "id_centro_comercial", class: "text-center" },
+    { titulo: "Nombre CC", fila: "nombreCC", class: "text-left" },
     { titulo: "Dirección", fila: "direccion", class: "text-left" },
-    { titulo: "Nombre CC", fila: "nombre_cc", class: "text-center" },
     { titulo: "Estado de Cuenta", fila: "estado_cuenta", class: "text-center" },
     { titulo: "Correo", fila: "correo", class: "text-center" },
-    { titulo: "Número de Teléfono", fila: "numero_telefono", class: "text-center" },
+    { titulo: "Número de Teléfono", fila: "telefonoCC", class: "text-center" },
     { titulo: "Imagen", fila: "imagen", class: "text-center" },
     { titulo: "Longitud", fila: "longitud", class: "text-right" },
     { titulo: "Latitud", fila: "latitud", class: "text-right" },
@@ -86,10 +63,7 @@ const Comerciales = () => {
 
   
 
-  const deleteItem = (item) => {
-    console.log(item)
-  }
-
+ 
   const [validateSlide, setValidateSlide] = useState(true)
 
   useEffect(()=>{
@@ -100,6 +74,22 @@ const Comerciales = () => {
     // Realiza acciones basadas en el valor de sidebarVisible aquí
   };
 
+  const editItem = (items) => {
+    router.push(`/Comerciales/EditarComercial/${pathGen()}`)
+    encryptAndSetLocalStorage('comercialData', JSON.stringify(items));
+    console.log(items)
+  }
+
+  const deleteItem = (item) => {
+    console.log(item)
+  }
+
+
+  const insertItem = (items) => {
+    router.push(`/Comerciales/NuevoComercial/${pathGen()}`)
+    // encryptAndSetLocalStorage('usuarioData', JSON.stringify(items));
+    console.log(items)
+  }
 
 
   return (
@@ -109,9 +99,11 @@ const Comerciales = () => {
       <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
         <Table 
           headers={Headers} 
-          content={companias} 
+          content={items} 
           showActions={true} 
+          onInsert={(newValue)=> insertItem(newValue)}
           onDelete={(newValue)=> deleteItem(newValue)}
+          onEdit={(newValue)=> editItem(newValue)}
         />
       </div>
     </>

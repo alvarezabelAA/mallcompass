@@ -112,6 +112,37 @@ export async function putToAPIWithParamsAndBody(endpoint, queryParams, bodyData)
   }
 }
 
+// Función para realizar una solicitud POST con queryParams y body
+export async function postToAPIWithParamsAndBody(endpoint, queryParams, bodyData) {
+  try {
+    // Construir la URL completa con el host y el endpoint y agregar los queryParams
+    const url = new URL(endpoint);
+    Object.keys(queryParams).forEach((key) => {
+      url.searchParams.append(key, queryParams[key]);
+    });
+
+    // Realizar la solicitud POST con los datos del body
+    const response = await fetch(url.href, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Ajusta el tipo de contenido según lo que esperas en el servidor
+      },
+      body: JSON.stringify(bodyData), // Convierte el objeto bodyData a JSON
+    });
+
+    if (!response.ok) {
+      throw new Error('La solicitud POST no fue exitosa');
+    }
+
+    const data = await response.json();
+    console.log(data)
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
 
 // Función para encriptar y guardar en localStorage
 export function encryptAndSetLocalStorage(key, data) {

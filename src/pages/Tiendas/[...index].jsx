@@ -111,7 +111,7 @@ const Tiendas = () => {
   return (
     <>
       <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
+      <div className='p-4 sm:ml-64'>
         <Table
           headers={Headers} 
           content={items} 
