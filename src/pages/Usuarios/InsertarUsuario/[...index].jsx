@@ -1,24 +1,24 @@
+import React, { useEffect, useState } from 'react'
 import SideBar from '../../../components/globals/SideBar'
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useAuth } from '../../../context/AuthContext';
-import { postToAPI, pathGen, putToAPIWithParamsAndBody, decryptAndGetLocalStorage, encryptAndSetLocalStorage } from '../../../funciones/api';
-import { useAlert } from '../../../context/AlertContext'; 
+import { useAlert } from '../../../context/AlertContext';
 import useHasMounted from '../../../hooks/useHasMounted';
-import { format } from 'date-fns';
+import { useAuth } from '../../../context/AuthContext';
+import { useRouter } from 'next/router';
+import { pathGen, postToAPI } from '../../../funciones/api';
 
-const EditarUsuario = () => {
+const InsertarUsuario = () => {
+  const { showAlertWithMessage } = useAlert();
+  const hasMounted = useHasMounted();
+  const { token, login } = useAuth();
+  const router = useRouter();
+
   const [nombre, setNombre] = useState('');
-  const [contrasena, setContrasena] = useState('');
-  const [rol, setRol] = useState('');
   const [apellido, setApellido] = useState('');
   const [email, setEmail] = useState('');
   const [telefono, setTelefono] = useState('');
   const [imagen, setImagen] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
-  const { showAlertWithMessage } = useAlert();
-  const hasMounted = useHasMounted();
-
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
     nombre: '',
     apellido: '',
@@ -33,16 +33,8 @@ const EditarUsuario = () => {
     if (!token) {
       router.push(`/login/${pathGen()}`);
     }
-    const decryptedData = decryptAndGetLocalStorage('usuarioData');
-    const objeto = JSON.parse(decryptedData);
-    setRol(objeto[0].rol)
-    setContrasena(objeto[0].contrasena)
-    setApellido(objeto[0].apellido)
-    setNombre(objeto[0].nombre)
-    setEmail(objeto[0].correo)
-    setTelefono(objeto[0].telefono)
-    setImagen(objeto[0].imagen)
-    setFechaNacimiento(format(new Date(objeto[0].fecha_nacimiento), 'yyyy/MM/dd'))
+    
+    
   }
 
   useEffect(() => {
@@ -52,60 +44,52 @@ const EditarUsuario = () => {
     }
   }, [hasMounted]);
 
-  const { token, login } = useAuth();
-  const router = useRouter();
+
+
 
   const handleRegistro = async () => {
-    // // Validación de campos
-    // const camposObligatorios = ['nombre', 'apellido', 'email', 'telefono', 'imagen', 'fechaNacimiento', 'password'];
-    // const newErrors = {};
+    // Validación de campos
+    const camposObligatorios = ['nombre', 'apellido', 'email', 'telefono', 'imagen', 'fechaNacimiento', 'password'];
+    const newErrors = {};
 
-    // camposObligatorios.forEach((campo) => {
-    //   if (!eval(campo)) {
-    //     newErrors[campo] = `El campo de ${campo} es obligatorio.`;
-    //   } else {
-    //     newErrors[campo] = '';
-    //   }
-    // });
-    // console.log(newErrors)
+    camposObligatorios.forEach((campo) => {
+      if (!eval(campo)) {
+        newErrors[campo] = `El campo de ${campo} es obligatorio.`;
+      } else {
+        newErrors[campo] = '';
+      }
+    });
 
-    // setErrors(newErrors);
+    setErrors(newErrors);
 
-    // // Verifica si hay algún error en los campos
-    // const hayErrores = Object.values(newErrors).some((error) => error);
+    // Verifica si hay algún error en los campos
+    const hayErrores = Object.values(newErrors).some((error) => error);
 
-    // if (hayErrores) {
-    //   console.log(hayErrores)
-    //   // Detén el proceso de registro si faltan campos obligatorios
-    //   return;
-    // }
+    if (hayErrores) {
+      // Detén el proceso de registro si faltan campos obligatorios
+      return;
+    }
 
     // // Redirigir a la carpeta PantallaInicio después del registro exitoso
-    const endpoint = 'http://localhost:4044/usuario/final/updateGeneral'; // Ajusta la URL del servidor de registro
+    const endpoint = 'http://localhost:4044/usuario/final/registro'; // Ajusta la URL del servidor de registro
     const registroData = {
-      contrasena: contrasena,
+      contrasena: password,
       apellido,
       nombre,
-      rol,
       correo: email,
       telefono,
       imagen,
       fecha_nacimiento: fechaNacimiento,
     };
-    const queryParams = {
-      tokenSesion: token.toString()
-    };
 
-    console.log(registroData)
-    console.log(queryParams)
+
     try {
       try {
-        const response = await putToAPIWithParamsAndBody(endpoint,queryParams, registroData);
+        const response = await postToAPI(endpoint, registroData);
         // Haz algo con la respuesta aquí
         console.log(response)
         if(response.status === 1){
-          router.push(`/Configuracion/${pathGen()}`)
-          encryptAndSetLocalStorage('usuarioData', '');
+          router.push(`/Usuarios/${pathGen()}`);
           showAlertWithMessage('OK', 'Se ingresaron los datos')
         }else{
           showAlertWithMessage('ERROR', 'No se ingreso la data')
@@ -121,10 +105,10 @@ const EditarUsuario = () => {
     }
   };
 
-  const handleLogin = () => {
-    encryptAndSetLocalStorage('usuarioData', '');
-    router.push(`/Configuracion/${pathGen()}`);
+  const handleUsuario = () => {
+    router.push(`/Usuarios/${pathGen()}`);
   };
+
 
   return (
     <>
@@ -132,7 +116,7 @@ const EditarUsuario = () => {
       <div className='p-4 sm:ml-64'>
         <div className="md:p-32 py-60 ">
           <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
-            <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Editar Perfil</h2>
+            <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Registro</h2>
             <div className="grid grid-cols-1 gap-4 ">
               <div>
                 <label htmlFor="nombre" className="text-white block text-sm font-medium ">
@@ -165,7 +149,6 @@ const EditarUsuario = () => {
               Correo Electrónico
                 </label>
                 <input
-                  disabled
                   type="email"
                   id="email"
                   className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
@@ -213,21 +196,34 @@ const EditarUsuario = () => {
                 />
                 {errors.fechaNacimiento && <div className="text-red-500">{errors.fechaNacimiento}</div>}
               </div>
+              <div>
+                <label htmlFor="password" className="text-white block text-sm font-medium ">
+              Contraseña
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {errors.password && <div className="text-red-500">{errors.password}</div>}
+              </div>
             </div>
             <div className="mt-6">
               <button
                 type="button"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7a7bcb] hover:bg-[#898ae1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={()=>handleRegistro()}
+                onClick={handleRegistro}
               >
-            Actualizar
+            Registrarse
               </button>
               <button
-                onClick={handleLogin}
+                onClick={handleUsuario}
                 type="button"
                 className="w-full mt-2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-            Regresar a Configuracion
+            Regresar 
               </button>
             </div>
           </div>
@@ -237,4 +233,4 @@ const EditarUsuario = () => {
   )
 }
 
-export default EditarUsuario
+export default InsertarUsuario

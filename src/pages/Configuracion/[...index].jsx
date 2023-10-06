@@ -103,7 +103,7 @@ const Configuracion = () => {
     <>
       <SideBar />
       
-      <div className="p-4 sm:ml-64">
+      <div className="p-4 ml-24 sm:ml-64">
         <div className='flex items-center justify-center rounded-lg'>
           <div className='m-2 gap-4 grid grid-flow-row-dense grid-cols-3 grid-rows-3 bg-white rounded-t-lg'>
             <div className="bg-indigo-500 rounded-t-lg p-2  items-center col-span-3 font-semibold text-4xl flex ">

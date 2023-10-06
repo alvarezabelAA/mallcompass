@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 import * as iconsMd from 'react-icons/md';
+import * as iconsBs from 'react-icons/bs';
 
-const Table = ({ headers, content, showActions = false, onDelete, onEdit }) => {
+const Table = ({ headers, content, showActions = false, onDelete, onEdit, showInsertButton = true, onInsert }) => {
   const [searchTerm, setSearchTerm] = useState(""); // Estado para el filtro de búsqueda
   const [currentPage, setCurrentPage] = useState(1); // Estado para el número de página actual
   const [itemsPerPage, setItemsPerPage] = useState(4); // Estado para la cantidad de elementos por página
   const [totalPages, setTotalPages] = useState(1); // Estado para la cantidad total de páginas
+
+  const handleInsert = () => {
+    console.log('Hola')
+    if (onInsert) {
+      onInsert('hola'); // Llama a la función onInsert si está definida
+    }
+  };
 
   const handleDelete = (item) => {
     console.log(item);
@@ -67,18 +75,25 @@ const Table = ({ headers, content, showActions = false, onDelete, onEdit }) => {
   return (
     <div className="h-screen overflow-hidden">
       {/* Agregar un campo de búsqueda */}
-      <div className="relative">
+      <div className="relative flex items-center mb-3">
         {/* Agregar un icono de búsqueda dentro del campo */}
-        <iconsMd.MdSearch className='h-7 w-7 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-300' />
+        <iconsMd.MdSearch className='h-7 w-7 absolute left-3 text-slate-500 dark:text-slate-300' />
         <input
           type="text"
           placeholder="Buscar..."
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full mb-3 pl-10 p-2.5  dark-bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark-bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        {showInsertButton && (
+          <button onClick={handleInsert} className="mall-button bg-emerald-500 text-white font-semibold ">
+            <iconsBs.BsPlus className="w-5 h-5 flex-shrink-0 "/>
+          Insertar
+          </button>
+        )}
       </div>
 
+        
       <div className="overflow-x-auto">
         <table className="table-auto w-full">
           <thead>

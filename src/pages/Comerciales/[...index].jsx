@@ -94,7 +94,7 @@ const Comerciales = () => {
     <>
       <SideBar />
       
-      <div className="p-4 sm:ml-64">
+      <div className="p-4 ml-24 sm:ml-64">
         <Table 
           headers={Headers} 
           content={companias} 

@@ -95,9 +95,8 @@ const Usuarios = () => {
   
   
   const Headers = [
-    { titulo: "Contraseña", fila: "contrasena", class: "text-center" },
-    { titulo: "Apellido", fila: "apellido", class: "text-center" },
     { titulo: "Nombre", fila: "nombre", class: "text-center" },
+    { titulo: "Apellido", fila: "apellido", class: "text-center" },
     { titulo: "Id Usuario", fila: "id_usuario", class: "text-center" },
     { titulo: "Rol", fila: "rol", class: "text-center" },
     { titulo: "Número de Teléfono", fila: "telefono", class: "text-center" },
@@ -107,7 +106,10 @@ const Usuarios = () => {
     // Agrega más títulos y filas según sea necesario
   ];
 
-  
+  const insertItem = (item) => {
+    console.log(item)
+    router.push(`/Usuarios/InsertarUsuario/${pathGen()}`)
+  }
 
 
 
@@ -148,11 +150,13 @@ const Usuarios = () => {
   return (
     <>
       <SideBar />
-      <div className="p-4 sm:ml-64">
-        <Table 
+      <div className="p-4 ml-24 sm:ml-64">
+        <Table
+          showInsertButton={true}
           headers={Headers} 
           content={items} 
           showActions={true} 
+          onInsert={(newValue)=> insertItem(newValue)}
           onDelete={(newValue)=> deleteItem(newValue)}
           onEdit={(newValue)=> editItem(newValue)}
         />

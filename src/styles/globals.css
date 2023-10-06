@@ -29,5 +29,5 @@
 }
 
 .input-proyect{
-  @apply w-full rounded text-black
+  @apply w-full h-10 rounded text-black
 }
