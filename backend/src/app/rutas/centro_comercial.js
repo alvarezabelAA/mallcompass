@@ -9,7 +9,6 @@ module.exports = (app) => {
     app.options('/centroComercial/registro', cors());
     app.post('/centroComercial/registro', cors(),(req, res)=>{
       console.log("ejecucion metodo POST");
-      console.log("ejecucion metodo GET");
         let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
         conn.query(query, (error, filas) => {
           if(error){
@@ -101,7 +100,7 @@ module.exports = (app) => {
     /*MODIFICACION DATOS DE UN SOLO CC */
     app.options('/centroComercial/modificacion', cors());
     app.put('/centroComercial/modificacion', cors(),(req, res)=>{
-        console.log("ejecucion metodo GET");
+        console.log("ejecucion metodo PUT");
         let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
         conn.query(query, (error, filas) => {
           if(error){
