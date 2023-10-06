@@ -30,6 +30,8 @@ const SideBar = ({ onVisible }) => {
  
   },[sidebarVisible])
 
+  const CentrosComerciales = () => {
+    router.push(`../CentrosComerciales/${pathGen()}`);  };
 
   const comercialesB = () => {
     router.push(`../Comerciales/${pathGen()}`);  };
@@ -66,7 +68,7 @@ const SideBar = ({ onVisible }) => {
         }`}
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800 dark:bg-gray-800 ">
           
           <ul className="space-y-2 font-medium">
             <li>
@@ -84,9 +86,9 @@ const SideBar = ({ onVisible }) => {
                   onClick={toggleCatalogosMenu} // Manejador de eventos para abrir/cerrar el menú de Catalogos
                 >
                   <iconsFc.FcAutomatic className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                  <span className={`ml-3 ${sidebarVisible ? 'hidden':'block'}`}>Catalogos</span>
+                  <span className={`text-white ml-3 ${sidebarVisible ? 'hidden':'block'}`}>Catalogos</span>
                   <svg
-                    className={`ml-auto w-4 h-4 transition-transform ${
+                    className={`text-white ml-auto w-4 h-4 transition-transform ${
                       catalogosMenuOpen ? 'rotate-0' : 'rotate-180'
                     }`}
                     fill="none"
@@ -112,7 +114,7 @@ const SideBar = ({ onVisible }) => {
                         className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group"
                       >
                         <iconsFc.FcDepartment className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                        <span className={`ml-3 ${sidebarVisible ? 'hidden': 'block'}`}>Centros Comerciales</span>
+                        <span className={`text-white ml-3 ${sidebarVisible ? 'hidden': 'block'}`}>Centros Comerciales</span>
                       </a>
                     </li>
                     <li>
@@ -122,7 +124,7 @@ const SideBar = ({ onVisible }) => {
                         className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group"
                       >
                         <iconsFc.FcManager className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                        <span className={`ml-3 ${sidebarVisible ? 'hidden': 'block'}`}>Usuarios</span>
+                        <span className={`text-white ml-3 ${sidebarVisible ? 'hidden': 'block'}`}>Usuarios</span>
                       </a>
                     </li>
                     <li>
@@ -132,7 +134,7 @@ const SideBar = ({ onVisible }) => {
                         className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group"
                       >
                         <iconsFc.FcShop className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                        <span className={`ml-3 ${sidebarVisible ? 'hidden': 'block'}`}>Tiendas</span>
+                        <span className={`text-white ml-3 ${sidebarVisible ? 'hidden': 'block'}`}>Tiendas</span>
                       </a>
                     </li>
                     {/* Agrega más opciones aquí */}
@@ -144,33 +146,33 @@ const SideBar = ({ onVisible }) => {
               <a onClick={()=> feedC()}
                 href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                 <iconsFc.FcTabletAndroid className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                <span className={`flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Feed</span>
+                <span className={`text-white flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Feed</span>
               </a>
             </li>
             <li>
-              <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
+              <a onClick={()=> CentrosComerciales()} href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                 <iconsFc.FcOrganization className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                <span className={`flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Centros Comerciales</span>
+                <span className={`text-white flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Centros Comerciales</span>
               </a>
             </li>
             <li>
               <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                 <iconsMd.MdOutlinePercent className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                <span className={`flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Promociones</span>
+                <span className={`text-white flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Promociones</span>
               </a>
             </li>
             <li>
               <a onClick={()=> configuracionC()} href="#" className="flex items
               -center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                 <iconsFc.FcSettings className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                <span className={`flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Configuración</span>
+                <span className={`text-white flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Configuración</span>
               </a>
             </li>
             <li>
               <a onClick={()=>handleLogout()} href="#" className="flex items
               -center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                 <iconsMd.MdOutlineKeyboardDoubleArrowLeft className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                <span className={`flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Cerrar Sesión</span>
+                <span className={`text-white flex-1 ml-3 whitespace-nowrap ${sidebarVisible?'hidden':'block'}`}>Cerrar Sesión</span>
               </a>
             </li>
           </ul>

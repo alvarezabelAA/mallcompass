@@ -117,7 +117,7 @@ const EditarComecial = () => {
     console.log(registroData)
     const queryParams = {
       token: token.toString(),
-      id_Comercial:id_comercial
+      idComercial:id_comercial
     };
     console.log()
     console.log(queryParams)
