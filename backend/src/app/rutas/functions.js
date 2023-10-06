@@ -19,11 +19,32 @@ function tokenSesion(correo, contra){
     return hash
 }
 
+function verificadorSesion(token){
+  var verificador = "false";
+  console.log("ejecucion verificadorSesion");
+  let query = `SELECT * FROM logintokens WHERE token = '${token}'`;
+  conn.query(query, (error, filas) => {
+    if(error){
+      console.log("No se encontró el token");
+    }else{
+      if(filas.length == 0){
+      console.log("consulta sin elementos");
+      verificador = "true";
+      }else{
+        console.log("encontro el token");
+        verificador = "false";
+      }
+    }
+    console.log(`verificador -> ${verificador}`);
+  });
+  return verificador;
+}
 
 function hasheador(contrasena){
 }
 
 module.exports = {
     hasheador,
-    tokenSesion
+    tokenSesion,
+    verificadorSesion
 }

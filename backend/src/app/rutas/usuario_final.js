@@ -1,7 +1,7 @@
 const conn = require('../../config/database');
 const bcrypt = require('bcrypt'); /*funcion hash*/
 const cors = require('cors');
-const { tokenSesion } = require('./functions')
+const { tokenSesion,verificadorSesion } = require('./functions')
 
 module.exports = (app) => {
 
@@ -27,7 +27,7 @@ module.exports = (app) => {
   });
 
 
-  /*CONSULTA DATOS USUARIO */
+  /*CONSULTA DATOS de un USUARIO */
   app.options('/usuario/final/consultaGeneral', cors());
   app.get('/usuario/final/consultaGeneral', cors(),(req, res)=>{
     console.log("ejecucion metodo GET");
@@ -41,15 +41,11 @@ module.exports = (app) => {
     });
   });
 
-  
-
-
 
   /*LOGIN USUARIOS FINALES */
   app.options('/usuario/final/login', cors());
   app.get('/usuario/final/login', cors(),(req, res)=>{
     console.log("ejecucion metodo GET");
-
     let query = `SELECT contrasena,rol FROM usuarios WHERE correo='${req.query.correo}'`;
     conn.query(query, (error, filas) => {
       if(error){
@@ -144,7 +140,7 @@ module.exports = (app) => {
     });
   });
 
-  /*UPDATE DE USUARIO NORMAL*/
+  /*UPDATE DE USUARIO NORMAL SUPERADMIN*/
   app.options('/usuario/final/update', cors());
   app.put('/usuario/final/update', cors(), (req, res) => {
     const { contrasena, apellido, nombre, rol, correo, telefono, imagen, fecha_nacimiento } = req.body;
@@ -169,7 +165,7 @@ module.exports = (app) => {
   });
   
 
-  /*UPDATE DE USUARIOS*/
+  /*UPDATE DE DATOS DE UN USUARIO NORMAL*/
   app.options('/usuario/final/updateGeneral', cors());
   app.put('/usuario/final/updateGeneral',(req,res)=>{
     let query1 = `SELECT * FROM logintokens WHERE token ='${req.query.tokenSesion}'`;
@@ -227,7 +223,6 @@ module.exports = (app) => {
       }
     });
   });
-
 
 
 }
