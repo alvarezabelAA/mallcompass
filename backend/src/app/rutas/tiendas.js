@@ -125,4 +125,40 @@ module.exports = (app) => {
       });
 
   });
+
+
+
+  /*DELETE DE TIENDAS*/
+  app.options('/tiendas/delete', cors());
+  app.delete('/tiendas/delete', cors(),(req, res)=>{
+      console.log("ejecucion metodo DELETE");
+      let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
+      conn.query(query, (error, filas) => {
+        if(error){
+          console.log("No se encontró el token");
+        }else{
+          if(filas.length == 0){
+            console.log("consulta sin elementos");
+            res.json({ status: 1, mensaje: "error de token", datos: filas });
+          }else{
+            console.log("encontró el token");
+            let query = `DELETE FROM tiendas WHERE id_tienda = ${req.query.idTienda}`;
+            conn.query(query, (error, filas) => {
+            if(error){
+                res.json({ status: 0, mensaje: "error en DB", datos:error });
+            }else{
+                var prueba;
+                prueba = filas.affectedRows;
+                if(prueba > 0){
+                  res.json({ status: 1, mensaje: "datos eliminados en DB", datos: filas });
+                }else{
+                  res.json({status: 1, mensaje: "no existe el id en la DB", datos: filas});
+                }
+            }
+            });
+          }
+        }
+      });
+
+  });
 }
