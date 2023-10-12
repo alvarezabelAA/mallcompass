@@ -73,7 +73,7 @@ module.exports = (app) => {
 
 
     /*CONSULTA DE TODOS LOS CENTROS COMERCIALES ACTIVOS */ /*falta contador de tiendas */
-    app.options('/centroComercial/consultaGeneral', cors());
+    app.options('/centroComercial/consultaGeneral/activo', cors());
     app.get('/centroComercial/consultaGeneral', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
         let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
