@@ -234,8 +234,8 @@ module.exports = (app) => {
           correo = filas[0].correo;
           token = filas[0].token;
           console.log(`correo encontrado -> ${correo}  || token encontrado -> ${token}`);
-          let query = `UPDATE usuarios SET contrasena=?, apellido=?, nombre=?, rol=?, correo=?, telefono=?, imagen=?, fecha_nacimiento=? WHERE correo ='${correo}'`;
-          const values = [req.body.contrasena, req.body.apellido, req.body.nombre, req.body.rol, req.body.correo, req.body.telefono, req.body.imagen, req.body.fecha_nacimiento];
+          let query = `UPDATE usuarios SET contrasena=?, apellido=?, nombre=?, correo=?, telefono=?, imagen=?, fecha_nacimiento=? WHERE correo ='${correo}'`;
+          const values = [req.body.contrasena, req.body.apellido, req.body.nombre, req.body.correo, req.body.telefono, req.body.imagen, req.body.fecha_nacimiento];
           conn.query(query, values, (error, filas) => {
             if(error){
               res.json({ status: 0, mensaje: "error en DB", datos:error });
