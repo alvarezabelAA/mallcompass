@@ -23,45 +23,35 @@ function insertCC_Tienda(){
   
 }
 
-function insertUsuarios(tokenSesion,rol,id){
-  let query = `SELECT * FROM usuarios INNER JOIN logintokens ON usuarios.correo=logintokens.correo WHERE token = '${tokenSesion}'`;
-  conn.query(query, (error, filas) => {
-    if(error){
-      console.log("error en la consulta de DB");
-    }else{
-      var usuario = filas[0].id_usuario;
-      console.log(`consulta en DB exitosa   ->  ${usuario}`);
+function insertUsuarios(usuario,rol,id_establecimiento){
+ 
+  if(rol == "C"){
+    console.log("se ejecuto C2");
+    let query = `INSERT INTO rel_user_cc(id_usuario,id_centroComercial) VALUES (?,?)`;
+    const values = [usuario, id_establecimiento];
+    conn.query(query, values, (error, filas) => {
+        if (error) {
+            console.log(`error en insert a rel_user_cc`);
+            console.log(error);
+        } else {
+            console.log(`insert en rel_user_cc exitoso`);
+        }
+    });
+  }
 
-
-      if(rol == "C"){
-        console.log("se ejecuto C2");
-        let query = `INSERT INTO rel_user_cc(id_usuario,id_centroComercial) VALUES (?,?)`;
-        const values = [usuario, id];
-        conn.query(query, values, (error, filas) => {
-            if (error) {
-                console.log(`error en insert a rel_user_cc`);
-                console.log(error);
-            } else {
-                console.log(`insert en rel_user_cc exitoso`);
-            }
-        });
-      }
-      
-      if(rol == "T"){
-        console.log("se ejecuto T2");
-        let query2 = `INSERT INTO rel_user_tienda(id_tienda,id_usuario) VALUES (?,?)`;
-        const values2 = [id, usuario];
-        conn.query(query2, values2, (error2, filas2) => {
-            if (error2) {
-                console.log(`error en insert a rel_user_tienda`);
-                console.log(error2);
-            } else {
-                console.log(`insert en rel_user_tienda exitoso`);
-            }
-        });
-      }
-    }
-  });
+  if(rol == "T"){
+    console.log("se ejecuto T2");
+    let query2 = `INSERT INTO rel_user_tienda(id_tienda,id_usuario) VALUES (?,?)`;
+    const values2 = [id_establecimiento, usuario];
+    conn.query(query2, values2, (error2, filas2) => {
+        if (error2) {
+            console.log(`error en insert a rel_user_tienda`);
+            console.log(error2);
+        } else {
+            console.log(`insert en rel_user_tienda exitoso`);
+        }
+    });
+  }
 
 
 }

@@ -141,11 +141,14 @@ module.exports = (app) => {
     });
   });
 
+
+
+
   /*UPDATE DE USUARIO NORMAL SUPERADMIN*/
   app.options('/usuario/final/update', cors());
   app.put('/usuario/final/update', cors(), (req, res) => {
 
-    console.log("ejecucion metodo GET");
+        console.log("ejecucion metodo GET");
         let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
         conn.query(query, (error, filas) => {
           if(error){
@@ -157,7 +160,7 @@ module.exports = (app) => {
             }else{
               console.log("encontro el token");
 
-              const { contrasena, apellido, nombre, rol, correo, telefono, imagen, fecha_nacimiento } = req.body;
+              const { contrasena, apellido, nombre, rol, correo, telefono, imagen, fecha_nacimiento, id_usuario} = req.body;
             
               if (!correo) {
                 res.json({ status: 0, mensaje: 'Correo no proporcionado en el cuerpo de la solicitud' });
@@ -194,7 +197,7 @@ module.exports = (app) => {
             
                   /*INSERT EN TABLA RELACION */
                   console.log("se ejecuto C");
-                  insertUsuarios(req.query.tokenSesion,rol, req.query.idComercial);
+                  insertUsuarios(id_usuario,rol, req.query.idComercial);
                 }else{
                   console.log("usuario C no insertado");
           
@@ -214,7 +217,7 @@ module.exports = (app) => {
               
                     /*INSERT EN TABLA RELACION */
                     console.log("se ejecuto T");
-                    insertUsuarios(req.query.tokenSesion,rol, req.query.idTienda);
+                    insertUsuarios(id_usuario,rol, req.query.idTienda);
                   }else{
                     console.log("usuario T no insertado");
                     res.json({ status: 0, mensaje: 'No se puede actualizar', datos: "parametros faltantes o erroneos" });
