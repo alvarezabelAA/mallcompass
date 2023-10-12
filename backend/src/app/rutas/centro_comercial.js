@@ -35,15 +35,9 @@ module.exports = (app) => {
               
             }
           }
-
-
-
-
-
-
         });
-
     });
+    
 
 
     /*CONSULTA DE TODOS LOS CENTROS COMERCIALES */ /*falta contador de tiendas */
@@ -75,6 +69,40 @@ module.exports = (app) => {
           }
         });
     });
+
+
+
+    /*CONSULTA DE TODOS LOS CENTROS COMERCIALES ACTIVOS */ /*falta contador de tiendas */
+    app.options('/centroComercial/consultaGeneral', cors());
+    app.get('/centroComercial/consultaGeneral', cors(),(req, res)=>{
+        console.log("ejecucion metodo GET");
+        let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
+        conn.query(query, (error, filas) => {
+          if(error){
+            console.log("No se encontró el token");
+          }else{
+            if(filas.length == 0){
+              console.log("consulta sin elementos");
+              res.json({ status: 1, mensaje: "error de token", datos: filas });
+            }else{
+              console.log("encontro el token");
+              
+              let query = "SELECT * FROM centro_comercial WHERE estado_cuenta= 'A'";
+              conn.query(query, (error, filas) => {
+              if(error){
+                  res.json({ status: 0, mensaje: "error en DB", datos:error });
+              }else{
+                  res.json({ status: 1, mensaje: "datos obtenidos", datos: filas });
+              }
+              });
+
+
+            }
+          }
+        });
+    });
+
+
 
     /*CONSULTA DATOS DE UN SOLO CC */
     app.options('/centroComercial/consulta', cors());
