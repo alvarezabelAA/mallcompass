@@ -1,7 +1,7 @@
 const conn = require('../../config/database');
 const bcrypt = require('bcrypt'); /*funcion hash*/
 const cors = require('cors');
-const { tokenSesion, verificadorSesion } = require('./functions')
+const { insertCC_Tienda, verificadorSesion } = require('./functions')
 
 module.exports = (app) => {
   /* REGISTRO DE TIENDA*/
@@ -18,6 +18,8 @@ module.exports = (app) => {
             res.json({ status: 1, mensaje: "error de token", datos: filas });
           }else{
             console.log("encontro el token");
+
+            /*INSERT EN TABLA TIENDA*/
             let query = `INSERT INTO tiendas(nombreTienda, imagen, telefono, numeroLocal, estado_cuenta, categoriaTienda, correo) VALUES (?,?,?,?,?,?,?)`;
             const { nombreTienda, imagen, telefono, numeroLocal, estado_cuenta, categoriaTienda, correo } = req.body;
             const values = [nombreTienda, imagen, telefono, numeroLocal, estado_cuenta, categoriaTienda, correo];
@@ -28,6 +30,9 @@ module.exports = (app) => {
                   res.json({ status: 1, mensaje: "datos insertados en DB", datos: filas });
               }
             });
+
+
+
           }
         }
       });

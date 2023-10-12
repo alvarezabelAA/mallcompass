@@ -1,7 +1,8 @@
 const conn = require('../../config/database');
 const bcrypt = require('bcrypt'); /*funcion hash*/
 const cors = require('cors');
-const { tokenSesion,verificadorSesion } = require('./functions')
+const { tokenSesion,insertUsuarios } = require('./functions');
+const { x64 } = require('crypto-js');
 
 module.exports = (app) => {
 
@@ -149,19 +150,71 @@ module.exports = (app) => {
       res.json({ status: 0, mensaje: 'Correo no proporcionado en el cuerpo de la solicitud' });
       return;
     }
+
+    if(req.query.idComercial == null && req.query.idTienda == null && (rol == "S" || rol == "U")){
+      // Construye la consulta de actualización
   
-    // Construye la consulta de actualización
-    const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
-    const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
+      const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
+      const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
+      // Ejecuta la consulta de actualización
+      conn.query(query, values, (error, filas) => {
+        if (error) {
+          res.json({ status: 0, mensaje: 'Error al actualizar el usuario', datos: error });
+        } else {
+          res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
+        }
+      });
+    }else{
+
+      if(rol == "C" && req.query.idComercial != null){
+        // Construye la consulta de actualización
+        const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
+        const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
+        // Ejecuta la consulta de actualización
+        conn.query(query, values, (error, filas) => {
+          if (error) {
+            res.json({ status: 0, mensaje: 'Error al actualizar el usuario', datos: error });
+          } else {
+            res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
+          }
+        });
   
-    // Ejecuta la consulta de actualización
-    conn.query(query, values, (error, filas) => {
-      if (error) {
-        res.json({ status: 0, mensaje: 'Error al actualizar el usuario', datos: error });
-      } else {
-        res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
+  
+        console.log("se ejecuto C");
+        insertUsuarios(req.query.tokenSesion,rol, req.query.idComercial);
+      }else{
+        console.log("usuario C no insertado");
+
+
+        if(rol == "T" && req.query.idTienda != null){
+          // Construye la consulta de actualización
+          const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
+          const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
+          // Ejecuta la consulta de actualización
+          conn.query(query, values, (error, filas) => {
+            if (error) {
+              res.json({ status: 0, mensaje: 'Error al actualizar el usuario', datos: error });
+            } else {
+              res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
+            }
+          });
+    
+    
+          console.log("se ejecuto T");
+          insertUsuarios(req.query.tokenSesion,rol, req.query.idTienda);
+        }else{
+          console.log("usuario T no insertado");
+          res.json({ status: 0, mensaje: 'No se puede actualizar', datos: "parametros faltantes o erroneos" });
+        }
       }
-    });
+
+
+
+
+    }
+
+
+
   });
   
 

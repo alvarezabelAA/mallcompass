@@ -19,6 +19,8 @@ module.exports = (app) => {
               res.json({ status: 1, mensaje: "error de token", datos: filas });
             }else{
               console.log("encontro el token");
+
+              /* PRIMER INSERT TABLA CC*/
               let query = `INSERT INTO centro_comercial(estado_cuenta, nombreCC, longitud, latitud, imagen, telefonoCC, correo, direccion) VALUES (?,?,?,?,?,?,?,?)`;
               const { estado_cuenta, nombreCC, longitud, latitud, imagen, telefonoCC, correo, direccion } = req.body;
               const values = [estado_cuenta, nombreCC, longitud, latitud, imagen, telefonoCC, correo, direccion];
@@ -29,8 +31,16 @@ module.exports = (app) => {
                     res.json({ status: 1, mensaje: "datos insertados en DB", datos: filas });
                 }
               });
+
+              
             }
           }
+
+
+
+
+
+
         });
 
     });
