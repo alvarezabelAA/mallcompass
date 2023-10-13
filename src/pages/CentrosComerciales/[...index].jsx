@@ -97,7 +97,7 @@ const CentrosComerciales = () => {
       <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
       
       <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
-        <Cards />
+        <Cards cardData={items}/>
       </div>
     </>
   )

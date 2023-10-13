@@ -5,7 +5,7 @@ import useHasMounted from '../../hooks/useHasMounted';
 import { useRouter } from 'next/router';
 import { useAlert } from '../../context/AlertContext';
 import Table from '../../components/globals/Table';
-import { deleteWithParams, encryptAndSetLocalStorage, getFromAPI, pathGen } from '../../funciones/api';
+import { deleteWithParams, deleteWithbody, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
 
 const Tiendas = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
@@ -15,16 +15,13 @@ const Tiendas = () => {
   const { showAlertWithMessage } = useAlert();
 
   const Headers = [
-    { titulo: "Contraseña", fila: "contrasena", class: "text-center" },
-    { titulo: "Apellido", fila: "apellido", class: "text-center" },
-    { titulo: "Nombre", fila: "nombre", class: "text-center" },
-    { titulo: "Id Usuario", fila: "id_usuario", class: "text-center" },
-    { titulo: "Rol", fila: "rol", class: "text-center" },
-    { titulo: "Número de Teléfono", fila: "telefono", class: "text-center" },
+    { titulo: "Nombre Tienda", fila: "nombreTienda", class: "text-center" },
+    { titulo: "Telefono", fila: "telefono", class: "text-center" },
+    { titulo: "Número Local", fila: "numeroLocal", class: "text-center" },
+    { titulo: "Estado Cuenta", fila: "estado_cuenta", class: "text-center" },
+    { titulo: "Categoria Tienda", fila: "categoriaTienda", class: "text-center" },
     { titulo: "Correo", fila: "correo", class: "text-center" },
-    { titulo: "Imagen", fila: "imagen", class: "text-center" },
-    { titulo: "Fecha", fila: "fecha_nacimiento", class: "text-center" },
-    // Agrega más títulos y filas según sea necesario
+    { titulo: "Imagen", fila: "imagen", class: "text-center" }    // Agrega más títulos y filas según sea necesario
   ];
 
   const getEnv = () => {
@@ -37,9 +34,11 @@ const Tiendas = () => {
 
   const listar =async()=>{
     try {
-      const endpoint = 'http://localhost:4044/usuario/final/consulta';
-      
-      const data = await getFromAPI(endpoint);
+      const endpoint = 'http://localhost:4044/tiendas/consultaGeneral';
+      const queryParams = {
+        token: token      
+      };
+      const data = await getFromAPIWithParams(endpoint,queryParams);
       console.log(data)
       setItems(data.datos)
       if(data.status ==='1'){
@@ -59,20 +58,18 @@ const Tiendas = () => {
   }, [hasMounted]);
 
   useEffect(() => {
-    console.log(items)
   }, [items]);
 
   const deleteItem = async (item) => {
-    console.log(item);
-    const endpoint = 'http://localhost:4044/usuario/final/delete'; // URL del servidor de eliminación
+    const endpoint = 'http://localhost:4044/tiendas/delete'; // URL del servidor de eliminación
     const requestBody = {
-      id_usuario: item.id_usuario, // Agrega otros campos si es necesario
+      token:token.toString(),
+      idTienda: item.id_tienda, // Agrega otros campos si es necesario
     };
   
     try {
       const response = await deleteWithParams(endpoint, requestBody);
   
-      console.log(response);
   
       if (response.status === 1) {
         listar();
@@ -88,9 +85,9 @@ const Tiendas = () => {
   
 
   const editItem = (items) => {
-    router.push(`/Usuarios/EditarUsuarios/${pathGen()}`)
+    router.push(`/Tiendas/EditarTienda/${pathGen()}`)
     console.log(items)
-    encryptAndSetLocalStorage('usuarioData', JSON.stringify(items));
+    encryptAndSetLocalStorage('tiendaData', JSON.stringify(items));
 
   }
 
@@ -107,17 +104,25 @@ const Tiendas = () => {
     console.log(validateSlide)
   },[validateSlide])
 
+  const insertItem = (items) => {
+    router.push(`/Tiendas/InsertarTienda/${pathGen()}`)
+    // encryptAndSetLocalStorage('usuarioData', JSON.stringify(items));
+    console.log(items)
+  }
+
 
   return (
     <>
       <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className='p-4 sm:ml-64'>
+      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
         <Table
           headers={Headers} 
           content={items} 
           showActions={true} 
           onDelete={(newValue)=> deleteItem(newValue)}
           onEdit={(newValue)=> editItem(newValue)}
+          onInsert={(newValue)=> insertItem(newValue)}
+
         />
       </div>
 

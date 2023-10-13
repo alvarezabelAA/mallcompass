@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';import Table from '../../components/glob
 import { useAuth } from '../../context/AuthContext';
 import useHasMounted from '../../hooks/useHasMounted';
 import SideBar from '../../components/globals/SideBar';
-import { deleteWithParams, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
+import { deleteWithbody, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
 import { useAlert } from '../../context/AlertContext';
 
 const Usuarios = () => {
@@ -13,15 +13,20 @@ const Usuarios = () => {
   const [items,setItems]=useState([])
   const { showAlertWithMessage } = useAlert();
 
+
   const listar =async()=>{
     try {
       const endpoint = 'http://localhost:4044/usuario/final/consulta';
-      
-      const data = await getFromAPI(endpoint);
-      console.log(data)
-      setItems(data.datos)
-      if(data.status ==='1'){
-        showAlertWithMessage('OK', 'Datos obtenidos')
+      const queryParams = {
+        token: token.toString()
+      };
+      console.log(queryParams)
+      const data = await getFromAPIWithParams(endpoint,queryParams);
+      if(data.status ===1){
+        console.log(data)
+        setItems(data.datos)
+      }else{
+        setItems([])
       }
     } catch (error) {
       console.error('Error al obtener datos:', error);
@@ -76,12 +81,14 @@ const Usuarios = () => {
   const deleteItem = async (item) => {
     console.log(item);
     const endpoint = 'http://localhost:4044/usuario/final/delete'; // URL del servidor de eliminación
+    console.log(token)
     const requestBody = {
+      token: token.toString(),
       id_usuario: item.id_usuario, // Agrega otros campos si es necesario
     };
   
     try {
-      const response = await deleteWithParams(endpoint, requestBody);
+      const response = await deleteWithbody(endpoint, requestBody);
   
       console.log(response);
   

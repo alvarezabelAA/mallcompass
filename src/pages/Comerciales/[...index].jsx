@@ -3,13 +3,15 @@ import { useRouter } from 'next/router';import Table from '../../components/glob
 import { useAuth } from '../../context/AuthContext';
 import useHasMounted from '../../hooks/useHasMounted';
 import SideBar from '../../components/globals/SideBar';
-import { encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
+import { deleteWithParams, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
+import { useAlert } from '../../context/AlertContext';
 
 const Comerciales = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
   const hasMounted = useHasMounted();
   const router = useRouter();
   const [items,setItems]=useState([])
+  const { showAlertWithMessage } = useAlert();
 
 
   const listar =async()=>{
@@ -80,9 +82,32 @@ const Comerciales = () => {
     console.log(items)
   }
 
-  const deleteItem = (item) => {
-    console.log(item)
-  }
+  const deleteItem = async (item) => {
+    console.log(item);
+    const endpoint = 'http://localhost:4044/centroComercial/delete'; // URL del servidor de eliminación
+    console.log(token)
+    console.log(item.id_centroComercial)
+    const requestParams = {
+      token: token.toString(),
+      idComercial: item.id_centroComercial, // Agrega otros campos si es necesario
+    };
+  
+    try {
+      const response = await deleteWithParams(endpoint, requestParams);
+  
+      console.log(response);
+  
+      if (response.status === 1) {
+        listar();
+        showAlertWithMessage('OK', 'El elemento se eliminó correctamente');
+      } else {
+        showAlertWithMessage('ERROR', 'No se pudo eliminar el elemento');
+      }
+    } catch (error) {
+      showAlertWithMessage('ERROR', 'Error al hacer la solicitud DELETE: ' + error);
+      // Maneja el error aquí
+    }
+  };
 
 
   const insertItem = (items) => {

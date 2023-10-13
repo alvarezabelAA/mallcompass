@@ -38,7 +38,7 @@ export async function postToAPI(endpoint, dataToSend) {
   }
 }
 
-export async function deleteWithParams(endpoint, body) {
+export async function deleteWithbody(endpoint, body) {
   try {
     const response = await fetch(endpoint, {
       method: 'DELETE',
@@ -58,6 +58,31 @@ export async function deleteWithParams(endpoint, body) {
     throw error;
   }
 }
+
+export async function deleteWithParams(endpoint, params) {
+  try {
+    // Construir la URL con los parámetros
+    const url = new URL(endpoint);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`La solicitud DELETE no fue exitosa. Estado: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 // Función para realizar una solicitud GET con parámetros
 export async function getFromAPIWithParams(endpoint, queryParams) {

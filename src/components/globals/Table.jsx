@@ -5,7 +5,7 @@ import * as iconsBs from 'react-icons/bs';
 const Table = ({ headers, content, showActions = false, onDelete, onEdit, showInsertButton = true, onInsert }) => {
   const [searchTerm, setSearchTerm] = useState(""); // Estado para el filtro de búsqueda
   const [currentPage, setCurrentPage] = useState(1); // Estado para el número de página actual
-  const [itemsPerPage, setItemsPerPage] = useState(4); // Estado para la cantidad de elementos por página
+  const [itemsPerPage, setItemsPerPage] = useState(15); // Estado para la cantidad de elementos por página
   const [totalPages, setTotalPages] = useState(1); // Estado para la cantidad total de páginas
 
   const handleInsert = () => {
@@ -103,7 +103,7 @@ const Table = ({ headers, content, showActions = false, onDelete, onEdit, showIn
                   className={`${
                     index === 0 ? "rounded-tl-lg" : ""}${
                     index === extendedHeaders.length - 1 ? "rounded-tr-lg" : ""
-                  } background-darkBlue text-white truncate`}
+                  } background-darkBlue h-10 text-white truncate`}
                   key={index}
                 >
                   {header.titulo}

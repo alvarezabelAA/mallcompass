@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
   return (
     <LayoutContext.Provider value={{}} >
       <div>
-        <div className=' w-full h-screen bg-gray-200 max-w-9xl mx-auto'>
+        <div className=' w-full h-screen  max-w-9xl mx-auto'>
           {children}
         </div>
       </div>

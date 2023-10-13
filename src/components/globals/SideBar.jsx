@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import * as iconsFc from 'react-icons/fc';
 import * as iconsMd from 'react-icons/md';
 import { useRouter } from 'next/router';
-import { decryptAndGetLocalStorage, pathGen } from '../../funciones/api';
+import { decryptAndGetLocalStorage, deleteWithbody, pathGen } from '../../funciones/api';
 import { useAuth } from '../../context/AuthContext';
+import { useAlert } from '../../context/AlertContext';
 
 const SideBar = ({ onVisible }) => {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [catalogosMenuOpen, setCatalogosMenuOpen] = useState(false); // Estado para el menú desplegable de Catalogos
+  const [catalogosMenuOpen2, setCatalogosMenuOpen2] = useState(false); // Estado para el menú desplegable de Catalogos
   const router = useRouter();
   const { token,logout } = useAuth(); // Obtén el token del contexto de autenticación
   const [validar, setValidar]=useState('')
+  const { showAlertWithMessage } = useAlert();
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
@@ -20,6 +23,10 @@ const SideBar = ({ onVisible }) => {
 
   const toggleCatalogosMenu = () => {
     setCatalogosMenuOpen(!catalogosMenuOpen);
+  };
+
+  const toggleCatalogosMenu2 = () => {
+    setCatalogosMenuOpen2(!catalogosMenuOpen2);
   };
 
   const sidebarClassName = `fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${
@@ -36,6 +43,9 @@ const SideBar = ({ onVisible }) => {
   const comercialesB = () => {
     router.push(`../Comerciales/${pathGen()}`);  };
 
+  const adminCC = () => {
+    router.push(`../AdministracionCC/${pathGen()}`);  };
+
   const usuariosC = () => {
     router.push(`../Usuarios/${pathGen()}`);  };
 
@@ -48,7 +58,31 @@ const SideBar = ({ onVisible }) => {
   const configuracionC = () => {
     router.push(`../Configuracion/${pathGen()}`);  };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const endpoint = 'http://localhost:4044/usuario/final/logout'; // URL del servidor de eliminación
+    console.log(token)
+    const requestBody = {
+      tokenSesion: token.toString(),
+    };
+    console.log(requestBody)
+    
+    try {
+      
+      const response = await deleteWithbody(endpoint, requestBody);
+      console.log(response);
+  
+      if (response.status === 1) {
+        showAlertWithMessage('OK', 'Se cerro sesion correctamente');
+        logout();
+        localStorage.clear();
+        router.push(`/login/${pathGen()}`);
+      } else {
+        showAlertWithMessage('ERROR', 'No se pudo eliminar el elemento');
+      }
+    } catch (error) {
+      showAlertWithMessage('ERROR', 'Error al hacer la solicitud DELETE: ' + error);
+      // Maneja el error aquí
+    }
     logout();
     localStorage.clear();
     router.push(`/login/${pathGen()}`);
@@ -57,6 +91,7 @@ const SideBar = ({ onVisible }) => {
   useEffect(()=>{
     const decryptedData = decryptAndGetLocalStorage('rol');
     setValidar(decryptedData)
+    console.log(validar)
   },[validar])
 
   return (
@@ -135,6 +170,50 @@ const SideBar = ({ onVisible }) => {
                       >
                         <iconsFc.FcShop className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
                         <span className={`text-white ml-3 ${sidebarVisible ? 'hidden': 'block'}`}>Tiendas</span>
+                      </a>
+                    </li>
+                    {/* Agrega más opciones aquí */}
+                  </ul>
+                )}
+              </li>
+            )}
+            {(validar === 'S' || validar === 'C') && (
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group"
+                  onClick={toggleCatalogosMenu2} // Manejador de eventos para abrir/cerrar el menú de Catalogos
+                >
+                  <iconsFc.FcInTransit className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
+                  <span className={`text-white ml-3 ${sidebarVisible ? 'hidden':'block'}`}>Administracion</span>
+                  <svg
+                    className={`text-white ml-auto w-4 h-4 transition-transform ${
+                      catalogosMenuOpen2 ? 'rotate-0' : 'rotate-180'
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </a>
+                {/* Menú desplegable de Catalogos */}
+                {catalogosMenuOpen2 && (
+                  <ul className="ml-6 space-y-2">
+                    <li>
+                      <a
+                        onClick={()=> adminCC()}
+                        href="#"
+                        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group"
+                      >
+                        <iconsFc.FcSurvey className='flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
+                        <span className={`text-white ml-3 ${sidebarVisible ? 'hidden': 'block'}`}>Admin C.C</span>
                       </a>
                     </li>
                     {/* Agrega más opciones aquí */}

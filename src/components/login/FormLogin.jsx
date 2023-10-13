@@ -44,6 +44,7 @@ const FormLogin = () => {
           login(data.tokenSesionID);
           encryptAndSetLocalStorage('token', data.tokenSesionID);
           encryptAndSetLocalStorage('rol', data.rol);
+          encryptAndSetLocalStorage('id_usuario', data.id_usuario);
         }else{
           showAlertWithMessage('ERROR', 'Verifique sus datos ')
         }
