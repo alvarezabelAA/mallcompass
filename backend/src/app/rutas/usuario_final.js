@@ -1,7 +1,7 @@
 const conn = require('../../config/database');
 const bcrypt = require('bcrypt'); /*funcion hash*/
 const cors = require('cors');
-const { tokenSesion,insertUsuarios } = require('./functions');
+const { tokenSesion,insertUsuarios,deleteUsuarios } = require('./functions');
 const { x64 } = require('crypto-js');
 
 module.exports = (app) => {
@@ -312,6 +312,11 @@ module.exports = (app) => {
             return;
           }
 
+          /*DELETE DE LOGINTOKEN y RELACIONES
+          deleteUsuarios(id_usuario);*/
+
+
+          /*DELETE DE TABLA USUARIO */
           const query = `DELETE FROM usuarios WHERE id_usuario = ?`;
           conn.query(query, [id_usuario], (error, result) => {
             if (error) {

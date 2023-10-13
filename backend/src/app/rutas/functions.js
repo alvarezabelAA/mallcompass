@@ -52,9 +52,64 @@ function insertUsuarios(usuario,rol,id_establecimiento){
         }
     });
   }
-
-
 }
+
+
+function deleteUsuarios(id_usuario,){
+    const query = `DELETE FROM logintokens WHERE id_usuario = ?`;
+    conn.query(query, [id_usuario], (error, result) => {
+        if (error) {
+            console.log("Error al eliminar el usuario");
+        } else {
+            if (result.affectedRows > 0) {
+                console.log("Usuario eliminado de logintoken");
+            } else {
+                console.log("No se encontró ningún usuario con ese id_usuario");
+            }
+        }
+    });
+
+
+    const query2 = `SELECT * FROM usuarios WHERE id_usuario = ?`;
+    conn.query(query2, [id_usuario], (error2, result2) => {
+        if (error2) {
+            console.log("Error de consulta en usuarios");
+        } else {
+            console.log("datos de usuario obtenidos");
+            if(result2[0].rol == "C"){
+                const query = `DELETE FROM rel_user_cc WHERE id_usuario = ?`;
+                conn.query(query, [id_usuario], (error, result) => {
+                    if (error) {
+                        console.log("Error al eliminar el usuario");
+                    } else {
+                        if (result.affectedRows > 0) {
+                            console.log("Usuario eliminado de rel_user_cc");
+                        } else {
+                            console.log("No se encontró ningún usuario con ese id_usuario");
+                        }
+                    }
+                });
+            }else{
+                if(result2[0].rol == "T"){
+                    const query = `DELETE FROM rel_user_tienda WHERE id_usuario = ?`;
+                    conn.query(query, [id_usuario], (error, result) => {
+                        if (error) {
+                            console.log("Error al eliminar el usuario");
+                        } else {
+                            if (result.affectedRows > 0) {
+                                console.log("Usuario eliminado de rel_user_tienda");
+                            } else {
+                                console.log("No se encontró ningún usuario con ese id_usuario");
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    });
+}
+
+
 
 function hasheador(contrasena){
 }
@@ -63,5 +118,6 @@ module.exports = {
     hasheador,
     tokenSesion,
     insertCC_Tienda,
-    insertUsuarios
+    insertUsuarios,
+    deleteUsuarios
 }
