@@ -111,6 +111,7 @@ module.exports = (app) => {
   app.options('/usuario/final/logout', cors());
   app.delete('/usuario/final/logout', cors(),(req, res)=>{
     let query1 = `SELECT token FROM logintokens WHERE '${req.query.tokenSesion}'`;
+    console.log(`token de frontend -> ${req.query.tokenSesion}`);
     conn.query(query1, (error, filas1) => {
       if(error){
         res.json({ status: 0, mensaje: "error en consulta de token", datos:error });
