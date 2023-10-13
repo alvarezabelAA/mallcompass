@@ -110,20 +110,20 @@ module.exports = (app) => {
   /* LOGOUT DE USUARIO*/
   app.options('/usuario/final/logout', cors());
   app.delete('/usuario/final/logout', cors(),(req, res)=>{
-    let query1 = `SELECT token FROM logintokens WHERE '${req.query.tokenSesion}'`;
-    console.log(`token de frontend -> ${req.query.tokenSesion}`);
+    let query1 = `SELECT token FROM logintokens WHERE '${req.body.tokenSesion}'`;
+    console.log(`token de frontend -> ${req.body.tokenSesion}`);
     conn.query(query1, (error, filas1) => {
       if(error){
         res.json({ status: 0, mensaje: "error en consulta de token", datos:error });
       }else{
         console.log(`token encontrado -> ${filas1[0].token}`);
       
-        let query2 = `DELETE FROM logintokens WHERE token='${req.query.tokenSesion}'`;
+        let query2 = `DELETE FROM logintokens WHERE token='${req.body.tokenSesion}'`;
         conn.query(query2, (error, filas) => {
           if(error){
             res.json({ status: 0, mensaje: "error en DELETE sobre DB", datos:error });
           }else{
-            if(filas1[0].token == req.query.tokenSesion){
+            if(filas1[0].token == req.body.tokenSesion){
               console.log("DELETE ejecutado");
               res.json({ status: 1, mensaje: "Logout exitoso", datos:[] });
             }else{
