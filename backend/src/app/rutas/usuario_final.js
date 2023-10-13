@@ -16,13 +16,28 @@ module.exports = (app) => {
   /*CONSULTA GENERAL DATOS USUARIOS*/
   app.options('/usuario/final/consulta', cors());
   app.get('/usuario/final/consulta', cors(),(req, res)=>{
-    console.log("ejecucion metodo GET");
-    let query = "SELECT * FROM usuarios";
+    let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
     conn.query(query, (error, filas) => {
       if(error){
-        res.json({ status: 0, mensaje: "error en DB", datos:error });
+        console.log("No se encontró el token");
       }else{
-        res.json({ status: 1, mensaje: "datos obtenidos", datos: filas });
+        if(filas.length == 0){
+          console.log("consulta sin elementos");
+          res.json({ status: 0, mensaje: "error de token", datos: filas });
+        }else{
+          console.log("encontro el token");
+
+          console.log("ejecucion metodo GET");
+          let query = "SELECT * FROM usuarios";
+          conn.query(query, (error, filas) => {
+            if(error){
+              res.json({ status: 0, mensaje: "error en DB", datos:error });
+            }else{
+              res.json({ status: 1, mensaje: "datos obtenidos", datos: filas });
+            }
+          });
+
+        }
       }
     });
   });
@@ -32,12 +47,25 @@ module.exports = (app) => {
   app.options('/usuario/final/consultaGeneral', cors());
   app.get('/usuario/final/consultaGeneral', cors(),(req, res)=>{
     console.log("ejecucion metodo GET");
-    let query = `SELECT * FROM usuarios INNER JOIN logintokens ON usuarios.correo=logintokens.correo WHERE token = '${req.query.tokenSesion}'`;
+    let query = `SELECT * FROM logintokens WHERE token = '${req.query.tokenSesion}'`;
     conn.query(query, (error, filas) => {
       if(error){
-        res.json({ status: 0, mensaje: "error en DB", datos:error });
+        console.log("No se encontró el token");
       }else{
-        res.json({ status: 1, mensaje: "datos obtenidos", datos: filas });
+        if(filas.length == 0){
+          console.log("consulta sin elementos");
+          res.json({ status: 0, mensaje: "error de token", datos: filas });
+        }else{
+          console.log("encontro el token");
+          let query = `SELECT * FROM usuarios INNER JOIN logintokens ON usuarios.correo=logintokens.correo WHERE token = '${req.query.tokenSesion}'`;
+          conn.query(query, (error, filas) => {
+            if(error){
+              res.json({ status: 0, mensaje: "error en DB", datos:error });
+            }else{
+              res.json({ status: 1, mensaje: "datos obtenidos", datos: filas });
+            }
+          });
+        }
       }
     });
   });
@@ -147,7 +175,6 @@ module.exports = (app) => {
   /*UPDATE DE USUARIO NORMAL SUPERADMIN*/
   app.options('/usuario/final/update', cors());
   app.put('/usuario/final/update', cors(), (req, res) => {
-
         console.log("ejecucion metodo GET");
         let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
         conn.query(query, (error, filas) => {
@@ -156,7 +183,7 @@ module.exports = (app) => {
           }else{
             if(filas.length == 0){
               console.log("consulta sin elementos");
-              res.json({ status: 1, mensaje: "error de token", datos: filas });
+              res.json({ status: 0, mensaje: "error de token", datos: filas });
             }else{
               console.log("encontro el token");
 
@@ -229,10 +256,6 @@ module.exports = (app) => {
           }
         });
 
-
-
-
-
   });
   
 
@@ -273,23 +296,36 @@ module.exports = (app) => {
   /* DELETE DE USUARIO POR ID_USUARIO */
   app.options('/usuario/final/delete', cors());
   app.delete('/usuario/final/delete', cors(), (req, res) => {
-    const { id_usuario } = req.body; // Obtiene el id_usuario del cuerpo de la solicitud
+    let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
+    conn.query(query, (error, filas) => {
+      if(error){
+        console.log("No se encontró el token");
+      }else{
+        if(filas.length == 0){
+          console.log("consulta sin elementos");
+          res.json({ status: 0, mensaje: "error de token", datos: filas });
+        }else{
+          console.log("encontro el token");
 
-    if (!id_usuario) {
-      res.json({ status: 0, mensaje: 'Falta el parámetro id_usuario en el cuerpo de la solicitud' });
-      return;
-    }
+          const { id_usuario } = req.body; // Obtiene el id_usuario del cuerpo de la solicitud
+          if (!id_usuario) {
+            res.json({ status: 0, mensaje: 'Falta el parámetro id_usuario en el cuerpo de la solicitud' });
+            return;
+          }
 
-    const query = `DELETE FROM usuarios WHERE id_usuario = ?`;
+          const query = `DELETE FROM usuarios WHERE id_usuario = ?`;
 
-    conn.query(query, [id_usuario], (error, result) => {
-      if (error) {
-        res.json({ status: 0, mensaje: 'Error al eliminar el usuario', datos: error });
-      } else {
-        if (result.affectedRows > 0) {
-          res.json({ status: 1, mensaje: 'Usuario eliminado correctamente', datos: result });
-        } else {
-          res.json({ status: 0, mensaje: 'No se encontró ningún usuario con ese id_usuario' });
+          conn.query(query, [id_usuario], (error, result) => {
+            if (error) {
+              res.json({ status: 0, mensaje: 'Error al eliminar el usuario', datos: error });
+            } else {
+              if (result.affectedRows > 0) {
+                res.json({ status: 1, mensaje: 'Usuario eliminado correctamente', datos: result });
+              } else {
+                res.json({ status: 0, mensaje: 'No se encontró ningún usuario con ese id_usuario' });
+              }
+            }
+          });
         }
       }
     });
