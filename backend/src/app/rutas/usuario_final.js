@@ -75,7 +75,7 @@ module.exports = (app) => {
   app.options('/usuario/final/login', cors());
   app.get('/usuario/final/login', cors(),(req, res)=>{
     console.log("ejecucion metodo GET");
-    let query = `SELECT contrasena,rol FROM usuarios WHERE correo='${req.query.correo}'`;
+    let query = `SELECT contrasena,rol,id_usuario FROM usuarios WHERE correo='${req.query.correo}'`;
     conn.query(query, (error, filas) => {
       if(error){
         res.json({ status: 0, mensaje: "error en DB", datos:error });
@@ -95,7 +95,7 @@ module.exports = (app) => {
             if (result) {
               console.log('Contraseña válida');
               const generador = tokenSesion(req.query.correo, req.query.contrasena);
-              res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}` });
+              res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}` });
             } else {
               console.log('Contraseña inválida');
               console.log(`Contraseña obtenida: ${filas[0].contrasena}`);
