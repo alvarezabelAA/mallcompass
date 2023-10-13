@@ -293,7 +293,7 @@ module.exports = (app) => {
 
   });
 
-  /* DELETE DE USUARIO POR ID_USUARIO */
+  /* DELETE DE USUARIO POR ID_USUARIO*/
   app.options('/usuario/final/delete', cors());
   app.delete('/usuario/final/delete', cors(), (req, res) => {
     let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
@@ -307,14 +307,13 @@ module.exports = (app) => {
         }else{
           console.log("encontro el token");
 
-          const { id_usuario } = req.body; // Obtiene el id_usuario del cuerpo de la solicitud
+          var  id_usuario  = req.query.id_usuario; // Obtiene el id_usuario del cuerpo de la solicitud
           if (!id_usuario) {
             res.json({ status: 0, mensaje: 'Falta el parámetro id_usuario en el cuerpo de la solicitud' });
             return;
           }
 
           const query = `DELETE FROM usuarios WHERE id_usuario = ?`;
-
           conn.query(query, [id_usuario], (error, result) => {
             if (error) {
               res.json({ status: 0, mensaje: 'Error al eliminar el usuario', datos: error });
