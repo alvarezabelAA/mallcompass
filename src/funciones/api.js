@@ -9,6 +9,7 @@ export async function getFromAPI(endpoint) {
       throw new Error('La solicitud GET no fue exitosa');
     }
     const data = await response.json();
+    console.log(data)
     return data;
   } catch (error) {
     throw error;

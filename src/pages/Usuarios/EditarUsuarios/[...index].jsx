@@ -2,7 +2,7 @@ import SideBar from '../../../components/globals/SideBar'
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../../context/AuthContext';
-import { postToAPI, pathGen, putToAPIWithParamsAndBody, decryptAndGetLocalStorage, encryptAndSetLocalStorage } from '../../../funciones/api';
+import { postToAPI, pathGen, putToAPIWithParamsAndBody, decryptAndGetLocalStorage, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams } from '../../../funciones/api';
 import { useAlert } from '../../../context/AlertContext'; 
 import useHasMounted from '../../../hooks/useHasMounted';
 import { format } from 'date-fns';
@@ -11,12 +11,16 @@ const EditarUsuario = () => {
   const [nombre, setNombre] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [rols, setRol] = useState('');
+  const [comercial, setComercial] = useState(null);
+  const [tienda, setTienda] = useState(null);
   const [apellido, setApellido] = useState('');
   const [email, setEmail] = useState('');
   const [telefono, setTelefono] = useState('');
   const [imagen, setImagen] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
+  const [id_usuario, setIdUsuario] = useState('');
   const { showAlertWithMessage } = useAlert();
+  const [items, setItems]= useState([])
   const hasMounted = useHasMounted();
 
   const [errors, setErrors] = useState({
@@ -27,21 +31,22 @@ const EditarUsuario = () => {
     imagen: '',
     fechaNacimiento: '',
     password: '',
+    centro_comercial:'',
+    rol:''
   });
 
   const getEnv = () => {
-    console.log(token);
     if (!token) {
       router.push(`/login/${pathGen()}`);
     }
     const decryptedData = decryptAndGetLocalStorage('usuarioData');
-    console.log(decryptedData)
+    listar()
     const objeto = JSON.parse(decryptedData);
     if (objeto && Object.keys(objeto).length > 0) {
-      console.log(objeto.contrasena)
       setContrasena(objeto.contrasena)
       setRol(objeto.rol)
       setApellido(objeto.apellido)
+      setIdUsuario(objeto.id_usuario)
       setNombre(objeto.nombre)
       setEmail(objeto.correo)
       setTelefono(objeto.telefono)
@@ -63,29 +68,38 @@ const EditarUsuario = () => {
   const router = useRouter();
 
   const handleRegistro = async () => {
-    // // Validación de campos
-    // const camposObligatorios = ['nombre', 'apellido', 'email', 'telefono', 'imagen', 'fechaNacimiento', 'password'];
-    // const newErrors = {};
+    // Validación de campos
+    const camposObligatorios = ['nombre', 'apellido', 'email', 'telefono', 'imagen', 'fechaNacimiento','centro_comercial','rol'];
+    const newErrors = {};
 
-    // camposObligatorios.forEach((campo) => {
-    //   if (!eval(campo)) {
-    //     newErrors[campo] = `El campo de ${campo} es obligatorio.`;
-    //   } else {
-    //     newErrors[campo] = '';
-    //   }
-    // });
-    // console.log(newErrors)
+    camposObligatorios.forEach((campo) => {
+      if (campo === 'centro_comercial' && rols === 'C') {
+        console.log(comercial)
+        if (!comercial) {
+          newErrors[campo] = `El campo de ${campo} es obligatorio.`;
+        } else {
+          newErrors[campo] = '';
+        }
+      } else {
+        if (!eval(campo)) {
+          newErrors[campo] = `El campo de ${campo} es obligatorio.`;
+        } else {
+          newErrors[campo] = '';
+        }
+      }
+    });
+    console.log(newErrors)
 
-    // setErrors(newErrors);
+    setErrors(newErrors);
 
-    // // Verifica si hay algún error en los campos
-    // const hayErrores = Object.values(newErrors).some((error) => error);
+    // Verifica si hay algún error en los campos
+    const hayErrores = Object.values(newErrors).some((error) => error);
 
-    // if (hayErrores) {
-    //   console.log(hayErrores)
-    //   // Detén el proceso de registro si faltan campos obligatorios
-    //   return;
-    // }
+    if (hayErrores) {
+      console.log(hayErrores)
+      // Detén el proceso de registro si faltan campos obligatorios
+      return;
+    }
 
     // // Redirigir a la carpeta PantallaInicio después del registro exitoso
     const endpoint = 'http://localhost:4044/usuario/final/update'; // Ajusta la URL del servidor de registro
@@ -98,10 +112,13 @@ const EditarUsuario = () => {
       telefono,
       imagen,
       fecha_nacimiento: fechaNacimiento,
+      id_usuario
     };
     const queryParams = {
-      tokenSesion: token.toString()
-    };
+      token: token.toString(),
+      idComercial: (comercial != null ? parseInt(comercial):null),
+      idTienda: (tienda != null ? parseInt(tienda) : null)
+    }
 
     console.log(registroData)
     console.log(queryParams)
@@ -116,9 +133,9 @@ const EditarUsuario = () => {
           showAlertWithMessage('OK', 'Se ingresaron los datos')
         }else{
           showAlertWithMessage('ERROR', 'No se ingreso la data')
-
+  
         }
-        
+          
       } catch (error) {
         showAlertWithMessage('ERROR', 'Error al hacer la solicitud POST:' + error)
         // Maneja el error aquí
@@ -126,6 +143,7 @@ const EditarUsuario = () => {
     } catch (error) {
       showAlertWithMessage('ERROR', 'Error al hacer la solicitud:' + error)
     }
+    
   };
 
   const handleLogin = () => {
@@ -144,6 +162,28 @@ const EditarUsuario = () => {
   useEffect(()=>{
     console.log(validateSlide)
   },[validateSlide])
+
+  useEffect(()=>{
+    console.log(rols)
+  },[rols])
+
+  const listar =async()=>{
+    try {
+      const endpoint = 'http://localhost:4044/centroComercial/consultaGeneral/activo';
+      const queryParams = {
+        token: token.toString()
+      };
+      const data = await getFromAPIWithParams(endpoint, queryParams);
+      console.log(data)
+      setItems(data.datos)
+      if(data.status ==='1'){
+      }
+    } catch (error) {
+      console.error('Error al obtener datos:', error);
+
+    }
+
+  }
 
 
   return (
@@ -234,11 +274,11 @@ const EditarUsuario = () => {
                 {errors.fechaNacimiento && <div className="text-red-500">{errors.fechaNacimiento}</div>}
               </div>
               <div>
-                <label htmlFor="fechaNacimiento" className="text-white block text-sm font-medium ">
+                <label htmlFor="rol" className="text-white block text-sm font-medium ">
               Rol:
                 </label>
                 <select
-                  id="fechaNacimiento"
+                  id="rol"
                   className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
                   value={rols}
                   onChange={(e) => setRol(e.target.value)}
@@ -250,6 +290,27 @@ const EditarUsuario = () => {
                 </select>
                 {errors.fechaNacimiento && <div className="text-red-500">{errors.fechaNacimiento}</div>}
               </div>
+              {rols === 'C' &&  (
+                <div>
+                  <label htmlFor="centro_comercial" className="text-white block text-sm font-medium ">
+              Centros Comerciales:
+                  </label>
+                  <select
+                    id="centro_comercial"
+                    className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                    value={comercial || ''}
+                    onChange={(e) => setComercial(e.target.value)}
+                  >
+                    <option></option>
+                    {items.map((item) => (
+                      <option key={item.id_centroComercial} value={item.id_centroComercial}>
+                        {item.nombreCC}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.centro_comercial && <div className="text-red-500">{errors.centro_comercial}</div>}
+                </div>
+              )}
             </div>
             <div className="mt-6">
               <button

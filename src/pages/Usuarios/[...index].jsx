@@ -21,6 +21,7 @@ const Usuarios = () => {
       console.log(data)
       setItems(data.datos)
       if(data.status ==='1'){
+        showAlertWithMessage('OK', 'Datos obtenidos')
       }
     } catch (error) {
       console.error('Error al obtener datos:', error);
