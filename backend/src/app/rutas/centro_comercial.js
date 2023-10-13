@@ -206,7 +206,7 @@ module.exports = (app) => {
 
     /*Lista de CC especial*/
     app.options('/centroComercial/lista', cors());
-    app.get('/centroComercial/consulta', cors(),(req, res)=>{
+    app.get('/centroComercial/lista', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
         let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
         conn.query(query, (error, filas) => {
@@ -254,7 +254,7 @@ module.exports = (app) => {
 
       /*Lista de CC usuarios especial*/
     app.options('/centroComercial/listaUsuarios', cors());
-    app.get('/centroComercial/consulta', cors(),(req, res)=>{
+    app.get('/centroComercial/listaUsuarios', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
         let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
         conn.query(query, (error, filas) => {
