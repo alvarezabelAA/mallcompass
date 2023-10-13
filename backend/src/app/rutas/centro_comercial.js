@@ -303,4 +303,33 @@ module.exports = (app) => {
 
 
 
+    /*TIENDAS DE UN CC*/
+    app.options('/centroComercial/listaTiendas', cors());
+    app.get('/centroComercial/listaTiendas', cors(),(req, res)=>{
+        console.log("ejecucion metodo GET");
+        let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
+        conn.query(query, (error, filas) => {
+          if(error){
+            console.log("No se encontró el token");
+          }else{
+            if(filas.length == 0){
+              console.log("consulta sin elementos");
+              res.json({ status: 1, mensaje: "error de token", datos: filas });
+            }else{
+              console.log("encontro el token");
+
+
+              let query2 = `SELECT * FROM rel_cc_tiendas INNER JOIN tiendas ON rel_cc_tiendas.id_tienda=tiendas.id_tienda WHERE id_centroComercial = '${req.query.id_centroComercial}'`;
+              conn.query(query2, (error2, filas2) => {
+                if(error2){
+                    res.json({ status: 0, mensaje: "error en DB", datos:error2 });
+                }else{
+                    res.json({ status: 1, mensaje: "datos obtenidos", datos: filas2 });
+                }
+              });
+            }
+          }
+        });
+      });
+
 }
