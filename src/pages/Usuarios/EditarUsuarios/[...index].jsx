@@ -68,38 +68,37 @@ const EditarUsuario = () => {
   const router = useRouter();
 
   const handleRegistro = async () => {
-    // Validación de campos
-    const camposObligatorios = ['nombre', 'apellido', 'email', 'telefono', 'imagen', 'fechaNacimiento','centro_comercial','rol'];
-    const newErrors = {};
+    // const camposObligatorios = ['nombre', 'apellido', 'email', 'telefono', 'imagen', 'fechaNacimiento', 'centro_comercial', 'rol'];
+    // const newErrors = {};
 
-    camposObligatorios.forEach((campo) => {
-      if (campo === 'centro_comercial' && rols === 'C') {
-        console.log(comercial)
-        if (!comercial) {
-          newErrors[campo] = `El campo de ${campo} es obligatorio.`;
-        } else {
-          newErrors[campo] = '';
-        }
-      } else {
-        if (!eval(campo)) {
-          newErrors[campo] = `El campo de ${campo} es obligatorio.`;
-        } else {
-          newErrors[campo] = '';
-        }
-      }
-    });
-    console.log(newErrors)
+    // camposObligatorios.forEach((campo) => {
+    //   if (campo === 'centro_comercial' && rols === 'C') {
+    //     if (typeof comercial === 'undefined' || comercial === null || comercial.trim() === '') {
+    //       newErrors[campo] = `El campo de ${campo} es obligatorio.`;
+    //     } else {
+    //       newErrors[campo] = '';
+    //     }
+    //   } else {
+    //     if (!eval(campo)) {
+    //       newErrors[campo] = `El campo de ${campo} es obligatorio.`;
+    //     } else {
+    //       newErrors[campo] = '';
+    //     }
+    //   }
+      
+    // });
+    // console.log(newErrors)
 
-    setErrors(newErrors);
+    // setErrors(newErrors);
 
-    // Verifica si hay algún error en los campos
-    const hayErrores = Object.values(newErrors).some((error) => error);
+    // // Verifica si hay algún error en los campos
+    // const hayErrores = Object.values(newErrors).some((error) => error);
 
-    if (hayErrores) {
-      console.log(hayErrores)
-      // Detén el proceso de registro si faltan campos obligatorios
-      return;
-    }
+    // if (hayErrores) {
+    //   console.log(hayErrores)
+    //   // Detén el proceso de registro si faltan campos obligatorios
+    //   return;
+    // }
 
     // // Redirigir a la carpeta PantallaInicio después del registro exitoso
     const endpoint = 'http://localhost:4044/usuario/final/update'; // Ajusta la URL del servidor de registro
@@ -130,9 +129,9 @@ const EditarUsuario = () => {
         if(response.status === 1){
           router.push(`/Usuarios/${pathGen()}`)
           encryptAndSetLocalStorage('usuarioData', '');
-          showAlertWithMessage('OK', 'Se ingresaron los datos')
+          showAlertWithMessage('OK', response.mensaje)
         }else{
-          showAlertWithMessage('ERROR', 'No se ingreso la data')
+          showAlertWithMessage('ERROR', response.mensaje)
   
         }
           

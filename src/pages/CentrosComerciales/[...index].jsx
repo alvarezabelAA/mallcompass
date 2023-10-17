@@ -91,13 +91,20 @@ const CentrosComerciales = () => {
     console.log(items)
   }
 
+  const showStores = (item) => {
+    console.log('Aca estoiy')
+    console.log(item)
+    router.push(`/CentrosComerciales/TiendasComercial/${pathGen()}`)
+    encryptAndSetLocalStorage('tiendasData', item);
+  }
+
 
   return (
     <>
       <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
       
       <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
-        <Cards cardData={items}/>
+        <Cards onShopClick={(item)=> showStores(item)} cardData={items}/>
       </div>
     </>
   )

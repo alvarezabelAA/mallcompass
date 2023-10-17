@@ -109,6 +109,7 @@ const AdministracionCC = () => {
         <Cards cardData={items} onShopClick={(newValue)=>handleShopClick(newValue)} onInfoClick={(newValue)=>handleInfoClick(newValue)}/>
       </div>
 
+
     </>
   )
 }

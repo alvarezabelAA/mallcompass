@@ -96,7 +96,7 @@ export async function getFromAPIWithParams(endpoint, queryParams) {
     });
     console.log(url.href)
     const response = await fetch(url.href);
-
+    console.log(response)
     if (!response.ok) {
       throw new Error('La solicitud GET no fue exitosa');
     }

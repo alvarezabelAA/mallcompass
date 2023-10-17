@@ -53,110 +53,72 @@ const Feed = () => {
     console.log(validateSlide)
   },[validateSlide])
 
+  const sampleItems = [
+    {
+      id: 1,
+      title: 'Oferta Especial',
+      description: '¡Descuentos increíbles en todas las tiendas de moda!',
+    },
+    {
+      id: 2,
+      title: '¡Nuevos Lanzamientos!',
+      description: 'Descubre las últimas tendencias en electrónica y gadgets.',
+    },
+  ];
+
+  const sampleMalls = [
+    {
+      id: 1,
+      name: 'Centro Comercial XYZ',
+      location: 'Calle Principal #123',
+    },
+    {
+      id: 2,
+      name: 'Mall Aventura',
+      location: 'Avenida Central #456',
+    },
+  ];
+
 
   return (
     <>
       <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
+
       <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
+        <header className="background-purple text-white text-center py-4">
+          <h1 className="text-4xl font-bold">Bienvenido a Centros Comerciales</h1>
+          <nav className="mt-4">
+            {/* Coloca aquí enlaces de navegación si es necesario */}
+          </nav>
+        </header>
+
+        <section className="my-8 px-4">
+          <h2 className="text-2xl font-semibold mb-4">Publicaciones Recientes</h2>
+          <div className="flex flex-wrap -mx-2">
+            {/* Tarjetas de publicaciones */}
+            {/* ... */}
           </div>
-          <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-            <p className="text-2xl text-gray-400 dark:text-gray-500">
-              <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-              </svg>
-            </p>
+        </section>
+
+        <section className="my-8 px-4">
+          <h2 className="text-2xl font-semibold mb-4">Promociones Destacadas</h2>
+          <div className="flex flex-wrap -mx-2">
+            {/* Tarjetas de promociones */}
+            {/* ... */}
           </div>
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
+        </section>
+
+        <section className="my-8 px-4">
+          <h2 className="text-2xl font-semibold mb-4">Centros Comerciales Activos</h2>
+          <div className="flex flex-wrap -mx-2">
+            {/* Tarjetas de centros comerciales */}
+            {/* ... */}
           </div>
-          <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-            <p className="text-2xl text-gray-400 dark:text-gray-500">
-              <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-              </svg>
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                </svg>
-              </p>
-            </div>
-          </div>
-        </div>
+        </section>
+
+        <footer className="background-purple text-white text-center py-4">
+          <p>&copy; 2023 Centros Comerciales. Todos los derechos reservados.</p>
+        </footer>
       </div>
     </>
   );
