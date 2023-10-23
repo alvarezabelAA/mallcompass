@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import SideBar from '../../../components/globals/SideBar';
 import { decryptAndGetLocalStorage, pathGen, postToAPI, postToAPIWithParamsAndBody, putToAPIWithParamsAndBody } from '../../../funciones/api';
 import { useAlert } from '../../../context/AlertContext';
+import SideBars from '../../../components/common/SideBars';
 
 
 const EditarComecial = () => {
@@ -21,7 +22,7 @@ const EditarComecial = () => {
   const [longitud, setLongitud] = useState('');
   const [estado_cuenta, setEstadoCuenta] = useState('A');
   const [id_comercial, setIdComercial] = useState(0);
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
 
   const [errors, setErrors] = useState({
     estado_cuenta: "",
@@ -129,18 +130,18 @@ const EditarComecial = () => {
         console.log(response)
         if(response.status === 1){
           router.push(`/Comerciales/${pathGen()}`);
-          showAlertWithMessage('OK', 'Se modificaron los datos')
+          showAlertWithMessage('SUCCESS','Update realizado', 'Se modificaron los datos')
         }else{
-          showAlertWithMessage('ERROR', 'No se ingreso la data')
+          showAlertWithMessage('ERROR','Hay error en los datros', 'No se hizo la consulta correctamente')
 
         }
         
       } catch (error) {
-        showAlertWithMessage('ERROR', 'Error al hacer la solicitud POST:' + error)
+        showAlertWithMessage('ERROR','Hubo error de conexión con la Api', 'Error al hacer la solicitud POST:' + error)
         // Maneja el error aquí
       }
     } catch (error) {
-      showAlertWithMessage('ERROR', 'Error al hacer la solicitud:' + error)
+      showAlertWithMessage('WARNING','Valide su conexión', 'Error al hacer la solicitud:' + error)
     }
   };
 
@@ -151,9 +152,8 @@ const EditarComecial = () => {
 
   return (
     <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
-        <div className="md:p-32 py-60 ">
+      <SideBars >
+        <div className='w-full items-center m-[10vh]'>
           <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
             <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Editar Comercial</h2>
             <div className="grid grid-cols-1 gap-4 ">
@@ -281,7 +281,7 @@ const EditarComecial = () => {
             </div>
           </div>
         </div>
-      </div>
+      </SideBars>
     </>
   )
 }

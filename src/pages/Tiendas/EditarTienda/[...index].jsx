@@ -5,9 +5,10 @@ import useHasMounted from '../../../hooks/useHasMounted';
 import { useAuth } from '../../../context/AuthContext';
 import { useRouter } from 'next/router';
 import { decryptAndGetLocalStorage, pathGen, postToAPI, postToAPIWithParamsAndBody, putToAPIWithParamsAndBody } from '../../../funciones/api';
+import SideBars from '../../../components/common/SideBars';
 
 const EditarTienda = () => {
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
   const hasMounted = useHasMounted();
   const { token, login } = useAuth();
   const router = useRouter();
@@ -109,18 +110,18 @@ const EditarTienda = () => {
         console.log(response)
         if(response.status === 1){
           router.push(`/Tiendas/${pathGen()}`);
-          showAlertWithMessage('OK', 'Se ingresaron los datos')
+          showAlertWithMessage('SUCCESS','Solicitud correcta', 'Se ingresaron los datos')
         }else{
-          showAlertWithMessage('ERROR', 'No se ingreso la data')
+          showAlertWithMessage('ERROR','Hay error en los datros', 'No se hizo la consulta correctamente')
 
         }
         
       } catch (error) {
-        showAlertWithMessage('ERROR', 'Error al hacer la solicitud POST:' + error)
+        showAlertWithMessage('ERROR','Hubo error de conexión con la Api', 'Error al hacer la solicitud POST:' + error)
         // Maneja el error aquí
       }
     } catch (error) {
-      showAlertWithMessage('ERROR', 'Error al hacer la solicitud:' + error)
+      showAlertWithMessage('WARNING','Valide su conexión', 'Error al hacer la solicitud:' + error)
     }
   };
 
@@ -144,124 +145,121 @@ const EditarTienda = () => {
 
   return (
     <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className='p-4 sm:ml-64'>
-        <div className="md:p-32 py-60 ">
-          <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
-            <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Registro</h2>
-            <div className="grid grid-cols-1 gap-4 ">
-              <div>
-                <label htmlFor="nombre" className="text-white block text-sm font-medium ">
+      <SideBars>
+        <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
+          <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Registro</h2>
+          <div className="grid grid-cols-1 gap-4 ">
+            <div>
+              <label htmlFor="nombre" className="text-white block text-sm font-medium ">
               Nombre
-                </label>
-                <input
-                  type="text"
-                  id="nombreTienda"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={nombreTienda}
-                  onChange={(e) => setNombre(e.target.value)}
-                />
-                {errors.nombreTienda && <div className="text-red-500">{errors.nombreTienda}</div>}
-              </div>
-              <div>
-                <label htmlFor="apellido" className="text-white block text-sm font-medium ">
-              Imagen
-                </label>
-                <input
-                  type="text"
-                  id="imagen"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={imagen}
-                  onChange={(e) => setImagen(e.target.value)}
-                />
-                {errors.imagen && <div className="text-red-500">{errors.imagen}</div>}
-              </div>
-              <div>
-                <label htmlFor="email" className="text-white block text-sm font-medium ">
-              Teléfono
-                </label>
-                <input
-                  type="text"
-                  id="telefono"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={telefono}
-                  onChange={(e) => setTelefono(e.target.value)}
-                />
-                {errors.telefono && <div className="text-red-500">{errors.telefono}</div>}
-              </div>
-              <div>
-                <label htmlFor="telefono" className="text-white block text-sm font-medium ">
-              Número de Local
-                </label>
-                <input
-                  type="text"
-                  id="numeroLocal"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={numeroLocal}
-                  onChange={(e) => setNumeroLocal(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="estado" className="text-white block text-sm font-medium ">
-              Estado
-                </label>
-                <select
-                  id="estado"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={estado}
-                  onChange={(e) => setEstado(e.target.value)}
-                >
-                  <option value="A">Activo</option>
-                  <option value="I">Inactivo</option>
-                </select>
-                {errors.estado && <div className="text-red-500">{errors.estado}</div>}
-              </div>
-              <div>
-                <label htmlFor="fechaNacimiento" className="text-white block text-sm font-medium ">
-              Categoria Tienda
-                </label>
-                <input
-                  type="text"
-                  id="categoriaTienda"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={categoriaTienda}
-                  onChange={(e) => setCategoria(e.target.value)}
-                />
-                {errors.categoriaTienda && <div className="text-red-500">{errors.categoriaTienda}</div>}
-              </div>
-              <div>
-                <label htmlFor="password" className="text-white block text-sm font-medium ">
-              Correo
-                </label>
-                <input
-                  type="email"
-                  id="correo"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={correo}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                {errors.correo && <div className="text-red-500">{errors.correo}</div>}
-              </div>
+              </label>
+              <input
+                type="text"
+                id="nombreTienda"
+                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                value={nombreTienda}
+                onChange={(e) => setNombre(e.target.value)}
+              />
+              {errors.nombreTienda && <div className="text-red-500">{errors.nombreTienda}</div>}
             </div>
-            <div className="mt-6">
-              <button
-                type="button"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7a7bcb] hover:bg-[#898ae1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={handleRegistro}
+            <div>
+              <label htmlFor="apellido" className="text-white block text-sm font-medium ">
+              Imagen
+              </label>
+              <input
+                type="text"
+                id="imagen"
+                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                value={imagen}
+                onChange={(e) => setImagen(e.target.value)}
+              />
+              {errors.imagen && <div className="text-red-500">{errors.imagen}</div>}
+            </div>
+            <div>
+              <label htmlFor="email" className="text-white block text-sm font-medium ">
+              Teléfono
+              </label>
+              <input
+                type="text"
+                id="telefono"
+                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
+              />
+              {errors.telefono && <div className="text-red-500">{errors.telefono}</div>}
+            </div>
+            <div>
+              <label htmlFor="telefono" className="text-white block text-sm font-medium ">
+              Número de Local
+              </label>
+              <input
+                type="text"
+                id="numeroLocal"
+                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                value={numeroLocal}
+                onChange={(e) => setNumeroLocal(e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="estado" className="text-white block text-sm font-medium ">
+              Estado
+              </label>
+              <select
+                id="estado"
+                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
               >
-            Registrarse
-              </button>
-              <button
-                onClick={handleUsuario}
-                type="button"
-                className="w-full mt-2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-            Regresar 
-              </button>
+                <option value="A">Activo</option>
+                <option value="I">Inactivo</option>
+              </select>
+              {errors.estado && <div className="text-red-500">{errors.estado}</div>}
+            </div>
+            <div>
+              <label htmlFor="fechaNacimiento" className="text-white block text-sm font-medium ">
+              Categoria Tienda
+              </label>
+              <input
+                type="text"
+                id="categoriaTienda"
+                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                value={categoriaTienda}
+                onChange={(e) => setCategoria(e.target.value)}
+              />
+              {errors.categoriaTienda && <div className="text-red-500">{errors.categoriaTienda}</div>}
+            </div>
+            <div>
+              <label htmlFor="password" className="text-white block text-sm font-medium ">
+              Correo
+              </label>
+              <input
+                type="email"
+                id="correo"
+                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                value={correo}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {errors.correo && <div className="text-red-500">{errors.correo}</div>}
             </div>
           </div>
+          <div className="mt-6">
+            <button
+              type="button"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7a7bcb] hover:bg-[#898ae1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={handleRegistro}
+            >
+            Registrarse
+            </button>
+            <button
+              onClick={handleUsuario}
+              type="button"
+              className="w-full mt-2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+            Regresar 
+            </button>
+          </div>
         </div>
-      </div>
+      </SideBars>
     </>
   )
 }

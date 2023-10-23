@@ -5,9 +5,10 @@ import useHasMounted from '../../../hooks/useHasMounted';
 import { useAuth } from '../../../context/AuthContext';
 import { useRouter } from 'next/router';
 import { pathGen, postToAPI } from '../../../funciones/api';
+import SideBars from '../../../components/common/SideBars';
 
 const InsertarUsuario = () => {
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
   const hasMounted = useHasMounted();
   const { token, login } = useAuth();
   const router = useRouter();
@@ -90,18 +91,18 @@ const InsertarUsuario = () => {
         console.log(response)
         if(response.status === 1){
           router.push(`/Usuarios/${pathGen()}`);
-          showAlertWithMessage('OK', 'Se ingresaron los datos')
+          showAlertWithMessage('SUCCESS','Solicitud correcta', 'Se ingresaron los datos')
         }else{
-          showAlertWithMessage('ERROR', 'No se ingreso la data')
+          showAlertWithMessage('ERROR','Hay error en los datros', 'No se hizo la consulta correctamente')
 
         }
         
       } catch (error) {
-        showAlertWithMessage('ERROR', 'Error al hacer la solicitud POST:' + error)
+        showAlertWithMessage('ERROR','Hubo error de conexión con la Api', 'Error al hacer la solicitud POST:' + error)
         // Maneja el error aquí
       }
     } catch (error) {
-      showAlertWithMessage('ERROR', 'Error al hacer la solicitud:' + error)
+      showAlertWithMessage('WARNING','Valide su conexión', 'Error al hacer la solicitud:' + error)
     }
   };
 
@@ -125,9 +126,8 @@ const InsertarUsuario = () => {
 
   return (
     <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className='p-4 sm:ml-64'>
-        <div className="md:p-32 py-60 ">
+      <SideBars>
+        <div className='w-full items-center m-[10vh]'>
           <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
             <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Registro</h2>
             <div className="grid grid-cols-1 gap-4 ">
@@ -241,7 +241,7 @@ const InsertarUsuario = () => {
             </div>
           </div>
         </div>
-      </div>
+      </SideBars>
     </>
   )
 }

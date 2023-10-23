@@ -6,6 +6,7 @@ import useHasMounted from '../../hooks/useHasMounted';
 import { useAuth } from '../../context/AuthContext';
 import { decryptAndGetLocalStorage, encryptAndSetLocalStorage, getFromAPIWithParams, pathGen } from '../../funciones/api';
 import Cards from '../../components/globals/Cards';
+import SideBars from '../../components/common/SideBars';
 
 const AdministracionCC = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
@@ -13,7 +14,7 @@ const AdministracionCC = () => {
   const router = useRouter();
   const [items,setItems]=useState([])
   const [usuario ,setUsuario]=useState([])
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
 
   const [validateSlide, setValidateSlide] = useState(true)
 
@@ -104,10 +105,10 @@ const AdministracionCC = () => {
   },[usuario])
   return (
     <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
+
+      <SideBars>
         <Cards cardData={items} onShopClick={(newValue)=>handleShopClick(newValue)} onInfoClick={(newValue)=>handleInfoClick(newValue)}/>
-      </div>
+      </SideBars>
 
 
     </>

@@ -5,13 +5,14 @@ import useHasMounted from '../../hooks/useHasMounted';
 import SideBar from '../../components/globals/SideBar';
 import { deleteWithParams, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
 import { useAlert } from '../../context/AlertContext';
+import SideBars from '../../components/common/SideBars';
 
 const Comerciales = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
   const hasMounted = useHasMounted();
   const router = useRouter();
   const [items,setItems]=useState([])
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
 
 
   const listar =async()=>{
@@ -55,9 +56,7 @@ const Comerciales = () => {
     { titulo: "Estado de Cuenta", fila: "estado_cuenta", class: "text-center" },
     { titulo: "Correo", fila: "correo", class: "text-center" },
     { titulo: "Número de Teléfono", fila: "telefonoCC", class: "text-center" },
-    { titulo: "Imagen", fila: "imagen", class: "text-center" },
-    { titulo: "Longitud", fila: "longitud", class: "text-right" },
-    { titulo: "Latitud", fila: "latitud", class: "text-right" },
+    { titulo: "Imagen", fila: "imagen", class: "text-center" }
     // Agrega más títulos y filas según sea necesario
   ];
 
@@ -99,12 +98,12 @@ const Comerciales = () => {
   
       if (response.status === 1) {
         listar();
-        showAlertWithMessage('OK', 'El elemento se eliminó correctamente');
+        showAlertWithMessage('Success','Delete Completo', 'El elemento se eliminó correctamente');
       } else {
-        showAlertWithMessage('ERROR', 'No se pudo eliminar el elemento');
+        showAlertWithMessage('ERROR','Delete no completado', 'No se pudo eliminar el elemento');
       }
     } catch (error) {
-      showAlertWithMessage('ERROR', 'Error al hacer la solicitud DELETE: ' + error);
+      showAlertWithMessage('Warning', 'Delete warning','Error al hacer la solicitud DELETE: ' + error);
       // Maneja el error aquí
     }
   };
@@ -118,19 +117,19 @@ const Comerciales = () => {
 
 
   return (
-    <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      
-      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
-        <Table 
-          headers={Headers} 
-          content={items} 
-          showActions={true} 
-          onInsert={(newValue)=> insertItem(newValue)}
-          onDelete={(newValue)=> deleteItem(newValue)}
-          onEdit={(newValue)=> editItem(newValue)}
-        />
-      </div>
+    <>      
+      <SideBars >
+        <div className='w-full p-4'>
+          <Table 
+            headers={Headers} 
+            content={items} 
+            showActions={true} 
+            onInsert={(newValue)=> insertItem(newValue)}
+            onDelete={(newValue)=> deleteItem(newValue)}
+            onEdit={(newValue)=> editItem(newValue)}
+          />
+        </div>
+      </SideBars>
     </>
   )
 }

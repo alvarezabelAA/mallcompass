@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { decryptAndGetLocalStorage, getFromAPIWithParams, pathGen, postToAPIWithParamsAndBody, putToAPIWithParamsAndBody } from '../../../funciones/api';
 import CardStore from '../../../components/globals/CardStore';
 import * as iconsFc from 'react-icons/fc';
+import SideBars from '../../../components/common/SideBars';
 
 const AgregarTienda = () => {
   const [validateSlide, setValidateSlide] = useState(true)
@@ -16,7 +17,7 @@ const AgregarTienda = () => {
   const [items,setItems]=useState([])
   const [usuario ,setUsuario]=useState([])
   const [centroCC ,setCentroCC]=useState([])
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
 
   const handleSidebarVisibility = (sidebarVisible) => {
     setValidateSlide(sidebarVisible)
@@ -83,18 +84,18 @@ const AgregarTienda = () => {
         console.log(response)
         if(response.status === 1){
           router.push(`/AdministracionCC/${pathGen()}`);
-          showAlertWithMessage('OK', 'Se modificaron los datos')
+          showAlertWithMessage('SUCCESS','Update realizado', 'Se modificaron los datos')
         }else{
-          showAlertWithMessage('ERROR', 'No se ingreso la data')
+          showAlertWithMessage('ERROR','Hay error en los datros', 'No se hizo la consulta correctamente')
 
         }
         
       } catch (error) {
-        showAlertWithMessage('ERROR', 'Error al hacer la solicitud POST:' + error)
+        showAlertWithMessage('ERROR','Hubo error de conexión con la Api', 'Error al hacer la solicitud POST:' + error)
         // Maneja el error aquí
       }
     } catch (error) {
-      showAlertWithMessage('ERROR', 'Error al hacer la solicitud:' + error)
+      showAlertWithMessage('WARNING','Valide su conexión', 'Error al hacer la solicitud:' + error)
     }
   }
 
@@ -105,8 +106,7 @@ const AgregarTienda = () => {
 
   return (
     <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
+      <SideBars >
         {items.length > 0 && (
           <div className=''>
             <CardStore item={items} onClickButton={(newValue)=> onClickButtonChange(newValue)} />
@@ -118,7 +118,7 @@ const AgregarTienda = () => {
             Regresar
           </button>
         </div>
-      </div>
+      </SideBars>
 
     </>
   )

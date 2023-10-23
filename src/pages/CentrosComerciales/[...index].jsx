@@ -5,6 +5,7 @@ import useHasMounted from '../../hooks/useHasMounted';
 import SideBar from '../../components/globals/SideBar';
 import { encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
 import Cards from '../../components/globals/Cards';
+import SideBars from '../../components/common/SideBars';
 const CentrosComerciales = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
   const hasMounted = useHasMounted();
@@ -101,11 +102,9 @@ const CentrosComerciales = () => {
 
   return (
     <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      
-      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
+      <SideBars>
         <Cards onShopClick={(item)=> showStores(item)} cardData={items}/>
-      </div>
+      </SideBars>
     </>
   )
 }

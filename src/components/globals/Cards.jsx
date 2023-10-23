@@ -38,7 +38,7 @@ const Cards = ({ cardData,onShopClick,onInfoClick }) => {
   
   const defaultImage = '/images/no_image.jpg'; // Especifica la URL de la imagen por defecto
   return (
-    <div className="mx-auto px-12">
+    <div className="mx-auto w-full p-2">
       <div className="mb-4">
         <input
           type="text"
@@ -48,9 +48,9 @@ const Cards = ({ cardData,onShopClick,onInfoClick }) => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2  lg:grid-cols-4 gap-4">
+      <div className="grid  grid-cols-1  md:grid-cols-2  lg:grid-cols-4 gap-4">
         {filteredAndPaginatedCards.map((card) => (
-          <div key={card.id} className="  ">
+          <div key={card.id} className=" w-full ">
             <h2 className="text-xl text-center font-semibold background-darkBlue rounded-t-lg  p-2 text-white">{card.nombreCC}</h2>
             <div className='bg-white pb-4 rounded shadow'>
               {card.imagen ? (
@@ -109,8 +109,8 @@ const Cards = ({ cardData,onShopClick,onInfoClick }) => {
                   </div>) : '' 
 
                 }
-                <div className='flex justify-center'>
-                  <div className='grid grid-cols-2 gap-8'>
+                <div className='md:flex justify-center'>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
                     <a onClick={()=>onShopClick(card)} 
                       href="#"
                       className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-slate-800 rounded-lg hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

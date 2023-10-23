@@ -86,7 +86,7 @@ const Table = ({ headers, content, showActions = false, onDelete, onEdit, showIn
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         {showInsertButton && (
-          <button onClick={handleInsert} className="mall-button bg-emerald-500 text-white font-semibold ">
+          <button onClick={handleInsert} className="mall-button bg-emerald-600 text-white font-semibold ">
             <iconsBs.BsPlus className="w-5 h-5 flex-shrink-0 "/>
           Insertar
           </button>
@@ -102,8 +102,8 @@ const Table = ({ headers, content, showActions = false, onDelete, onEdit, showIn
                 <th
                   className={`${
                     index === 0 ? "rounded-tl-lg" : ""}${
-                    index === extendedHeaders.length - 1 ? "rounded-tr-lg" : ""
-                  } background-darkBlue h-10 text-white truncate`}
+                    index === extendedHeaders.length - 1 ? "border" : ""
+                  }  h-10 border bg-slate-300 truncate`}
                   key={index}
                 >
                   {header.titulo}
@@ -115,7 +115,7 @@ const Table = ({ headers, content, showActions = false, onDelete, onEdit, showIn
             {currentItems.map((row, rowIndex) => (
               <tr className={rowIndex % 2 === 0 ? "bg-slate-200" : "bg-slate-300"} key={rowIndex}>
                 {headers.map((header, colIndex) => (
-                  <td className={`${header.class || ""}`} key={colIndex}>
+                  <td className={`h-10 ${header.class || ""}`} key={colIndex}>
                     {row[header.fila]}
                   </td>
                 ))}
@@ -123,10 +123,10 @@ const Table = ({ headers, content, showActions = false, onDelete, onEdit, showIn
                 {showActions && (
                   <td className="text-center">
                     <button className="px-2 py-1">
-                      <iconsMd.MdEditDocument onClick={() => handleEdit(row)} className='h-7 w-7 shrink-0 text-blue-500 dark:text-blue-300' />
+                      <iconsMd.MdEditDocument onClick={() => handleEdit(row)} className='h-6 w-6 shrink-0 text-blue-800 hover:bg-blue-300 hover:rounded-lg ' />
                     </button>
                     <button type="button" onClick={() => handleDelete(row)} className="px-2 py-1">
-                      <iconsMd.MdDeleteOutline className='h-7 w-7 shrink-0 text-red-500 dark:text-red-300' />
+                      <iconsMd.MdDeleteOutline className='h-6 w-6 shrink-0 text-red-500  hover:bg-red-300 hover:rounded' />
                     </button>
                   </td>
                 )}

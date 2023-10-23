@@ -1,39 +1,30 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import Alert from '../components/Alert';
+import React, { createContext, useContext, useState } from 'react';
+import Alerts from '../components/common/Alerts';
 
-// Crea el contexto de alerta
 const AlertContext = createContext();
 
-// Hook personalizado para acceder al contexto de alerta
 export const useAlert = () => {
   return useContext(AlertContext);
 };
 
-// Componente proveedor de alerta
 export const AlertProvider = ({ children }) => {
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
-  const [alertType, setAlertType] = useState('INFO');
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alert, setAlert] = useState(null);
 
-  const showAlertWithMessage = (type, message) => {
-    setAlertType(type);
-    setAlertMessage(message);
-    setIsAlertVisible(true);
-
-    // Ocultar la alerta después de 5 segundos
+  const showAlert = (type, title, message) => {
+    setAlert({ type, title, message });
     setTimeout(() => {
-      hideAlert();
-    }, 5000);
+      setAlert(null);
+    }, 6000); // Ocultar la alerta después de 5 segundos
   };
 
-  const hideAlert = () => {
-    setIsAlertVisible(false);
+  const closeAlert = () => {
+    setAlert(null);
   };
 
   return (
-    <AlertContext.Provider value={{ showAlertWithMessage, hideAlert }}>
+    <AlertContext.Provider value={showAlert}>
       {children}
-      {isAlertVisible && <Alert type={alertType} message={alertMessage} />}
+      {alert && <Alerts alert={alert} onClose={closeAlert} />}
     </AlertContext.Provider>
   );
 };

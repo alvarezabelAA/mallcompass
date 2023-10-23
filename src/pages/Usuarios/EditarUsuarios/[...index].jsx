@@ -6,6 +6,7 @@ import { postToAPI, pathGen, putToAPIWithParamsAndBody, decryptAndGetLocalStorag
 import { useAlert } from '../../../context/AlertContext'; 
 import useHasMounted from '../../../hooks/useHasMounted';
 import { format } from 'date-fns';
+import SideBars from '../../../components/common/SideBars';
 
 const EditarUsuario = () => {
   const [nombre, setNombre] = useState('');
@@ -19,7 +20,7 @@ const EditarUsuario = () => {
   const [imagen, setImagen] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [id_usuario, setIdUsuario] = useState('');
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
   const [items, setItems]= useState([])
   const hasMounted = useHasMounted();
 
@@ -129,18 +130,18 @@ const EditarUsuario = () => {
         if(response.status === 1){
           router.push(`/Usuarios/${pathGen()}`)
           encryptAndSetLocalStorage('usuarioData', '');
-          showAlertWithMessage('OK', response.mensaje)
+          showAlertWithMessage('SUCCESS','Solicitud correcta', response.mensaje)
         }else{
-          showAlertWithMessage('ERROR', response.mensaje)
+          showAlertWithMessage('ERROR','Datos no validos', response.mensaje)
   
         }
           
       } catch (error) {
-        showAlertWithMessage('ERROR', 'Error al hacer la solicitud POST:' + error)
+        showAlertWithMessage('ERROR','Hubo error de conexión con la Api', 'Error al hacer la solicitud POST:' + error)
         // Maneja el error aquí
       }
     } catch (error) {
-      showAlertWithMessage('ERROR', 'Error al hacer la solicitud:' + error)
+      showAlertWithMessage('WARNING','Valide su conexión', 'Error al hacer la solicitud:' + error)
     }
     
   };
@@ -187,9 +188,8 @@ const EditarUsuario = () => {
 
   return (
     <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className='p-4 sm:ml-64'>
-        <div className="md:p-32 py-60 ">
+      <SideBars>
+        <div className='w-full items-center m-[10vh]'>
           <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
             <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Editar Perfil</h2>
             <div className="grid grid-cols-1 gap-4 ">
@@ -329,7 +329,7 @@ const EditarUsuario = () => {
             </div>
           </div>
         </div>
-      </div>
+      </SideBars>
     </>
   )
 }

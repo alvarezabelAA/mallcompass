@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../context/AuthContext';
 import { postToAPI, pathGen } from '../../funciones/api';
 import { useAlert } from '../../context/AlertContext'; // Ajusta la ruta según tu estructura de directorios
+import dynamic from 'next/dynamic';
+import { MdOutlineAdminPanelSettings,MdOutlineLocalMall } from 'react-icons/md'
+
+const Map = dynamic(() => import('../../components/Map'), {
+  ssr: false,
+});
 
 const Registro = () => {
   const [nombre, setNombre] = useState('');
@@ -10,9 +16,10 @@ const Registro = () => {
   const [email, setEmail] = useState('');
   const [telefono, setTelefono] = useState('');
   const [imagen, setImagen] = useState('');
+  const [validarRegistro, setValidarRegistro] = useState(false);
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [password, setPassword] = useState('');
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
   const [errors, setErrors] = useState({
     nombre: '',
     apellido: '',
@@ -26,7 +33,8 @@ const Registro = () => {
   const { login } = useAuth();
   const router = useRouter();
 
-  const handleRegistro = async () => {
+  const handleRegistro = async ({ imageFile }) => {
+    console.log(imageFile)
     // Validación de campos
     const camposObligatorios = ['nombre', 'apellido', 'email', 'telefono', 'imagen', 'fechaNacimiento', 'password'];
     const newErrors = {};
@@ -69,18 +77,19 @@ const Registro = () => {
         console.log(response)
         if(response.status === 1){
           router.push(`/login/${pathGen()}`);
-          showAlertWithMessage('OK', 'Se ingresaron los datos')
+          showAlertWithMessage('SUCCESS','Solicitud correcta', 'Se ingresaron los datos')
+          setValidarRegistro(true)
         }else{
-          showAlertWithMessage('ERROR', 'No se ingreso la data')
+          showAlertWithMessage('ERROR','Hay error en los datros', 'No se hizo la consulta correctamente')
 
         }
         
       } catch (error) {
-        showAlertWithMessage('ERROR', 'Error al hacer la solicitud POST:' + error)
+        showAlertWithMessage('ERROR','Hubo error de conexión con la Api', 'Error al hacer la solicitud POST:' + error)
         // Maneja el error aquí
       }
     } catch (error) {
-      showAlertWithMessage('ERROR', 'Error al hacer la solicitud:' + error)
+      showAlertWithMessage('WARNING','Valide su conexión', 'Error al hacer la solicitud:' + error)
     }
   };
 
@@ -88,121 +97,181 @@ const Registro = () => {
     router.push(`/login/${pathGen()}`);
   };
 
+  const [imageFile,setImageFile]=useState('')
+
+  const handleImagenUpload = async (imagenGuardar) => {
+    console.log(imagenGuardar)
+    const file = imagenGuardar;
+    const formData = new FormData();
+    formData.append('imagen', file);
+    setValidarRegistro(false)
+    try {
+      const response = await fetch('http://localhost:4044/upload', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (response.ok) {
+        console.log('Archivo subido exitosamente');
+        // Realiza cualquier acción adicional después de cargar el archivo
+      } else {
+        console.error('Error al subir el archivo');
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+    }
+  };
+  
+
+  useEffect(()=>{
+    console.log(imageFile)
+  },[imageFile])
+
+  useEffect(()=>{
+    console.log(validarRegistro)
+    console.log(imageFile)
+    if(validarRegistro === true){
+      handleImagenUpload(imageFile)
+      
+    }
+  },[validarRegistro])
+
   return (
-    <div className="md:p-32 py-60 ">
-      <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
-        <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Registro</h2>
-        <div className="grid grid-cols-1 gap-4 ">
-          <div>
-            <label htmlFor="nombre" className="text-white block text-sm font-medium ">
-              Nombre
-            </label>
-            <input
-              type="text"
-              id="nombre"
-              className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-            />
-            {errors.nombre && <div className="text-red-500">{errors.nombre}</div>}
-          </div>
-          <div>
-            <label htmlFor="apellido" className="text-white block text-sm font-medium ">
-              Apellido
-            </label>
-            <input
-              type="text"
-              id="apellido"
-              className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-              value={apellido}
-              onChange={(e) => setApellido(e.target.value)}
-            />
-            {errors.apellido && <div className="text-red-500">{errors.apellido}</div>}
-          </div>
-          <div>
-            <label htmlFor="email" className="text-white block text-sm font-medium ">
-              Correo Electrónico
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {errors.email && <div className="text-red-500">{errors.email}</div>}
-          </div>
-          <div>
-            <label htmlFor="telefono" className="text-white block text-sm font-medium ">
-              Teléfono
-            </label>
-            <input
-              type="text"
-              id="telefono"
-              className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-              value={telefono}
-              onChange={(e) => setTelefono(e.target.value)}
-            />
-            {errors.telefono && <div className="text-red-500">{errors.telefono}</div>}
-          </div>
-          <div>
-            <label htmlFor="imagen" className="text-white block text-sm font-medium ">
-              URL de la Imagen
-            </label>
-            <input
-              type="text"
-              id="imagen"
-              className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-              value={imagen}
-              onChange={(e) => setImagen(e.target.value)}
-            />
-            {errors.imagen && <div className="text-red-500">{errors.imagen}</div>}
-          </div>
-          <div>
-            <label htmlFor="fechaNacimiento" className="text-white block text-sm font-medium ">
-              Fecha de Nacimiento
-            </label>
-            <input
-              type="date"
-              id="fechaNacimiento"
-              className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-              value={fechaNacimiento}
-              onChange={(e) => setFechaNacimiento(e.target.value)}
-            />
-            {errors.fechaNacimiento && <div className="text-red-500">{errors.fechaNacimiento}</div>}
-          </div>
-          <div>
-            <label htmlFor="password" className="text-white block text-sm font-medium ">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {errors.password && <div className="text-red-500">{errors.password}</div>}
+    <div className="md:p-32 md:py-24 bg-no-repeat bg-cover bg-center relative" style={{ backgroundImage: 'url(/images/mall.jpg)' }}>
+      <div className="absolute bg-gradient-to-b from-blue-900 to-blue-500 opacity-75 inset-0 z-0"></div>
+      <div className="min-h-screen sm:flex sm:flex-row mx-0 justify-center">
+        <div className="flex-col flex  self-center p-10 sm:max-w-5xl xl:max-w-2xl  z-10">
+          <div className="self-start hidden lg:flex flex-col  text-white">
+            {/* <img src="" className="mb-3" /> */}
+            <h1 className="mb-3 font-bold text-5xl">Quieres registrarte? Ingresa tus datos </h1>
+            <p className="pr-3">¿Buscas ofertas exclusivas y acceso a información privilegiada? Estás a un clic de descubrirlo.</p>
           </div>
         </div>
-        <div className="mt-6">
-          <button
-            type="button"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7a7bcb] hover:bg-[#898ae1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            onClick={handleRegistro}
-          >
+        <div className="flex justify-center self-center  z-10">
+          <div className="p-12 bg-white  mx-auto rounded-2xl w-[650px] ">
+            <div className="mb-4">
+              <h3 className="font-semibold text-2xl text-gray-800">Sign up </h3>
+              <p className="text-gray-500">Please Sign up to create your account.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className='col-span-1'>
+                <label htmlFor="nombre" className="text-gray-600 block text-sm font-medium">
+            Nombre
+                </label>
+                <input
+                  type="text"
+                  id="nombre"
+                  className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                />
+                {errors.nombre && <div className="text-red-500">{errors.nombre}</div>}
+              </div>
+              <div className='col-span-1'>
+                <label htmlFor="apellido" className="text-gray-600 block text-sm font-medium">
+            Apellido
+                </label>
+                <input
+                  type="text"
+                  id="apellido"
+                  className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  value={apellido}
+                  onChange={(e) => setApellido(e.target.value)}
+                />
+                {errors.apellido && <div className="text-red-500">{errors.apellido}</div>}
+              </div>
+              <div className='col-span-1'>
+                <label htmlFor="email" className="text-gray-600 block text-sm font-medium">
+            Correo Electrónico
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value.toLowerCase())}
+                />
+                {errors.email && <div className="text-red-500">{errors.email}</div>}
+              </div>
+              <div className='col-span-1'>
+                <label htmlFor="telefono" className="text-gray-600 block text-sm font-medium">
+            Teléfono
+                </label>
+                <input
+                  type="text"
+                  id="telefono"
+                  className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                />
+                {errors.telefono && <div className="text-red-500">{errors.telefono}</div>}
+              </div>
+              <div className='col-span-1'>
+                <label htmlFor="imagen" className="text-gray-600 block text-sm font-medium">
+            URL de la Imagen
+                </label>
+                <input
+                  type="file"
+                  id="imagen"
+                  accept="image/*"
+                  className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  value={imagen}
+                  onChange={(e) => {setImagen(e.target.value); setImageFile(e.target.files[0])}}
+                />
+                {errors.imagen && <div className="text-red-500">{errors.imagen}</div>}
+              </div>
+              <div className='col-span-1'>
+                <label htmlFor="fechaNacimiento" className="text-gray-600 block text-sm font-medium">
+            Fecha de Nacimiento
+                </label>
+                <input
+                  type="date"
+                  id="fechaNacimiento"
+                  className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  value={fechaNacimiento}
+                  onChange={(e) => setFechaNacimiento(e.target.value)}
+                />
+                {errors.fechaNacimiento && <div className="text-red-500">{errors.fechaNacimiento}</div>}
+              </div>
+              <div className='col-span-1'>
+                <label htmlFor="password" className="text-gray-600 block text-sm font-medium">
+            Contraseña
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {errors.password && <div className="text-red-500">{errors.password}</div>}
+              </div>
+              <div className='col-span-2'>
+                <button
+                  type="button"
+                  className="w-full  p-3  bg-blue-400  hover:bg-blue-500 text-white rounded-lg tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+                  onClick={()=>handleRegistro(imageFile)}
+                >
             Registrarse
-          </button>
-          <button
-            onClick={handleLogin}
-            type="button"
-            className="w-full mt-2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Regresar Login
-          </button>
+                </button>
+                
+              </div>
+              <div className='w-full col-span-2'>
+                <button
+                  onClick={handleLogin}
+                  type="button"
+                  className="w-full text-gray-100 p-3 bg-red-600 hover:bg-red-700 rounded-lg tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+                >
+            Regresar
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
+
   );
 };
 

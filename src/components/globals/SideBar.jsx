@@ -13,7 +13,7 @@ const SideBar = ({ onVisible }) => {
   const router = useRouter();
   const { token,logout } = useAuth(); // Obtén el token del contexto de autenticación
   const [validar, setValidar]=useState('')
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
@@ -72,15 +72,15 @@ const SideBar = ({ onVisible }) => {
       console.log(response);
   
       if (response.status === 1) {
-        showAlertWithMessage('OK', 'Se cerro sesion correctamente');
+        showAlertWithMessage('Success','Solicitud correcta', 'Se cerro sesion correctamente');
         logout();
         localStorage.clear();
         router.push(`/login/${pathGen()}`);
       } else {
-        showAlertWithMessage('ERROR', 'No se pudo eliminar el elemento');
+        showAlertWithMessage('ERROR','Delete no completado', 'No se pudo eliminar el elemento');
       }
     } catch (error) {
-      showAlertWithMessage('ERROR', 'Error al hacer la solicitud DELETE: ' + error);
+      showAlertWithMessage('Warning', 'Delete warning','Error al hacer la solicitud DELETE: ' + error);
       // Maneja el error aquí
     }
     logout();

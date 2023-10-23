@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import useHasMounted from '../../../hooks/useHasMounted';
 import { useAuth } from '../../../context/AuthContext';
 import TiendaCard from '../../../components/globals/TiendaCard';
+import SideBars from '../../../components/common/SideBars';
 
 const TiendasComercial = () => {
 
@@ -14,7 +15,7 @@ const TiendasComercial = () => {
   const router = useRouter();
   const [items,setItems]=useState([])
   const [centroComercial,setCentroComercial]=useState([])
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
 
 
   const listar =async(comercial)=>{
@@ -70,26 +71,30 @@ const TiendasComercial = () => {
 
   return (
     <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      
-      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
-        <h1 className="text-3xl font-bold mb-4">¡Bienvenido a {centroComercial}!</h1>
-        {validateSlide ? (
+      <SideBars>
+        <div className=''>
+          <div>
+            <h1 className="text-3xl font-bold mb-4">¡Bienvenido a {centroComercial}!</h1>
+          </div>
           <div>
             <h2 className="text-xl font-semibold mb-2">Descubre nuestras increíbles tiendas:</h2>
-            {items.length > 0 ? (
-              items.map((tienda) => <TiendaCard key={tienda.id_tienda} tienda={tienda} />)
-            ) : (
-              <p className="text-gray-600 text-lg font-semibold">
-            Lo sentimos, no tenemos tiendas disponibles en este momento. ¡Vuelve pronto para descubrir nuestras nuevas
-            tiendas!
-              </p>
-            )}
+            <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4'>
+              {items.length > 0 ? (
+                items.map((tienda) => (
+                  <div key={tienda.id_tienda}>
+                    <TiendaCard tienda={tienda} />
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-600 text-lg font-semibold">
+      Lo sentimos, no tenemos tiendas disponibles en este momento. ¡Vuelve pronto para descubrir nuestras nuevas
+      tiendas!
+                </p>
+              )}
+            </div>
           </div>
-        ) : (
-          <p>Cargando tiendas...</p>
-        )}
-      </div>
+        </div>
+      </SideBars>
     </>
   )
 }

@@ -6,13 +6,14 @@ import { useRouter } from 'next/router';
 import { useAlert } from '../../context/AlertContext';
 import Table from '../../components/globals/Table';
 import { deleteWithParams, deleteWithbody, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
+import SideBars from '../../components/common/SideBars';
 
 const Tiendas = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
   const hasMounted = useHasMounted();
   const router = useRouter();
   const [items,setItems]=useState([])
-  const { showAlertWithMessage } = useAlert();
+  const showAlertWithMessage  = useAlert();
 
   const Headers = [
     { titulo: "Nombre Tienda", fila: "nombreTienda", class: "text-center" },
@@ -73,12 +74,12 @@ const Tiendas = () => {
   
       if (response.status === 1) {
         listar();
-        showAlertWithMessage('OK', 'El elemento se eliminó correctamente');
+        showAlertWithMessage('Success','Delete Completo', 'El elemento se eliminó correctamente');
       } else {
-        showAlertWithMessage('ERROR', 'No se pudo eliminar el elemento');
+        showAlertWithMessage('ERROR','Delete no completado', 'No se pudo eliminar el elemento');
       }
     } catch (error) {
-      showAlertWithMessage('ERROR', 'Error al hacer la solicitud DELETE: ' + error);
+      showAlertWithMessage('Warning', 'Delete warning','Error al hacer la solicitud DELETE: ' + error);
       // Maneja el error aquí
     }
   };
@@ -113,18 +114,19 @@ const Tiendas = () => {
 
   return (
     <>
-      <SideBar onVisible={(newValue) => handleSidebarVisibility(newValue)} />
-      <div className={`p-4 ml-24 ${validateSlide ? 'sm:ml-24': 'sm:ml-64'}`}>
-        <Table
-          headers={Headers} 
-          content={items} 
-          showActions={true} 
-          onDelete={(newValue)=> deleteItem(newValue)}
-          onEdit={(newValue)=> editItem(newValue)}
-          onInsert={(newValue)=> insertItem(newValue)}
+      <SideBars >
+        <div className='w-full p-4'>
+          <Table
+            headers={Headers} 
+            content={items} 
+            showActions={true} 
+            onDelete={(newValue)=> deleteItem(newValue)}
+            onEdit={(newValue)=> editItem(newValue)}
+            onInsert={(newValue)=> insertItem(newValue)}
 
-        />
-      </div>
+          />
+        </div>
+      </SideBars>
 
     </>
   )

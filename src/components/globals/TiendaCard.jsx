@@ -4,7 +4,7 @@ const TiendaCard = ({ tienda }) => {
   const { nombreTienda, imagen, telefono, numeroLocal, categoriaTienda, correo } = tienda;
 
   return (
-    <div className="flex bg-white shadow-lg rounded-lg p-4 m-2">
+    <div className="bg-white shadow-lg rounded-lg p-4 m-2">
       <img src={'/images/' + imagen} alt={nombreTienda} className="w-20 h-20 object-cover mr-4" />
       <div>
         <h2 className="text-lg font-semibold mb-1">{nombreTienda}</h2>
@@ -14,7 +14,6 @@ const TiendaCard = ({ tienda }) => {
         <p className="text-gray-600 text-sm mb-1">Correo electrónico: {correo}</p>
       </div>
     </div>
-
   );
 };
 
