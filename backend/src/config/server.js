@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
     cb(null, '../../../mallcompass/public/images'); // La carpeta donde se guardarán los archivos
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname);
   }
 });
 
