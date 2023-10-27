@@ -192,4 +192,35 @@ module.exports = (app) => {
     });
 
   });
+
+
+  /*CONSULTA DE TODAS LAS TIENDAS ACTIVAS*/ /*falta contador de tiendas */
+  app.options('/tiendas/consultaGeneral/activo', cors());
+  app.get('/tiendas/consultaGeneral/activo', cors(),(req, res)=>{
+    console.log("ejecucion metodo GET");
+    let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
+    conn.query(query, (error, filas) => {
+      if(error){
+        console.log("No se encontró el token");
+      }else{
+        if(filas.length == 0){
+          console.log("consulta sin elementos");
+          res.json({ status: 1, mensaje: "error de token", datos: filas });
+        }else{
+          console.log("encontro el token");
+              
+          let query = `SELECT * FROM tiendas INNER JOIN rel_cc_tiendas ON tiendas.id_tienda=rel_cc_tiendas.id_tienda WHERE estado_cuenta= 'A' AND rel_cc_tiendas.id_centroComercial=${req.query.id_centroComercial}`;
+          conn.query(query, (error, filas) => {
+            if(error){
+              res.json({ status: 0, mensaje: "error en DB", datos:error });
+            }else{
+              res.json({ status: 1, mensaje: "datos obtenidos", datos: filas });
+            }
+          });
+        }
+      }
+    });
+  });
+
+
 }
