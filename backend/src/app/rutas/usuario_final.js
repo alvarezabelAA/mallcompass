@@ -128,7 +128,7 @@ module.exports = (app) => {
               res.json({ status: 1, mensaje: "Logout exitoso", datos:[] });
             }else{
               console.log("DELETE no completado");
-              res.json({ status: 1, mensaje: "logout fallido", datos:'token ingresado es incorrecto' });
+              res.json({ status: 0, mensaje: "logout fallido", datos:'token ingresado es incorrecto' });
             }
           }
         });

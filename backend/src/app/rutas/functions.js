@@ -140,9 +140,37 @@ function delete_REL_CC_TEINDAS(id_cc, id_tienda){
                 }
             }
     });
-
-
 }
+
+function accionProductos(id_tienda, id_producto, accion){
+ 
+    if(accion == "insert"){
+      console.log("se ejecuto insert");
+      let query = `INSERT INTO rel_tiendas_productos(id_tienda,id_producto) VALUES (?,?)`;
+      const values = [id_tienda, id_producto];
+      conn.query(query, values, (error, filas) => {
+          if (error) {
+              console.log(`error en insert a rel_tiendas_productos`);
+              console.log(error);
+          } else {
+              console.log(`insert en rel_tiendas_productos exitoso`);
+          }
+      });
+    }
+  
+    if(accion == "delete"){
+      console.log("se ejecuto delete");
+      let query2 = `DELETE FROM rel_user_tienda WHERE id_producto=${id_producto}`;
+      conn.query(query2, (error2, filas2) => {
+          if (error2) {
+              console.log(`error en delete a rel_user_tienda`);
+              console.log(error2);
+          } else {
+              console.log(`delete exitoso en rel_user_tienda`);
+          }
+      });
+    }
+  }
 
 
 module.exports = {
@@ -150,5 +178,6 @@ module.exports = {
     tokenSesion,
     insertCC_Tienda,
     insertUsuarios,
-    deleteUsuarios
+    deleteUsuarios,
+    accionProductos
 }
