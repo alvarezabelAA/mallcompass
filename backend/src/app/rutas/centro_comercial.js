@@ -63,8 +63,6 @@ module.exports = (app) => {
               res.json({ status: 1, mensaje: "datos obtenidos", datos: filas });
             }
           });
-
-
         }
       }
     });
@@ -95,8 +93,6 @@ module.exports = (app) => {
               res.json({ status: 1, mensaje: "datos obtenidos", datos: filas });
             }
           });
-
-
         }
       }
     });
@@ -130,7 +126,6 @@ module.exports = (app) => {
         }
       }
     });
-
   });
 
 
@@ -329,5 +324,9 @@ module.exports = (app) => {
       }
     });
   });
-
 }
+
+/* 
+PENDIENTES:
+-contador de tiendas: en un get de 
+*/

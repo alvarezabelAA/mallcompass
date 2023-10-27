@@ -170,7 +170,6 @@ module.exports = (app) => {
 
 
 
-
   /*UPDATE DE USUARIO NORMAL SUPERADMIN*/
   app.options('/usuario/final/update', cors());
   app.put('/usuario/final/update', cors(), (req, res) => {
@@ -336,3 +335,9 @@ module.exports = (app) => {
 
 
 }
+
+/* 
+PENDIENTES:
+-logout: temporizador de inactividad para que haga un logout automaticamente
+-delete de usuario: elimine de las demas tablas en la DB
+*/
