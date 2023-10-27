@@ -192,9 +192,10 @@ module.exports = (app) => {
                 return;
               }
           
-              if(req.query.idComercial == null && req.query.idTienda == null && (rol == "S" || rol == "U")){
+              if((req.query.idComercial == null && req.query.idTienda == null && (rol == "S" || rol == "U")) || (req.query.idComercial == "" && req.query.idTienda == "")){
                 // Construye la consulta de actualización
-            
+                console.log(`req.query.idComercial -> ${req.query.idComercial}`);
+                console.log(`req.query.idTienda -> ${req.query.idTienda}`);
                 const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
                 const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
                 // Ejecuta la consulta de actualización
