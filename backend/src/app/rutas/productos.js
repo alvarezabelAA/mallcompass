@@ -6,6 +6,7 @@ const { x64 } = require('crypto-js');
 
 module.exports = (app) => {
 
+    /*Insert de producto en tabla PRODUCTOS y REL relacionado a una tienda*/
     app.options('/productos/ingreso', cors());
     app.post('/productos/ingreso', cors(),(req, res)=>{
         console.log("ejecucion metodo POST");
@@ -43,6 +44,39 @@ module.exports = (app) => {
             }
 
                 
+            }
+        }
+        });
+    });
+
+
+
+    /*LISTA DE PRODUCTOS DE UNA TIENDA*/
+    app.options('/productos/tienda', cors());
+    app.get('/productos/tienda', cors(),(req, res)=>{
+        console.log("ejecucion metodo GET");
+        let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
+        conn.query(query, (error, filas) => {
+        if(error){
+            console.log("No se encontró el token");
+        }else{
+            if(filas.length == 0){
+            console.log("consulta sin elementos");
+            res.json({ status: 1, mensaje: "error de token", datos: filas });
+            }else{
+            console.log("encontro el token");
+            let query2 = `SELECT * FROM productos INNER JOIN rel_tiendas_productos ON productos.id_producto=rel_tiendas_productos.id_producto WHERE id_tienda = '${req.query.id_tienda}'`;
+            conn.query(query2, (error2, filas2) => {
+                if(error2){
+                    res.json({ status: 0, mensaje: "error en DB", datos:error2 });
+                }else{
+                    if (filas2.length == 0) {
+                        res.json({ status: 0, mensaje: "no existe productos en la tienda indicada", datos: filas2 });
+                    }else{
+                        res.json({ status: 1, mensaje: "datos obtenidos", datos: filas2 });
+                    }
+                }
+            });
             }
         }
         });
