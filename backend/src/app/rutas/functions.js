@@ -114,6 +114,37 @@ function deleteUsuarios(id_usuario,){
 function hasheador(contrasena){
 }
 
+/*funciona que ejecuta delete en rel_cc_tiendas*/
+function delete_REL_CC_TEINDAS(id_cc, id_tienda){
+    var campo;
+
+    if(id_cc != null){
+        campo = "id_centroComercial";
+    }else{
+        if(id_tienda != null){
+            campo = "id_tienda";
+        }else{
+            console.log("no se ingreso ningun ");
+        }
+    }
+
+    const query = `DELETE FROM rel_cc_tiendas WHERE ${campo} = ?`;
+        conn.query(query, [id_usuario], (error, result) => {
+            if (error) {
+                console.log("Error al eliminar el usuario");
+            } else {
+                if (result.affectedRows > 0) {
+                    console.log("Usuario eliminado de rel_cc_tiendas");
+                } else {
+                    console.log(`No se encontró ningún usuario con ese ${campo}`);
+                }
+            }
+    });
+
+
+}
+
+
 module.exports = {
     hasheador,
     tokenSesion,
