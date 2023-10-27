@@ -27,7 +27,7 @@ module.exports = (app) => {
             if(error){
               res.json({ status: 0, mensaje: "error en DB", datos:error });
             }else{
-              res.json({ status: 1, mensaje: "datos insertados en DB", datos: filas });
+              res.json({ status: 1, mensaje: "datos insertados en DB", id_tienda: filas.insertId });
             }
           });
         }
