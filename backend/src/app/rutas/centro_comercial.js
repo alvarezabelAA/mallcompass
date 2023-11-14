@@ -210,7 +210,7 @@ module.exports = (app) => {
       }else{
         if(filas.length == 0){
           console.log("consulta sin elementos");
-          res.json({ status: 1, mensaje: "error de token", datos: filas });
+          res.json({ status: 0, mensaje: "error de token", datos: filas });
         }else{
           console.log("encontro el token");
 

@@ -95,7 +95,48 @@ module.exports = (app) => {
             if (result) {
               console.log('Contraseña válida');
               const generador = tokenSesion(req.query.correo, req.query.contrasena);
-              res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}` });
+
+            
+              /*VERIFICACION SI USUARIO TIENE TIENDA*/
+              let query2 = `SELECT * FROM usuarios INNER JOIN rel_user_tienda ON usuarios.id_usuario=rel_user_tienda.id_usuario WHERE correo='${req.query.correo}'`;
+              conn.query(query2, (error2, filas2) => {
+                if(error2){
+                  res.json({ status: 0, mensaje: "error en DB", datos:error2 });
+                }else{
+                  if(filas2.length == 0){
+                    console.log("consulta sin elementos");
+                    /*VERIFICACION SI USUARIO TIENE CC*/
+                    let query3 = `SELECT * FROM usuarios INNER JOIN rel_user_cc ON usuarios.id_usuario=rel_user_cc.id_usuario WHERE correo='${req.query.correo}'`;
+                    conn.query(query3, (error3, filas3) => {
+                      if(error3){
+                        res.json({ status: 0, mensaje: "error en DB", datos:error3 });
+                      }else{
+                        if(filas3.length == 0){
+                          console.log("Usuario normal iniciando sesion...");
+                          res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}`, id_tienda:``, id_centroComercial:``});
+                        }else{
+                          console.log("datos obtenidos de DB ADMIN CC");
+                          res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}`, id_tienda:``, id_centroComercial:`${filas3[0].id_centroComercial}`});
+                        }
+                      }
+                    });
+                  }else{
+                    console.log("datos obtenidos de DB ADMIN TIENDA");
+                    let query4 = `SELECT * FROM rel_cc_tiendas WHERE id_tienda='${filas2[0].id_tienda}'`;
+                    conn.query(query4, (error4, filas4) => {
+                      if(error4){
+                        res.json({ status: 0, mensaje: "error en DB", datos:error4 });
+                      }else{
+                        console.log("datos obtenidos de DB 2");
+                        res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}`, id_tienda:`${filas2[0].id_tienda}`, id_centroComercial:`${filas4[0].id_centroComercial}`});
+                      }
+                    });
+                  }
+                }
+              });
+
+
+
             } else {
               console.log('Contraseña inválida');
               console.log(`Contraseña obtenida: ${filas[0].contrasena}`);
