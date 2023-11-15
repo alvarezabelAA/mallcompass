@@ -3,6 +3,7 @@ require('./app/rutas/usuario_final')(app);
 require('./app/rutas/centro_comercial')(app);
 require('./app/rutas/tiendas')(app);
 require('./app/rutas/productos')(app);
+require('./app/rutas/publicaciones')(app);
 
 app.listen(app.get('puerto'), () => console.log(`Servidor Corriendo en puerto ${app.get('puerto')}`));
 

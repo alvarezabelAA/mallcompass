@@ -54,8 +54,8 @@ function insertUsuarios(usuario,rol,id_establecimiento){
   }
 }
 
-
-function deleteUsuarios(id_usuario,){
+/**/
+function deleteUsuarios(id_usuario){
     const query = `DELETE FROM logintokens WHERE id_usuario = ?`;
     conn.query(query, [id_usuario], (error, result) => {
         if (error) {
@@ -172,6 +172,37 @@ function accionProductos(id_tienda, id_producto, accion){
     }
   }
 
+  function accionPublicacion(id_post, id_lugar, accion, categoria){
+ 
+    if(accion == "tienda"){
+      console.log("se ejecuto insert en rel tienda");
+      let query = `INSERT INTO rel_tiendas_publicaciones(id_post,id_tienda,categoria) VALUES (?,?,?)`;
+      const values = [id_post, id_lugar, categoria];
+      conn.query(query, values, (error, filas) => {
+          if (error) {
+              console.log(`error en insert a rel_tiendas_publicaciones`);
+              console.log(error);
+          } else {
+              console.log(`insert en rel_tiendas_publicaciones exitoso`);
+          }
+      });
+    }
+  
+    if(accion == "cc"){
+      console.log("se ejecuto insert rel cc");
+      let query = `INSERT INTO rel_cc_publicaciones(id_post,id_centroComercial,categoria) VALUES (?,?,?)`;
+      const values = [id_post, id_lugar, categoria];
+      conn.query(query, values, (error, filas) => {
+          if (error) {
+              console.log(`error en insert a rel_tiendas_publicaciones`);
+              console.log(error);
+          } else {
+              console.log(`insert en rel_tiendas_publicaciones exitoso`);
+          }
+      });
+    }
+  }
+
 
 module.exports = {
     hasheador,
@@ -179,5 +210,6 @@ module.exports = {
     insertCC_Tienda,
     insertUsuarios,
     deleteUsuarios,
-    accionProductos
+    accionProductos,
+    accionPublicacion
 }
