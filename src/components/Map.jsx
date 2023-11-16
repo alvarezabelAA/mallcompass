@@ -26,9 +26,9 @@ function MyComponent() {
 //   return null
 // }
 
-const Map = ({ ancho = '100%', largo='50vh' }) => {
+const Map = ({ ancho = '100%', largo='50vh', onCoordenadasChange, latitud,longitud,enableClick = true }) => {
 
-  const [coord, setCoord] = useState([14.64072, -90.51327])
+  const [coord, setCoord] = useState([14.64294167, -90.51322778])
 
   const SearchLocation = () => {
     return (
@@ -44,6 +44,7 @@ const Map = ({ ancho = '100%', largo='50vh' }) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           setCoord([position.coords.latitude, position.coords.longitude])
+          onCoordenadasChange([position.coords.latitude, position.coords.longitude])
           console.log([position.coords.latitude, position.coords.longitude])
         })
       } else {
@@ -58,8 +59,22 @@ const Map = ({ ancho = '100%', largo='50vh' }) => {
     )
   }
 
+  const [validData, setValidData] = useState(false);
+
+
+  useEffect(() => {
+    console.log(latitud)
+    console.log(longitud)
+    if(latitud != undefined && longitud != undefined){
+      setCoord([latitud, longitud]);
+
+    }
+
+  }, [latitud, longitud, validData]);
+
   useEffect(()=>{
-  },[coord])
+    //setCoord([latitud,longitud])
+  },[longitud,latitud])
 
 
   function MapClickEvent () {
@@ -69,6 +84,7 @@ const Map = ({ ancho = '100%', largo='50vh' }) => {
       console.log(lat,lng)
       map.setView([lat,lng], center.getZoom())
       setCoord([lat, lng]);
+      onCoordenadasChange([lat, lng])
     });
 
     return null;
@@ -77,8 +93,8 @@ const Map = ({ ancho = '100%', largo='50vh' }) => {
 
   return (
     <div id="map">
-      <SearchLocation />
-      <GetMyLocation />
+      {enableClick === true &&       <GetMyLocation />
+      }
       <MapContainer style={{
         height: largo,
         width: ancho
@@ -109,7 +125,7 @@ const Map = ({ ancho = '100%', largo='50vh' }) => {
           <Circle center={coord} radius={500} />
           
         </Marker>
-        <MapClickEvent />
+        {enableClick === true && <MapClickEvent />}
         {/* <MapZoomClick /> */}
       </MapContainer>
     </div>

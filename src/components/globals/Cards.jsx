@@ -1,42 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image'
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import * as iconsFc from 'react-icons/fc';
 
-const Cards = ({ cardData,onShopClick,onInfoClick }) => {
-  
-
+const Cards = ({ cardData, onShopClick = () => '', onInfoClick = () => '' }) => {
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 4;
 
-  const filteredAndPaginatedCards = cardData
-    .filter((card) => {
-      return card.nombreCC.toLowerCase().includes(searchText.toLowerCase()) ||
-        card.direccion.toLowerCase().includes(searchText.toLowerCase());
-    })
-    .slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
+  const filteredAndPaginatedCards = cardData.filter((card) => {
+    return card.nombreCC.toLowerCase().includes(searchText.toLowerCase()) ||
+      card.direccion.toLowerCase().includes(searchText.toLowerCase());
+  }).slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  useEffect(()=>{
-    console.log(cardData)
-  },[cardData])
-  
-  // estado_cuenta: 'I',
-  //       nombreCC: 'Centro Comercial C',
-  //       longitud: '-74.3456',
-  //       latitud: '40.7890',
-  //       imagen: 'imagen3.jpg',
-  //       telefonoCC: '345-678-9012',
-  //       correo: 'correo3@example.com',
-  //       id_centroComercial: 3,
-  //       direccion: '789 Calle Peatonal'
-  
-  
-  
-  const defaultImage = '/images/no_image.jpg'; // Especifica la URL de la imagen por defecto
+  useEffect(() => {
+    console.log(cardData);
+  }, [cardData]);
+
+  const defaultImage = '/images/no_image.jpg';
+
   return (
     <div className="mx-auto w-full p-2">
       <div className="mb-4">
@@ -48,84 +33,55 @@ const Cards = ({ cardData,onShopClick,onInfoClick }) => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      <div className="grid  grid-cols-1  md:grid-cols-2  lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {filteredAndPaginatedCards.map((card) => (
-          <div key={card.id} className=" w-full ">
-            <h2 className="text-xl text-center font-semibold background-darkBlue rounded-t-lg  p-2 text-white">{card.nombreCC}</h2>
+          <div key={card.id} className="w-full">
+            <h2 className="text-xl text-center font-semibold bg-blue-900 text-white rounded-t-lg p-2">{card.nombreCC}</h2>
             <div className='bg-white pb-4 rounded shadow'>
-              {card.imagen ? (
+              <div className='h-32 relative'>
                 <Image
-                  src={'/images/'+ card.imagen}
+                  src={card.imagen ? '/images/' + card.imagen : defaultImage}
                   onError={(e) => {
-                    
+                    e.target.onerror = null;
+                    e.target.src = defaultImage;
                   }}
                   alt="Imagen de la tarjeta"
-                  className=" w-full h-32 text-center "
-                  width={200} // Especifica el ancho de la imagen
-                  height={500} // Especifica la altura de la imagen
+                  className="w-full h-full object-cover"
+                  layout="fill"
                 />
-              ) : (
-                <Image
-                  src={defaultImage}
-                  alt="Imagen de la tarjeta por defecto"
-                  className=" w-full h-32 text-center "
-                  width={200} // Especifica el ancho de la imagen por defecto
-                  height={200} // Especifica la altura de la imagen por defecto
-                />
-              )}          
-              <div className='px-1'>
-                <a href="#">
-                  <h5 className="mb-2 text-2xl font-bold  text-gray-900 truncate">{card.nombreTienda}</h5>
-                </a>    
-                <p className='font-semibold '>Dirección: </p>
-                <span className=''>{card.direccion}</span>
+              </div>
+              <div className='p-4'>
+                <h5 className="mb-2 text-2xl font-bold text-gray-900 truncate">{card.nombreTienda}</h5>
+                <p className='font-semibold'>Dirección:</p>
+                <span className='block truncate'>{card.direccion}</span>
                 <h3 className='font-semibold'>Medios de Contacto</h3>
-                <p className='font-semibold '>Telefono:</p>
-                <span className=''> {card.telefonoCC}</span>
-                <p className='font-semibold '>Correo Electronico: </p>
-                <span className=''>{card.correo}</span>
-                <h3 className='font-semibold'></h3>
-                <p className='font-semibold '>Estado: </p>
-                <span className='text-center'>{
-                  card.estado_cuenta ==='I' ?  <iconsFc.FcCancel className='w-8 h-8 flex-shrink-0' />
-                  : <iconsFc.FcApproval className='w-8 h-8 flex-shrink-0' />
-
-                }</span>
-                {(card.cantidad_usuarios > 0) ?
-                  (<div className='flex justify-center px-4'>
-                    <div className='px-3'>
-                      <span className='font-semibold'>
-                        Tiendas:
-                      </span>
-                      {card.cantidad_tiendas}
+                <p className='font-semibold'>Teléfono:</p>
+                <span className='block'>{card.telefonoCC}</span>
+                <p className='font-semibold'>Correo Electrónico:</p>
+                <span className='block'>{card.correo}</span>
+                <h3 className='font-semibold'>Estado:</h3>
+                <span className='block text-center'>
+                  {card.estado_cuenta === 'I' ? <iconsFc.FcCancel className='w-8 h-8 mx-auto' /> : <iconsFc.FcApproval className='w-8 h-8 mx-auto' />}
+                </span>
+                {card.cantidad_usuarios > 0 && (
+                  <div className='flex justify-center space-x-8 mt-4'>
+                    <div className='flex items-center'>
+                      <span className='font-semibold'>Tiendas:</span>
+                      <span className='ml-1'>{card.cantidad_tiendas}</span>
                     </div>
-                    <div className='px-3'>
-                      <span className='font-semibold'>
-                        Usuarios:
-                      </span>
-                      {card.cantidad_usuarios}
-                      
+                    <div className='flex items-center'>
+                      <span className='font-semibold'>Usuarios:</span>
+                      <span className='ml-1'>{card.cantidad_usuarios}</span>
                     </div>
-                  </div>) : '' 
-
-                }
-                <div className='md:flex justify-center'>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-                    <a onClick={()=>onShopClick(card)} 
-                      href="#"
-                      className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-slate-800 rounded-lg hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      <iconsFc.FcShop className='w-7 h-7 flex-shrink-0 mr-1' />
-                      Tiendas
-                    </a>
-                    <a onClick={()=>onInfoClick(card)}
-                      href="#"
-                      className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-slate-800 rounded-lg hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      <iconsFc.FcInfo className='w-7 h-7 flex-shrink-0 mr-1' />
-                      Información
-                    </a>
                   </div>
+                )}
+                <div className='flex justify-center mt-4 space-x-4'>
+                  <button onClick={() => onShopClick(card)} className="btn-primary">
+                    <iconsFc.FcShop className='w-8 h-8 mr-1' />
+                  </button>
+                  <button onClick={() => onInfoClick(card)} className="btn-primary">
+                    <iconsFc.FcInfo className='w-8 h-8 mr-1' />
+                  </button>
                 </div>
               </div>
             </div>

@@ -6,11 +6,19 @@ import SideBar from '../../components/globals/SideBar';
 import { encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
 import Cards from '../../components/globals/Cards';
 import SideBars from '../../components/common/SideBars';
+import Modal from '../../components/globals/Modal';
+import dynamic from 'next/dynamic';
+const Map = dynamic(() => import('../../components/Map'), {
+  ssr: false,
+});
+
+
 const CentrosComerciales = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
   const hasMounted = useHasMounted();
   const router = useRouter();
   const [items,setItems]=useState([])
+  const [items2,setItems2]=useState([])
 
 
   const listar =async()=>{
@@ -99,11 +107,29 @@ const CentrosComerciales = () => {
     encryptAndSetLocalStorage('tiendasData', item);
   }
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleModalOpen = (item) => {
+    console.log(item)
+    setItems2(item)
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+  };
+
 
   return (
     <>
       <SideBars>
-        <Cards onShopClick={(item)=> showStores(item)} cardData={items}/>
+        <Cards onShopClick={(item)=> showStores(item)} onInfoClick={(item) => handleModalOpen(item) } cardData={items}/>
+        {modalVisible && (
+          <Modal titulo="Información" onClose={handleModalClose}>
+            <Map enableClick={false} latitud={items2.latitud} longitud={items2.longitud} />
+
+          </Modal>
+        )}
       </SideBars>
     </>
   )

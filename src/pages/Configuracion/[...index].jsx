@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';import Table from '../../components/globals/Table';
 import { useAuth } from '../../context/AuthContext';
 import useHasMounted from '../../hooks/useHasMounted';
-import SideBar from '../../components/globals/SideBar';
 import { encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
 import * as iconsFc from 'react-icons/fc';
 import { format } from 'date-fns';

@@ -69,10 +69,14 @@ const TiendasComercial = () => {
     // Realiza acciones basadas en el valor de sidebarVisible aquí
   };
 
+  const nowStore = (item) => {
+    console.log(item)
+  }
+
   return (
     <>
       <SideBars>
-        <div className=''>
+        <div className='p-4'>
           <div>
             <h1 className="text-3xl font-bold mb-4">¡Bienvenido a {centroComercial}!</h1>
           </div>
@@ -82,7 +86,7 @@ const TiendasComercial = () => {
               {items.length > 0 ? (
                 items.map((tienda) => (
                   <div key={tienda.id_tienda}>
-                    <TiendaCard tienda={tienda} />
+                    <TiendaCard onEdit={(newValue)=> nowStore(newValue) } tienda={tienda} />
                   </div>
                 ))
               ) : (

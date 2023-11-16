@@ -50,6 +50,8 @@ const FormLogin = () => {
           encryptAndSetLocalStorage('token', data.tokenSesionID);
           encryptAndSetLocalStorage('rol', data.rol);
           encryptAndSetLocalStorage('id_usuario', data.id_usuario);
+          encryptAndSetLocalStorage('id_tienda', data.id_tienda);
+          encryptAndSetLocalStorage('id_comercial', data.id_centroComercial);
         }else{
           showAlertWithMessage('ERROR','Los datos no son correctos', 'Verifique sus credenciales ')
         }
@@ -69,14 +71,13 @@ const FormLogin = () => {
   return (
     <>
       <div className="bg-no-repeat bg-cover bg-center relative" style={{ backgroundImage: 'url(/images/mall.jpg)' }} >
-        <div className="absolute bg-gradient-to-b from-blue-900 to-blue-500 opacity-75 inset-0 z-0"></div>
+        <div className="md:absolute md:bg-gradient-to-b md:from-blue-900 md:to-blue-500 md:opacity-75 md:inset-0 z-0"></div>
         <div className="min-h-screen sm:flex sm:flex-row mx-0 justify-center">
           <div className="flex-col flex  self-center p-10 sm:max-w-5xl xl:max-w-2xl  z-10">
             <div className="self-start hidden lg:flex flex-col  text-white">
               {/* <img src="" className="mb-3" /> */}
               <h1 className="mb-3 font-bold text-5xl">Hola!! Bienvenid@ a MallCompass </h1>
-              <p className="pr-3">Lorem ipsum is placeholder text commonly used in the graphic, print,
-            and publishing industries for previewing layouts and visual mockups</p>
+              <p className="pr-3">Descubre más, gasta menos: MallCompass, tu compañero de compras </p>
             </div>
           </div>
           <div className="flex justify-center self-center  z-10">

@@ -59,13 +59,14 @@ const Registro = () => {
 
     // // Redirigir a la carpeta PantallaInicio después del registro exitoso
     const endpoint = 'http://localhost:4044/usuario/final/registro'; // Ajusta la URL del servidor de registro
+    
     const registroData = {
       contrasena: password,
       apellido,
       nombre,
       correo: email,
       telefono,
-      imagen,
+      imagen: imagen.split('\\').pop(),
       fecha_nacimiento: fechaNacimiento,
     };
 
@@ -128,8 +129,10 @@ const Registro = () => {
   },[imageFile])
 
   useEffect(()=>{
-    console.log(validarRegistro)
-    console.log(imageFile)
+    console.log(imagen)
+  },[imagen])
+
+  useEffect(()=>{
     if(validarRegistro === true){
       handleImagenUpload(imageFile)
       
@@ -208,7 +211,7 @@ const Registro = () => {
               </div>
               <div className='col-span-1'>
                 <label htmlFor="imagen" className="text-gray-600 block text-sm font-medium">
-            URL de la Imagen
+            Imagen
                 </label>
                 <input
                   type="file"

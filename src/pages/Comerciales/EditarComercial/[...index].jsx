@@ -6,7 +6,11 @@ import SideBar from '../../../components/globals/SideBar';
 import { decryptAndGetLocalStorage, pathGen, postToAPI, postToAPIWithParamsAndBody, putToAPIWithParamsAndBody } from '../../../funciones/api';
 import { useAlert } from '../../../context/AlertContext';
 import SideBars from '../../../components/common/SideBars';
-
+import dynamic from 'next/dynamic';
+import Accordion from '../../../components/common/Accordion';
+const Map = dynamic(() => import('../../../components/Map'), {
+  ssr: false,
+});
 
 const EditarComecial = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
@@ -23,6 +27,7 @@ const EditarComecial = () => {
   const [estado_cuenta, setEstadoCuenta] = useState('A');
   const [id_comercial, setIdComercial] = useState(0);
   const showAlertWithMessage  = useAlert();
+  const [validarRegistro, setValidarRegistro] = useState(false);
 
   const [errors, setErrors] = useState({
     estado_cuenta: "",
@@ -109,7 +114,7 @@ const EditarComecial = () => {
       nombreCC: nombre,
       longitud: longitud,
       latitud: latitud,
-      imagen: imagen,
+      imagen:  imagen.split('\\').pop(),
       telefonoCC: telefonoCC,
       correo: correo,
       direccion: direccion
@@ -131,6 +136,7 @@ const EditarComecial = () => {
         if(response.status === 1){
           router.push(`/Comerciales/${pathGen()}`);
           showAlertWithMessage('SUCCESS','Update realizado', 'Se modificaron los datos')
+          setValidarRegistro(true)
         }else{
           showAlertWithMessage('ERROR','Hay error en los datros', 'No se hizo la consulta correctamente')
 
@@ -150,14 +156,65 @@ const EditarComecial = () => {
 
   }
 
+  const [imageFile,setImageFile]=useState('')
+
+  const handleImagenUpload = async (imagenGuardar) => {
+    console.log(imagenGuardar)
+    const file = imagenGuardar;
+    const formData = new FormData();
+    formData.append('imagen', file);
+    setValidarRegistro(false)
+    try {
+      const response = await fetch('http://localhost:4044/upload', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (response.ok) {
+        console.log('Archivo subido exitosamente');
+        // Realiza cualquier acción adicional después de cargar el archivo
+      } else {
+        console.error('Error al subir el archivo');
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+    }
+  };
+  
+
+  useEffect(()=>{
+    console.log(imageFile)
+  },[imageFile])
+
+  useEffect(()=>{
+    console.log(imagen)
+  },[imagen])
+
+  useEffect(()=>{
+    if(validarRegistro === true){
+      handleImagenUpload(imageFile)
+      
+    }
+  },[validarRegistro])
+
+  const coordenada = (latlng)=>{
+    console.log(latlng)
+    const latitud = latlng[0]
+    const longitud = latlng[1]
+    setLatitud(latitud)
+    setLongitud(longitud)
+    console.log('Latitud:', latitud)
+    console.log('Longitud:', longitud)
+  }
+  
   return (
     <>
       <SideBars >
-        <div className='w-full items-center m-[10vh]'>
-          <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
+        <div className='w-full items-center md:m-[10vh]'>
+          <div className=" bg-slate-300 p-5 rounded-md shadow-md">
             <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Editar Comercial</h2>
-            <div className="grid grid-cols-1 gap-4 ">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+              <div className='col-span-2 md:col-span-1'>
                 <label htmlFor="nombre" className="text-white block text-sm font-medium ">
               Nombre
                 </label>
@@ -170,7 +227,7 @@ const EditarComecial = () => {
                 />
                 {errors.nombreCC && <div className="text-red-500">{errors.nombreCC}</div>}
               </div>
-              <div>
+              <div className='col-span-2 md:col-span-1'>
                 <label htmlFor="telefono" className="text-white block text-sm font-medium ">
               Telefono
                 </label>
@@ -183,7 +240,7 @@ const EditarComecial = () => {
                 />
                 {errors.telefonoCC && <div className="text-red-500">{errors.apellido}</div>}
               </div>
-              <div>
+              <div className='col-span-2 md:col-span-1'>
                 <label htmlFor="correo" className="text-white block text-sm font-medium ">
               Correo Electrónico
                 </label>
@@ -196,7 +253,7 @@ const EditarComecial = () => {
                 />
                 {errors.correo && <div className="text-red-500">{errors.correo}</div>}
               </div>
-              <div>
+              <div className='col-span-2 md:col-span-1'>
                 <label htmlFor="direccion" className="text-white block text-sm font-medium ">
               Dirección
                 </label>
@@ -209,46 +266,21 @@ const EditarComecial = () => {
                 />
                 {errors.direccion && <div className="text-red-500">{errors.direccion}</div>}
               </div>
-              <div>
+              <div className='col-span-2 md:col-span-1'>
                 <label htmlFor="imagen" className="text-white block text-sm font-medium ">
-              URL de la Imagen
+              Imagen
                 </label>
                 <input
-                  type="text"
+                  type="file"
                   id="imagen"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={imagen}
-                  onChange={(e) => setImagen(e.target.value)}
+                  accept="image/*"
+                  className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  //value={imagen}
+                  onChange={(e) => {setImagen(e.target.value); setImageFile(e.target.files[0])}}
                 />
                 {errors.imagen && <div className="text-red-500">{errors.imagen}</div>}
               </div>
-              <div>
-                <label htmlFor="longitud" className="text-white block text-sm font-medium ">
-              Longitud
-                </label>
-                <input
-                  type="text"
-                  id="longitud"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={longitud}
-                  onChange={(e) => setLongitud(e.target.value)}
-                />
-                {errors.longitud && <div className="text-red-500">{errors.longitud}</div>}
-              </div>
-              <div>
-                <label htmlFor="latitud" className="text-white block text-sm font-medium ">
-              Latitud
-                </label>
-                <input
-                  type="text"
-                  id="latitud"
-                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                  value={latitud}
-                  onChange={(e) => setLatitud(e.target.value)}
-                />
-                {errors.latitud && <div className="text-red-500">{errors.latitud}</div>}
-              </div>
-              <div>
+              <div className='col-span-2 md:col-span-1'>
                 <label htmlFor="estado_cuenta" className="text-white block text-sm font-medium ">
               Estado
                 </label>
@@ -262,6 +294,39 @@ const EditarComecial = () => {
                   <option value="I">Inactivo</option>
                 </select>
               </div>
+              <div className='col-span-2 md:col-span-1'>
+                <label htmlFor="longitud" className="text-white block text-sm font-medium ">
+              Longitud
+                </label>
+                <input
+                  type="text"
+                  id="longitud"
+                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                  value={longitud}
+                  onChange={(e) => setLongitud(e.target.value)}
+                />
+                {errors.longitud && <div className="text-red-500">{errors.longitud}</div>}
+              </div>
+              <div className='col-span-2 md:col-span-1'>
+                <label htmlFor="latitud" className="text-white block text-sm font-medium ">
+              Latitud
+                </label>
+                <input
+                  type="text"
+                  id="latitud"
+                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                  value={latitud}
+                  onChange={(e) => setLatitud(e.target.value)}
+                />
+                {errors.latitud && <div className="text-red-500">{errors.latitud}</div>}
+              </div>
+              
+            </div>
+            <div className='col-span-2'>
+              <Map onCoordenadasChange={(newValue)=> coordenada(newValue)} />
+              {/* <Accordion numOfAccordions={1} title="Mapa Ubicación">
+                </Accordion> */}
+
             </div>
             <div className="mt-6">
               <button

@@ -12,6 +12,7 @@ const EditarTienda = () => {
   const hasMounted = useHasMounted();
   const { token, login } = useAuth();
   const router = useRouter();
+  const [validarRegistro, setValidarRegistro] = useState(false);
 
   const [nombreTienda, setNombre] = useState('');
   const [correo, setEmail] = useState('');
@@ -91,7 +92,7 @@ const EditarTienda = () => {
     const endpoint = 'http://localhost:4044/tiendas/modificacion'; // Ajusta la URL del servidor de registro
     const registroData = {
       nombreTienda,
-      imagen,
+      imagen:  imagen.split('\\').pop(),
       telefono,
       numeroLocal,
       estado_cuenta: estado,
@@ -111,6 +112,7 @@ const EditarTienda = () => {
         if(response.status === 1){
           router.push(`/Tiendas/${pathGen()}`);
           showAlertWithMessage('SUCCESS','Solicitud correcta', 'Se ingresaron los datos')
+          setValidarRegistro(true)
         }else{
           showAlertWithMessage('ERROR','Hay error en los datros', 'No se hizo la consulta correctamente')
 
@@ -142,121 +144,171 @@ const EditarTienda = () => {
     console.log(validateSlide)
   },[validateSlide])
 
+  const [imageFile,setImageFile]=useState('')
+
+  const handleImagenUpload = async (imagenGuardar) => {
+    console.log(imagenGuardar)
+    const file = imagenGuardar;
+    const formData = new FormData();
+    formData.append('imagen', file);
+    setValidarRegistro(false)
+    try {
+      const response = await fetch('http://localhost:4044/upload', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (response.ok) {
+        console.log('Archivo subido exitosamente');
+        // Realiza cualquier acción adicional después de cargar el archivo
+      } else {
+        console.error('Error al subir el archivo');
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+    }
+  };
+  
+
+  useEffect(()=>{
+    console.log(imageFile)
+  },[imageFile])
+
+  useEffect(()=>{
+    console.log(imagen)
+  },[imagen])
+
+  useEffect(()=>{
+    if(validarRegistro === true){
+      handleImagenUpload(imageFile)
+      
+    }
+  },[validarRegistro])
 
   return (
     <>
       <SideBars>
-        <div className="max-w-md md:max-w-3xl mx-auto background-darkBlue  p-5 rounded-md shadow-md">
-          <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Registro</h2>
-          <div className="grid grid-cols-1 gap-4 ">
-            <div>
-              <label htmlFor="nombre" className="text-white block text-sm font-medium ">
+        <div className='w-full items-center md:m-[10vh]'>
+          <div className=" bg-slate-300 p-5 rounded-md shadow-md">
+            <h2 className="text-2xl  font-semibold text-center mb-6 text-black">Registro</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+              <div className='col-span-2 md:col-span-1'>
+
+                <label htmlFor="nombre" className="text-black block text-sm font-medium ">
               Nombre
-              </label>
-              <input
-                type="text"
-                id="nombreTienda"
-                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                value={nombreTienda}
-                onChange={(e) => setNombre(e.target.value)}
-              />
-              {errors.nombreTienda && <div className="text-red-500">{errors.nombreTienda}</div>}
-            </div>
-            <div>
-              <label htmlFor="apellido" className="text-white block text-sm font-medium ">
+                </label>
+                <input
+                  type="text"
+                  id="nombreTienda"
+                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                  value={nombreTienda}
+                  onChange={(e) => setNombre(e.target.value)}
+                />
+                {errors.nombreTienda && <div className="text-red-500">{errors.nombreTienda}</div>}
+              </div>
+              <div className='col-span-2 md:col-span-1'>
+
+                <label htmlFor="apellido" className="text-black block text-sm font-medium ">
               Imagen
-              </label>
-              <input
-                type="text"
-                id="imagen"
-                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                value={imagen}
-                onChange={(e) => setImagen(e.target.value)}
-              />
-              {errors.imagen && <div className="text-red-500">{errors.imagen}</div>}
-            </div>
-            <div>
-              <label htmlFor="email" className="text-white block text-sm font-medium ">
+                </label>
+                <input
+                  type="file"
+                  id="imagen"
+                  accept="image/*"
+                  className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  // value={imagen}
+                  onChange={(e) => {setImagen(e.target.value); setImageFile(e.target.files[0])}}
+                />
+                {errors.imagen && <div className="text-red-500">{errors.imagen}</div>}
+              </div>
+              <div className='col-span-2 md:col-span-1'>
+
+                <label htmlFor="email" className="text-black block text-sm font-medium ">
               Teléfono
-              </label>
-              <input
-                type="text"
-                id="telefono"
-                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                value={telefono}
-                onChange={(e) => setTelefono(e.target.value)}
-              />
-              {errors.telefono && <div className="text-red-500">{errors.telefono}</div>}
-            </div>
-            <div>
-              <label htmlFor="telefono" className="text-white block text-sm font-medium ">
+                </label>
+                <input
+                  type="text"
+                  id="telefono"
+                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                />
+                {errors.telefono && <div className="text-red-500">{errors.telefono}</div>}
+              </div>
+              <div className='col-span-2 md:col-span-1'>
+
+                <label htmlFor="telefono" className="text-black block text-sm font-medium ">
               Número de Local
-              </label>
-              <input
-                type="text"
-                id="numeroLocal"
-                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                value={numeroLocal}
-                onChange={(e) => setNumeroLocal(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="estado" className="text-white block text-sm font-medium ">
+                </label>
+                <input
+                  type="text"
+                  id="numeroLocal"
+                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                  value={numeroLocal}
+                  onChange={(e) => setNumeroLocal(e.target.value)}
+                />
+              </div>
+              <div className='col-span-2 md:col-span-1'>
+
+                <label htmlFor="estado" className="text-black block text-sm font-medium ">
               Estado
-              </label>
-              <select
-                id="estado"
-                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                value={estado}
-                onChange={(e) => setEstado(e.target.value)}
-              >
-                <option value="A">Activo</option>
-                <option value="I">Inactivo</option>
-              </select>
-              {errors.estado && <div className="text-red-500">{errors.estado}</div>}
-            </div>
-            <div>
-              <label htmlFor="fechaNacimiento" className="text-white block text-sm font-medium ">
+                </label>
+                <select
+                  id="estado"
+                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                  value={estado}
+                  onChange={(e) => setEstado(e.target.value)}
+                >
+                  <option value="A">Activo</option>
+                  <option value="I">Inactivo</option>
+                </select>
+                {errors.estado && <div className="text-red-500">{errors.estado}</div>}
+              </div>
+              <div className='col-span-2 md:col-span-1'>
+
+                <label htmlFor="fechaNacimiento" className="text-black block text-sm font-medium ">
               Categoria Tienda
-              </label>
-              <input
-                type="text"
-                id="categoriaTienda"
-                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                value={categoriaTienda}
-                onChange={(e) => setCategoria(e.target.value)}
-              />
-              {errors.categoriaTienda && <div className="text-red-500">{errors.categoriaTienda}</div>}
-            </div>
-            <div>
-              <label htmlFor="password" className="text-white block text-sm font-medium ">
+                </label>
+                <input
+                  type="text"
+                  id="categoriaTienda"
+                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                  value={categoriaTienda}
+                  onChange={(e) => setCategoria(e.target.value)}
+                />
+                {errors.categoriaTienda && <div className="text-red-500">{errors.categoriaTienda}</div>}
+              </div>
+              <div className='col-span-2 md:col-span-1'>
+
+                <label htmlFor="password" className="text-black block text-sm font-medium ">
               Correo
-              </label>
-              <input
-                type="email"
-                id="correo"
-                className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                value={correo}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {errors.correo && <div className="text-red-500">{errors.correo}</div>}
+                </label>
+                <input
+                  type="email"
+                  id="correo"
+                  className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                  value={correo}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {errors.correo && <div className="text-red-500">{errors.correo}</div>}
+              </div>
             </div>
-          </div>
-          <div className="mt-6">
-            <button
-              type="button"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7a7bcb] hover:bg-[#898ae1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              onClick={handleRegistro}
-            >
+            <div className="mt-6">
+              <button
+                type="button"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7a7bcb] hover:bg-[#898ae1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={handleRegistro}
+              >
             Registrarse
-            </button>
-            <button
-              onClick={handleUsuario}
-              type="button"
-              className="w-full mt-2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
+              </button>
+              <button
+                onClick={handleUsuario}
+                type="button"
+                className="w-full mt-2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
             Regresar 
-            </button>
+              </button>
+            </div>
           </div>
         </div>
       </SideBars>

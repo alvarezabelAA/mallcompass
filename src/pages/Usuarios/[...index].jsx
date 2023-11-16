@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';import Table from '../../components/glob
 import { useAuth } from '../../context/AuthContext';
 import useHasMounted from '../../hooks/useHasMounted';
 import SideBar from '../../components/globals/SideBar';
-import { deleteWithbody, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
+import { deleteWithParams, deleteWithbody, encryptAndSetLocalStorage, getFromAPI, getFromAPIWithParams, pathGen } from '../../funciones/api';
 import { useAlert } from '../../context/AlertContext';
 import SideBars from '../../components/common/SideBars';
 
@@ -89,7 +89,7 @@ const Usuarios = () => {
     };
   
     try {
-      const response = await deleteWithbody(endpoint, requestBody);
+      const response = await deleteWithParams(endpoint, requestBody);
   
       console.log(response);
   
