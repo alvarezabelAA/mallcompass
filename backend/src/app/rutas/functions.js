@@ -204,6 +204,38 @@ function accionProductos(id_tienda, id_producto, accion){
   }
 
 
+  function accionPublicacionPromo(id_objeto, id_promocion, accion, categoria){
+ 
+    if(accion == "tienda"){
+      console.log("se ejecuto insert en rel promociones");
+      let query = `INSERT INTO rel_tiendas_promociones(id_tienda,id_promocion,categoria) VALUES (?,?,?)`;
+      const values = [id_objeto, id_promocion, categoria];
+      conn.query(query, values, (error, filas) => {
+          if (error) {
+              console.log(`error en insert a rel_tiendas_promociones`);
+              console.log(error);
+          } else {
+              console.log(`insert en rel_tiendas_promociones exitoso`);
+          }
+      });
+    }
+  
+    if(accion == "usuario"){
+      console.log("se ejecuto insert rel user");
+      let query = `INSERT INTO rel_user_promociones(id_usuario,id_promocion) VALUES (?,?)`;
+      const values = [id_objeto, id_promocion];
+      conn.query(query, values, (error, filas) => {
+          if (error) {
+              console.log(`error en insert a rel_user_promociones`);
+              console.log(error);
+          } else {
+              console.log(`insert en rel_user_promociones exitoso`);
+          }
+      });
+    }
+  }
+
+
 module.exports = {
     hasheador,
     tokenSesion,
@@ -211,5 +243,6 @@ module.exports = {
     insertUsuarios,
     deleteUsuarios,
     accionProductos,
-    accionPublicacion
+    accionPublicacion,
+    accionPublicacionPromo
 }

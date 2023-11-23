@@ -150,5 +150,48 @@ module.exports = (app) => {
     });
 
 
+    app.options('/publicaciones', cors());
+    app.get('/publicaciones', cors(),(req, res)=>{
+        console.log("ejecucion metodo GET");
+        let query = `SELECT * FROM logintokens WHERE token = '${req.query.tokenSesion}'`;
+        conn.query(query, (error, filas) => {
+        if(error){
+            console.log("No se encontró el token");
+        }else{
+            if(filas.length == 0){
+                console.log("consulta sin elementos");
+                res.json({ status: 0, mensaje: "error de token", datos: filas });
+            }else{
+                console.log("encontro el token");
+                let query = `SELECT * FROM publicaciones INNER JOIN rel_cc_publicaciones ON publicaciones.id_post=rel_cc_publicaciones.id_post`;
+                conn.query(query, (error, filas) => {
+                    if(error){
+                        res.json({ status: 0, mensaje: "error en DB", datos:error });
+                    }else{
+                        if(filas.length == 0){
+                            console.log("consulta sin elementos");
+                            res.json({ status: 0, mensaje: "no hay publicaciones", datos: filas });
+                        }else{
+
+                            let query2 = `SELECT * FROM publicaciones INNER JOIN rel_tiendas_publicaciones ON publicaciones.id_post=rel_tiendas_publicaciones.id_post`;
+                            conn.query(query2, (error2, filas2) => {
+                                if(error){
+                                    res.json({ status: 0, mensaje: "error en DB", datos:error });
+                                }else{
+                                    if(filas2.length == 0){
+                                        console.log("consulta sin elementos");
+                                        res.json({ status: 0, mensaje: "no hay publicaciones", datos: filas2 });
+                                    }else{
+                                        res.json({ status: 1, mensaje: "datos obtenidos", datosTienda: filas2 , datosCC: filas});
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+        });
+    });
 
 }
