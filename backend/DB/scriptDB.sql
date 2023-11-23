@@ -56,7 +56,7 @@ CREATE TABLE promociones(
 		id_promocion integer NOT NULL AUTO_INCREMENT,
     vigencia_inicio datetime,
     vigencia_final datetime,
-    timer time,
+    timer char(50),
     cantidad integer,
 		imagen char(255),
 		qr char(255),

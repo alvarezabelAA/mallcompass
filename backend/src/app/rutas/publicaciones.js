@@ -173,6 +173,7 @@ module.exports = (app) => {
                             console.log("consulta sin elementos");
                             res.json({ status: 0, mensaje: "no hay publicaciones", datos: filas });
                         }else{
+                            console.log(filas[0]);
 
                             let query2 = `SELECT * FROM publicaciones INNER JOIN rel_tiendas_publicaciones ON publicaciones.id_post=rel_tiendas_publicaciones.id_post`;
                             conn.query(query2, (error2, filas2) => {
