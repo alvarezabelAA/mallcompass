@@ -157,7 +157,7 @@ const Feed = () => {
                 <section className="my-12">
                   <h2 className="text-3xl font-semibold mb-8 text-white p-8">Descubre Nuestros Centros Comerciales</h2>
                   <Swiper
-                    spaceBetween={60} // Espaciado entre slides
+                    spaceBetween={10} // Espaciado entre slides
                     slidesPerView={2}   // Número de slides visibles en pantallas pequeñas
                     breakpoints={{
                       640: {

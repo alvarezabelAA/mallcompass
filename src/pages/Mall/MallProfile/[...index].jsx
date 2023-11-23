@@ -48,8 +48,8 @@ const TiendasCarousel = ({ tiendas, onTap = () =>{} }) => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 2,
+    slidesToShow: 4,
+    slidesToScroll: 4,
   };
   const defaultImage = '/images/no_image.jpg';
 
@@ -58,9 +58,9 @@ const TiendasCarousel = ({ tiendas, onTap = () =>{} }) => {
   return (
     <Slider {...settings}>
       {tiendas.map((tienda) => (
-        <div onClick={()=> onTap(tiendas)} key={tienda.id_tienda} className=" bg-opacity-25 p-6 rounded-lg shadow-lg flex flex-col justify-between transition duration-300 transform hover:scale-105">
+        <div onClick={() => onTap(tiendas)} key={tienda.id_tienda} className="bg-opacity-25 p-6 rounded-lg shadow-lg flex items-center justify-center transition duration-300 transform hover:scale-105">
           {/* Imagen de la tienda */}
-          <div className="h-40 overflow-hidden mb-4">
+          <div className="h-24 w-24 mb-2 overflow-hidden rounded-full flex bg-white">
             <Image
               src={tienda.imagen ? '/images/' + tienda.imagen : defaultImage}
               onError={(e) => {
@@ -70,23 +70,20 @@ const TiendasCarousel = ({ tiendas, onTap = () =>{} }) => {
               width={100}
               height={100}
               alt="Imagen de la tienda"
-              className="w-full h-full object-cover rounded-md"
+              className="w-full h-full object-cover rounded-full"
               layout="responsive"
             />
           </div>
-      
+
           {/* Contenido de la tienda */}
-          <div className="flex flex-col">
-            <h3 className="text-xl font-semibold mb-2 truncate">{tienda.nombreTienda}</h3>
-            <p className="text-gray-300 mb-4">{tienda.categoriaTienda}</p>
-          
-            {/* Otros detalles de la tienda */}
-            {/* ... */}
+          <div className="">
+            <h3 className="text-sm font-semibold mb-1 truncate">{tienda.nombreTienda}</h3>
+            <p className="text-xs text-gray-300">{tienda.categoriaTienda}</p>
           </div>
         </div>
-      
       ))}
     </Slider>
+
   );
 };
 
@@ -295,8 +292,8 @@ const MallProfile = () => {
           >
             {profileData && (
               <div className='w-full min-h-screen bg-gray-800 font-sans text-white'>
-                <div className="flex justify-center items-center h-40 bg-gradient-to-r from-blue-400 via-sky-500 to-green-500">
-                  <div className='h-20 w-20 md:h-32 md:w-32 relative'>
+                <div className="flex items-center bg-gradient-to-r from-blue-400 via-sky-500 to-green-500 p-4">
+                  <div className='h-20 w-20 md:h-32 md:w-32 relative mr-4'>
                     <Image
                       src={profileData.imagen ? '/images/' + profileData.imagen : defaultImage}
                       onError={(e) => {
@@ -308,26 +305,17 @@ const MallProfile = () => {
                       layout="fill"
                     />
                   </div>
+                  <div>
+                    <h1 className="text-2xl font-bold">
+                      {profileData.nombreCC || profileData.nombreTienda}
+                    </h1>
+                    <p className="text-sm text-gray-500">
+                      {profileData.nombreCC ? 'Centro Comercial' : 'Tienda'}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-center mt-4">
-                  <h1 className="text-2xl font-bold">
-                    {profileData.nombreCC || profileData.nombreTienda}
-                  </h1>
-                  <p className="text-sm text-gray-500">
-                    {profileData.nombreCC ? 'Centro Comercial' : 'Tienda'}
-                  </p>
-                  {/* {itemsComercialNombre?.map((comercial) => (
-                    <div key={comercial.id_centroComercial} className="mb-4">
-                      <p>Nombre del Centro Comercial: {comercial.nombreCC}</p>
-
-                      {comercial.id_centroComercial === numeroComercial && (
-                        <p>¡Este es el centro comercial actualmente seleccionado!</p>
-                      )}
-                    </div>
-                  ))} */}
-                </div>
-
-                <div className="mt-4 px-6">
+                <div className=" mt-4 px-6">
+                  {/* Resto del contenido */}
                   <p className="text-sm">
                     <span className="font-bold">Correo Electrónico:</span> {profileData.correo}
                   </p>
@@ -380,10 +368,9 @@ const MallProfile = () => {
                     <h1 className="text-2xl font-extrabold leading-tight">Publicaciones</h1>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-1 p-4 mt-2">
-                    
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 p-4 mt-4">
                     {itemsComercial?.map((result) => (
-                      <div key={result.descripcion} className="col-span-1 border border-gray-300 rounded-md overflow-hidden">
+                      <div key={result.descripcion} className="col-span-1 border border-gray-300 rounded-md overflow-hidden shadow-md">
                         <div className="relative h-48">
                           <Image
                             src={result.imagen ? '/images/' + result.imagen : defaultImage}
@@ -396,21 +383,24 @@ const MallProfile = () => {
                             layout="fill"
                           />
                         </div>
-                        <div className="p-4">
-                          <p className="font-semibold text-lg mb-2">{result.descripcion}</p>
-                          <p className="text-gray-300 mb-2">Actividad: {result.actividad}</p>
-                          <p className="text-gray-300 mb-2">
-           Inicia: {format(new Date(result.vigencia_inicio), "yyyy-MM-dd HH:mm:ss")}
+                        <div className="p-4 bg-white">
+                          <p className="font-semibold text-xs md:text-lg mb-2 text-black">{result.descripcion}</p>
+                          <p className="text-gray-600 mb-2 text-xs md:text-lg truncate">Actividad: {result.actividad}</p>
+                          <p className="text-gray-600 mb-2 text-xs md:text-lg">
+          Inicia: {format(new Date(result.vigencia_inicio), "yyyy-MM-dd HH:mm:ss")}
                           </p>
-                          <p className="text-gray-300 mb-2">
+                          <p className="text-gray-600 mb-2 text-xs md:text-lg">
           Termina: {format(new Date(result.vigencia_final), "yyyy-MM-dd HH:mm:ss")}
                           </p>
-                          <p className="text-gray-300">Categoría: {result.categoria}</p>
+                          <p className="text-gray-600 text-xs md:text-lg">Categoría: {result.categoria}</p>
                           {/* Otros campos que desees mostrar */}
                         </div>
                       </div>
                     ))}
                   </div>
+
+
+
 
 
                 </>

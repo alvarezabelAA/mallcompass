@@ -95,10 +95,12 @@ const EditProfile = () => {
     const queryParams = {
       tokenSesion: token.toString()
     };
+    console.log(queryParams,registroData)
     try {
       try {
         const response = await putToAPIWithParamsAndBody(endpoint,queryParams, registroData);
         // Haz algo con la respuesta aquí
+        console.log(response)
         if(response.status === 1){
           router.push(`/Perfil/${pathGen()}`)
           encryptAndSetLocalStorage('usuarioData', '');

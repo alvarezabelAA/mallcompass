@@ -10,6 +10,7 @@ import Modal from '../../components/globals/Modal';
 import SideBars from '../../components/common/SideBars';
 import Image from 'next/image';
 import { useAlert } from '../../context/AlertContext';
+import Accordion from '../../components/common/Accordion';
 
 const Perfil = () => {
   const { token } = useAuth(); // Obtén el token del contexto de autenticación
@@ -123,7 +124,7 @@ const Perfil = () => {
 
   const newStore = () => {
     encryptAndSetLocalStorage('usuarioData', JSON.stringify(items));
-    router.push(`/Perfil/EditProfile/${pathGen()}`)
+    router.push(`/Perfil/NewStore/${pathGen()}`)
   }
 
 
@@ -160,6 +161,10 @@ const Perfil = () => {
                   <h1 className="text-nomal">{items[0]?.telefono}</h1>
                   <h1 className="text-nomal">{items[0]?.correo}</h1>
                   <nav className="mt-4 text-center">
+                    {/* <div className='flex justify-center w-full'>
+                      <Accordion  title={'Hola'}>assssssssssssssssssssssssssssssssssssS</Accordion>
+
+                    </div> */}
                     {/* Coloca aquí enlaces de navegación si es necesario */}
                     {esComercial && (
                       <button onClick={()=>newStore(items)} className='bg-green-600 m-1 text-white font-semibold py-0.5 px-20 rounded-lg'>

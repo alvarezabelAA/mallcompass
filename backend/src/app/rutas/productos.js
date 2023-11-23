@@ -74,6 +74,7 @@ module.exports = (app) => {
                 res.json({ status: 0, mensaje: "no existe productos en la tienda indicada", datos: filas2 });
               }else{
                 res.js
+                
                 on({ status: 1, mensaje: "datos obtenidos", datos: filas2 });
               }
             }

@@ -35,7 +35,7 @@ const Accordion = ({ title, children }) => {
         aria-labelledby="heading"
         data-te-parent="#accordionExample"
       >
-        <div className="px-5 py-4">{children}</div>
+        <div className="px-5 py-4 text-black">{children}</div>
       </div>
     </div>
   );

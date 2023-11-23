@@ -82,7 +82,6 @@ const Feed = () => {
   }, [searchTerm, items]);
 
   const MallProfile = (item) => {
-    console.log(item)
     encryptAndSetLocalStorage('usuarioData', JSON.stringify(item));
     router.push(`../Mall/MallProfile/${pathGen()}`);  
   };
