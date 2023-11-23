@@ -150,6 +150,7 @@ module.exports = (app) => {
     });
 
 
+    /* PUBLICACION DE POST DE TIENDA y CC*/
     app.options('/publicaciones', cors());
     app.get('/publicaciones', cors(),(req, res)=>{
         console.log("ejecucion metodo GET");
