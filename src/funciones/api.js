@@ -155,7 +155,7 @@ export async function postToAPIWithParamsAndBody(endpoint, queryParams, bodyData
       },
       body: JSON.stringify(bodyData), // Convierte el objeto bodyData a JSON
     });
-
+    console.log(response)
     if (!response.ok) {
       throw new Error('La solicitud POST no fue exitosa');
     }

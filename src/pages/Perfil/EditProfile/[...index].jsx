@@ -141,6 +141,7 @@ const EditProfile = () => {
     <>
       <SideBars>
         <div className='w-full min-h-screen items-center bg-gray-800'>
+          
           <div className="  p-5 rounded-md shadow-md">
 
             <h2 className="text-2xl  font-semibold text-center mb-6 text-slate-500">Editar Perfil</h2>

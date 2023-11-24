@@ -89,24 +89,24 @@ const SideBars = ({ children }) => {
 
 
   const Menus = [
-    { title: 'Feed',spacing: true,onClick:()=> feedC() },
-    { title: 'Centros Comerciales',icon: <MdOutlineLocalMall/>,onClick:()=> CentrosComerciales() },
-    { title: 'Promociones' ,icon: <BsPercent />  },
-    { title: 'Configuración' ,icon: <AiFillSetting /> ,onClick:()=> configuracionC() },
-    { title: 'Logout',icon: <RiLogoutBoxLine />, onClick: () => handleLogout( ) },
+    // { title: 'Feed',spacing: true,onClick:()=> feedC() },
+    // { title: 'Centros Comerciales',icon: <MdOutlineLocalMall/>,onClick:()=> CentrosComerciales() },
+    // { title: 'Promociones' ,icon: <BsPercent />  },
+    // { title: 'Configuración' ,icon: <AiFillSetting /> ,onClick:()=> configuracionC() },
     { title: 'Catalogos',
       submenu: true,
       icon: <RiPagesLine/>,
       disabled: validar !== 'S',
       submenuItems: [
-        { title: 'Centros Comerciales', onClick: () => comercialesB()  },
         { title: 'Usuarios' , onClick: () => usuariosC() },
+        { title: 'Centros Comerciales', onClick: () => comercialesB()  },
         { title: 'Tiendas', onClick: () => tiendasC() },
       ],
     },
     { title: 'Administración',
       submenu: true,
       icon: <MdOutlineAdminPanelSettings/>,
+      
       disabled: validar !== 'S' && validar !== 'C', // Deshabilitar si validar no es 'S' o 'C'
       submenuItems: [
         { title: 'Admin C.C', onClick:() => adminCC() }
@@ -124,7 +124,8 @@ const SideBars = ({ children }) => {
       // { title: 'Usuarios' },
       // { title: 'Tiendas' },
       ],
-    },
+    },    { title: 'Logout',icon: <RiLogoutBoxLine />, onClick: () => handleLogout( ) },
+
   ]
 
   const [submenus, setSubmenus] = useState(Menus.map(() => false));

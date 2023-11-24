@@ -223,107 +223,105 @@ const Post = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2 }}
           >
-            <div className='w-full min-h-screen bg-gray-800 font-sans'>
-              <div className='w-full items-center md:md:m-[10vh] '>
-                <div className=" bg-slate-300 p-5 rounded-md shadow-md">
-                  <h2 className="text-2xl  font-semibold text-center mb-6 text-black">Publicaciones</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-                    <div className='col-span-2 md:col-span-1'>
-                      <label htmlFor="nombre" className="text-black block text-sm font-medium ">
+            <div className='w-full min-h-screen items-center bg-gray-800 '>
+              <div className="  p-5 rounded-md shadow-md">
+                <h2 className="text-2xl  font-semibold text-center mb-6 text-white">Publicaciones</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+                  <div className='col-span-2 md:col-span-1'>
+                    <label htmlFor="nombre" className="text-white block text-sm font-medium ">
               Descripcion
-                      </label>
-                      <input
-                        type="text"
-                        id="descripcion"
-                        className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                        value={descripcion}
-                        onChange={(e) => setDescripcion(e.target.value)}
-                      />
-                      {errors.descripcion && <div className="text-red-500">{errors.descripcion}</div>}
-                    </div>
-                    <div className='col-span-2 md:col-span-1'>
-                      <label htmlFor="telefono" className="text-black block text-sm font-medium ">
+                    </label>
+                    <input
+                      type="text"
+                      id="descripcion"
+                      className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                      value={descripcion}
+                      onChange={(e) => setDescripcion(e.target.value)}
+                    />
+                    {errors.descripcion && <div className="text-red-500">{errors.descripcion}</div>}
+                  </div>
+                  <div className='col-span-2 md:col-span-1'>
+                    <label htmlFor="telefono" className="text-white block text-sm font-medium ">
               Actividad
-                      </label>
-                      <input
-                        type="text"
-                        id="actividad"
-                        className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                        value={actividad}
-                        onChange={(e) => setActividad(e.target.value)}
-                      />
-                      {errors.actividad && <div className="text-red-500">{errors.actividad}</div>}
-                    </div>
-                    <div className='col-span-2 md:col-span-1'>
-                      <label htmlFor="vigencia_inicial" className="text-black block text-sm font-medium ">
+                    </label>
+                    <input
+                      type="text"
+                      id="actividad"
+                      className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                      value={actividad}
+                      onChange={(e) => setActividad(e.target.value)}
+                    />
+                    {errors.actividad && <div className="text-red-500">{errors.actividad}</div>}
+                  </div>
+                  <div className='col-span-2 md:col-span-1'>
+                    <label htmlFor="vigencia_inicial" className="text-white block text-sm font-medium ">
           Vigencia Inicial
-                      </label>
-                      <input
-                        type="datetime-local"
-                        id="vigencia_inicial"
-                        className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                        value={vigencia_inicial}
-                        onChange={handleVigenciaInicialChange}
-                      />
-                      {errors.vigencia_inicial && <div className="text-red-500">{errors.vigencia_inicial}</div>}
-                    </div>
-                    <div className='col-span-2 md:col-span-1'>
-                      <label htmlFor="vigencia_final" className="text-black block text-sm font-medium ">
+                    </label>
+                    <input
+                      type="datetime-local"
+                      id="vigencia_inicial"
+                      className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                      value={vigencia_inicial}
+                      onChange={handleVigenciaInicialChange}
+                    />
+                    {errors.vigencia_inicial && <div className="text-red-500">{errors.vigencia_inicial}</div>}
+                  </div>
+                  <div className='col-span-2 md:col-span-1'>
+                    <label htmlFor="vigencia_final" className="text-white block text-sm font-medium ">
           Vigencia Final
-                      </label>
-                      <input
-                        type="datetime-local"
-                        id="vigencia_final"
-                        className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                        value={vigencia_final}
-                        onChange={handleVigenciaFinalChange}
-                      />
-                      {errors.vigencia_final && <div className="text-red-500">{errors.vigencia_final}</div>}
-                    </div>
-                    <div className='col-span-2 md:col-span-1'>
-                      <label htmlFor="imagen" className="text-black block text-sm font-medium ">
+                    </label>
+                    <input
+                      type="datetime-local"
+                      id="vigencia_final"
+                      className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                      value={vigencia_final}
+                      onChange={handleVigenciaFinalChange}
+                    />
+                    {errors.vigencia_final && <div className="text-red-500">{errors.vigencia_final}</div>}
+                  </div>
+                  <div className='col-span-2 md:col-span-1'>
+                    <label htmlFor="imagen" className="text-white block text-sm font-medium ">
               Imagen
-                      </label>
-                      <input
-                        type="file"
-                        id="imagen"
-                        accept="image/*"
-                        className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                        value={imagen}
-                        onChange={(e) => {setImagen(e.target.value); setImageFile(e.target.files[0])}}
-                      />
-                      {errors.imagen && <div className="text-red-500">{errors.imagen}</div>}
-                    </div>
-                    <div className='col-span-2 md:col-span-1'>
-                      <label htmlFor="direccion" className="text-black block text-sm font-medium ">
+                    </label>
+                    <input
+                      type="file"
+                      id="imagen"
+                      accept="image/*"
+                      className="mt-1 h-8 w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                      value={imagen}
+                      onChange={(e) => {setImagen(e.target.value); setImageFile(e.target.files[0])}}
+                    />
+                    {errors.imagen && <div className="text-red-500">{errors.imagen}</div>}
+                  </div>
+                  <div className='col-span-2 md:col-span-1'>
+                    <label htmlFor="direccion" className="text-white block text-sm font-medium ">
               Categoria
-                      </label>
-                      <input
-                        type="text"
-                        id="categoria"
-                        className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
-                        value={categoria}
-                        onChange={(e) => setCategoria(e.target.value)}
-                      />
-                      {errors.categoria && <div className="text-red-500">{errors.categoria}</div>}
-                    </div>
+                    </label>
+                    <input
+                      type="text"
+                      id="categoria"
+                      className="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md"
+                      value={categoria}
+                      onChange={(e) => setCategoria(e.target.value)}
+                    />
+                    {errors.categoria && <div className="text-red-500">{errors.categoria}</div>}
+                  </div>
               
-                    {/* <div className='col-span-2'>
+                  {/* <div className='col-span-2'>
                 <Map onCoordenadasChange={(newValue)=> coordenada(newValue)} />
                 {/* <Accordion numOfAccordions={1} title="Mapa Ubicación">
                 </Accordion> */}
 
-                  </div>
-                  <div className="mt-6">
-                    <button
-                      type="button"
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7a7bcb] hover:bg-[#898ae1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      onClick={()=>handleRegistro()}
-                    >
+                </div>
+                <div className="mt-6">
+                  <button
+                    type="button"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7a7bcb] hover:bg-[#898ae1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={()=>handleRegistro()}
+                  >
             Insertar
-                    </button>
+                  </button>
                     
-                  </div>
                 </div>
               </div>
             </div>
