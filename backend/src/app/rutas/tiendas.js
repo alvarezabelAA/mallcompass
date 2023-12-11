@@ -81,7 +81,7 @@ module.exports = (app) => {
         }else{
           console.log("encontro el token");
             
-          let query = "SELECT * FROM tiendas";
+          let query = "SELECT * FROM tiendas WHERE estado_cuenta='A'";
           conn.query(query, (error, filas) => {
             if(error){
               res.json({ status: 0, mensaje: "error en DB", datos:error });

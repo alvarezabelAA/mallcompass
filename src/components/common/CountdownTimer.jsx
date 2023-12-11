@@ -51,7 +51,7 @@ const CountdownTimer = ({ startTime, endTime, showStyle = false }) => {
           <p>{`${remainingTime.days} días, ${remainingTime.hours} horas, ${remainingTime.minutes} minutos, ${remainingTime.seconds} segundos`}</p>
         </div>
       ) : (
-        <div className="bg-gray-800 text-white p-6 rounded-md shadow-md">
+        <div className="bg-white text-black p-6 rounded-md shadow-md">
           <p className="text-lg mb-4">Tiempo restante:</p>
           <div className="flex space-x-4">
             <div className="flex flex-col items-center">

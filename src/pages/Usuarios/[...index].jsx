@@ -64,9 +64,7 @@ const Usuarios = () => {
     { titulo: "Id Usuario", fila: "id_usuario", class: "text-center" },
     { titulo: "Rol", fila: "rol", class: "text-center" },
     { titulo: "Número de Teléfono", fila: "telefono", class: "text-center" },
-    { titulo: "Correo", fila: "correo", class: "text-center" },
-    { titulo: "Imagen", fila: "imagen", class: "text-center" },
-    { titulo: "Fecha", fila: "fecha_nacimiento", class: "text-center" },
+    { titulo: "Correo", fila: "correo", class: "text-center" }
     // Agrega más títulos y filas según sea necesario
   ];
 

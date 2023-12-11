@@ -187,10 +187,9 @@ const EditarUsuario = () => {
 
   const listarTiendas =async()=>{
     try {
-      const endpoint = 'http://localhost:4044/tiendas/consultaGeneral/activo';
+      const endpoint = 'http://localhost:4044/tiendas/consultaGeneral';
       const queryParams = {
         token: token.toString()
-        ,id_centroComercial: 11
       };
       const data = await getFromAPIWithParams(endpoint, queryParams);
       console.log(data)

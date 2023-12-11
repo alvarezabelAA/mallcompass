@@ -87,6 +87,9 @@ const SideBars = ({ children }) => {
   const post = () => {
     router.push(`../Post/${pathGen()}`);  };
 
+  const promociones = () => {
+    router.push(`../Promociones/${pathGen()}`);  };
+
 
   const Menus = [
     // { title: 'Feed',spacing: true,onClick:()=> feedC() },
@@ -208,7 +211,7 @@ const SideBars = ({ children }) => {
             </button>
             <button onClick={()=> mall()} className='flex flex-col items-center'>
               <FaSearch /> 
-              <span className='text-xs'>Comerciales</span>
+              <span className='text-xs'>Buscar</span>
             </button>
             {validar !== 'U' && (
               <button onClick={()=>post()} className='flex flex-col items-center'>
@@ -216,7 +219,7 @@ const SideBars = ({ children }) => {
                 <span className='text-xs'>Añadir Publicación</span>
               </button>
             )}
-            <button className='flex flex-col items-center'>
+            <button onClick={()=>promociones()} className='flex flex-col items-center'>
               <FaBell /> 
               <span className='text-xs'>Promociones</span>
             </button>

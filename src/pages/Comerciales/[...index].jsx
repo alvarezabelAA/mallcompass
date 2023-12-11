@@ -55,9 +55,7 @@ const Comerciales = () => {
     { titulo: "Dirección", fila: "direccion", class: "text-left" },
     { titulo: "Estado de Cuenta", fila: "estado_cuenta", class: "text-center" },
     { titulo: "Correo", fila: "correo", class: "text-center" },
-    { titulo: "Número de Teléfono", fila: "telefonoCC", class: "text-center" },
-    { titulo: "Imagen", fila: "imagen", class: "text-center" }
-    // Agrega más títulos y filas según sea necesario
+    { titulo: "Número de Teléfono", fila: "telefonoCC", class: "text-center" }    // Agrega más títulos y filas según sea necesario
   ];
 
 

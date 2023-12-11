@@ -113,10 +113,10 @@ module.exports = (app) => {
                       }else{
                         if(filas3.length == 0){
                           console.log("Usuario normal iniciando sesion...");
-                          res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}`, id_tienda:``, id_centroComercial:``});
+                          res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}`, id_tienda:``, id_centroComercial:`` });
                         }else{
                           console.log("datos obtenidos de DB ADMIN CC");
-                          res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}`, id_tienda:``, id_centroComercial:`${filas3[0].id_centroComercial}`});
+                          res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}`, id_tienda:``, id_centroComercial:`${filas3[0].id_centroComercial}` });
                         }
                       }
                     });
@@ -128,7 +128,7 @@ module.exports = (app) => {
                         res.json({ status: 0, mensaje: "error en DB", datos:error4 });
                       }else{
                         console.log("datos obtenidos de DB 2");
-                        res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}`, id_tienda:`${filas2[0].id_tienda}`, id_centroComercial:`${filas4[0].id_centroComercial}`});
+                        res.json({ status: 1, mensaje: "login exitoso", tokenSesionID: `${generador}`, rol:`${filas[0].rol}`, id_usuario:`${filas[0].id_usuario}`, id_tienda:`${filas2[0].id_tienda}`, id_centroComercial:`${filas4[0].id_centroComercial}` });
                       }
                     });
                   }
@@ -214,29 +214,63 @@ module.exports = (app) => {
   /*UPDATE DE USUARIO NORMAL SUPERADMIN*/
   app.options('/usuario/final/update', cors());
   app.put('/usuario/final/update', cors(), (req, res) => {
-        console.log("ejecucion metodo GET");
-        let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
-        conn.query(query, (error, filas) => {
-          if(error){
-            console.log("No se encontró el token");
-          }else{
-            if(filas.length == 0){
-              console.log("consulta sin elementos");
-              res.json({ status: 0, mensaje: "error de token", datos: filas });
-            }else{
-              console.log("encontro el token");
+    console.log("ejecucion metodo GET");
+    let query = `SELECT * FROM logintokens WHERE token = '${req.query.token}'`;
+    conn.query(query, (error, filas) => {
+      if(error){
+        console.log("No se encontró el token");
+      }else{
+        if(filas.length == 0){
+          console.log("consulta sin elementos");
+          res.json({ status: 0, mensaje: "error de token", datos: filas });
+        }else{
+          console.log("encontro el token");
 
-              const { contrasena, apellido, nombre, rol, correo, telefono, imagen, fecha_nacimiento, id_usuario} = req.body;
+          const { contrasena, apellido, nombre, rol, correo, telefono, imagen, fecha_nacimiento, id_usuario } = req.body;
             
-              if (!correo) {
-                res.json({ status: 0, mensaje: 'Correo no proporcionado en el cuerpo de la solicitud' });
-                return;
-              }
+          if (!correo) {
+            res.json({ status: 0, mensaje: 'Correo no proporcionado en el cuerpo de la solicitud' });
+            return;
+          }
           
-              if((req.query.idComercial == null && req.query.idTienda == null && (rol == "S" || rol == "U")) || (req.query.idComercial == "" && req.query.idTienda == "")){
+          if((req.query.idComercial == null && req.query.idTienda == null && (rol == "S" || rol == "U")) || (req.query.idComercial == "" && req.query.idTienda == "")){
+            // Construye la consulta de actualización
+            console.log(`req.query.idComercial -> ${req.query.idComercial}`);
+            console.log(`req.query.idTienda -> ${req.query.idTienda}`);
+            const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
+            const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
+            // Ejecuta la consulta de actualización
+            conn.query(query, values, (error, filas) => {
+              if (error) {
+                res.json({ status: 0, mensaje: 'Error al actualizar el usuario', datos: error });
+              } else {
+                res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
+              }
+            });
+          }else{
+          
+            if(rol == "C" && req.query.idComercial != null){
+              // Construye la consulta de actualización
+              const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
+              const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
+              // Ejecuta la consulta de actualización
+              conn.query(query, values, (error, filas) => {
+                if (error) {
+                  res.json({ status: 0, mensaje: 'Error al actualizar el usuario', datos: error });
+                } else {
+                  res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
+                }
+              });
+            
+              /*INSERT EN TABLA RELACION */
+              console.log("se ejecuto C");
+              insertUsuarios(id_usuario,rol, req.query.idComercial);
+            }else{
+              console.log("usuario C no insertado");
+          
+          
+              if(rol == "T" && req.query.idTienda != null){
                 // Construye la consulta de actualización
-                console.log(`req.query.idComercial -> ${req.query.idComercial}`);
-                console.log(`req.query.idTienda -> ${req.query.idTienda}`);
                 const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
                 const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
                 // Ejecuta la consulta de actualización
@@ -247,54 +281,20 @@ module.exports = (app) => {
                     res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
                   }
                 });
-              }else{
-          
-                if(rol == "C" && req.query.idComercial != null){
-                  // Construye la consulta de actualización
-                  const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
-                  const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
-                  // Ejecuta la consulta de actualización
-                  conn.query(query, values, (error, filas) => {
-                    if (error) {
-                      res.json({ status: 0, mensaje: 'Error al actualizar el usuario', datos: error });
-                    } else {
-                      res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
-                    }
-                  });
-            
-                  /*INSERT EN TABLA RELACION */
-                  console.log("se ejecuto C");
-                  insertUsuarios(id_usuario,rol, req.query.idComercial);
-                }else{
-                  console.log("usuario C no insertado");
-          
-          
-                  if(rol == "T" && req.query.idTienda != null){
-                    // Construye la consulta de actualización
-                    const query = `UPDATE usuarios SET contrasena = ?, apellido = ?, nombre = ?, rol = ?, telefono = ?, imagen = ?, fecha_nacimiento = ? WHERE correo = ?`;
-                    const values = [contrasena, apellido, nombre, rol, telefono, imagen, fecha_nacimiento, correo];
-                    // Ejecuta la consulta de actualización
-                    conn.query(query, values, (error, filas) => {
-                      if (error) {
-                        res.json({ status: 0, mensaje: 'Error al actualizar el usuario', datos: error });
-                      } else {
-                        res.json({ status: 1, mensaje: 'Actualización de usuario realizada', datos: filas });
-                      }
-                    });
               
-                    /*INSERT EN TABLA RELACION */
-                    console.log("se ejecuto T");
-                    insertUsuarios(id_usuario,rol, req.query.idTienda);
-                  }else{
-                    console.log("usuario T no insertado");
-                    res.json({ status: 0, mensaje: 'No se puede actualizar', datos: "parametros faltantes o erroneos" });
-                  }
-                }
+                /*INSERT EN TABLA RELACION */
+                console.log("se ejecuto T");
+                insertUsuarios(id_usuario,rol, req.query.idTienda);
+              }else{
+                console.log("usuario T no insertado");
+                res.json({ status: 0, mensaje: 'No se puede actualizar', datos: "parametros faltantes o erroneos" });
               }
-
             }
           }
-        });
+
+        }
+      }
+    });
 
   });
   
@@ -376,10 +376,13 @@ module.exports = (app) => {
   });
 
 
-}
-
-/* 
+  /* 
 PENDIENTES:
 -logout: temporizador de inactividad para que haga un logout automaticamente
 -delete de usuario: elimine de las demas tablas en la DB
 */
+
+
+}
+
+
